@@ -10,7 +10,7 @@
 
   <PropertyGroup>
     <PackageId>Meteroid</PackageId>
-    <Version>0.27.0</Version><!-- x-release-please-version -->
+    <Version>0.27.1</Version><!-- x-release-please-version -->
     <Authors>Meteroid</Authors>
     <Description>Meteroid API client</Description>
     <PackageTags>meteroid;api;sdk</PackageTags>
