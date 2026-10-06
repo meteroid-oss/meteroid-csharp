@@ -1,0 +1,45 @@
+// this file is @generated
+#pragma warning disable CS0612, CS0618 // generated code may use deprecated API
+#pragma warning disable CA1707, CA1711, CA1716, CA1720 // identifiers follow the API's own names
+using System;
+using System.Collections.Generic;
+using System.Text.Json;
+using System.Text.Json.Nodes;
+using System.Text.Json.Serialization;
+
+namespace Meteroid.Models;
+
+/// <summary>The <c>ComponentParameterization</c> object.</summary>
+public sealed partial record ComponentParameterization
+{
+    /// <summary>The <c>component_id</c> property.</summary>
+    [JsonPropertyName("component_id")]
+    public required string ComponentId { get; init; }
+
+    /// <summary>The <c>parameters</c> property.</summary>
+    [JsonPropertyName("parameters")]
+    public required ComponentParameters Parameters { get; init; }
+
+    /// <summary>The properties of the JSON object this SDK version does not know, sent back as they came.</summary>
+    [JsonExtensionData]
+    public IDictionary<string, JsonElement>? AdditionalProperties { get; set; }
+
+    /// <summary>Whether <paramref name="other"/> holds the same values, collections and JSON compared by content.</summary>
+    /// <param name="other">The record to compare with.</param>
+    /// <returns>Whether the records are equal.</returns>
+    public bool Equals(ComponentParameterization? other) =>
+        other is not null
+        && global::Meteroid.Equality.Equal(ComponentId, other.ComponentId)
+        && global::Meteroid.Equality.Equal(Parameters, other.Parameters)
+        && global::Meteroid.Equality.Equal(AdditionalProperties, other.AdditionalProperties);
+
+    /// <inheritdoc/>
+    public override int GetHashCode()
+    {
+        var hash = new HashCode();
+        hash.Add(global::Meteroid.Equality.Hash(ComponentId));
+        hash.Add(global::Meteroid.Equality.Hash(Parameters));
+        hash.Add(global::Meteroid.Equality.Hash(AdditionalProperties));
+        return hash.ToHashCode();
+    }
+}

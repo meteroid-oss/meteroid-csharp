@@ -1,0 +1,41 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <RootNamespace>Meteroid</RootNamespace>
+    <Nullable>enable</Nullable>
+    <IsAotCompatible>true</IsAotCompatible>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <AnalysisLevel>latest-recommended</AnalysisLevel>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <PackageId>Meteroid</PackageId>
+    <Version>0.1.0</Version><!-- x-release-please-version -->
+    <Authors>Meteroid</Authors>
+    <Description>Meteroid API client</Description>
+    <PackageTags>meteroid;api;sdk</PackageTags>
+    <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+    <PackageProjectUrl>https://meteroid.com</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/meteroid-oss/meteroid-csharp</RepositoryUrl><RepositoryType>git</RepositoryType>
+    <PackageReadmeFile Condition="Exists('../README.md')">README.md</PackageReadmeFile>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <ContinuousIntegrationBuild Condition="'$(CI)' == 'true'">true</ContinuousIntegrationBuild>
+  </PropertyGroup>
+
+  <!-- The IHttpClientFactory integration, generated with `dependency_injection = true` in [csharp.context]. -->
+  <ItemGroup Condition="Exists('MeteroidServiceCollectionExtensions.cs')">
+    <PackageReference Include="Microsoft.Extensions.Http" Version="8.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- The .NET 8 JSON source generator emits property names containing quotes or backslashes unescaped. -->
+    <PackageReference Include="System.Text.Json" Version="9.0.9" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="../README.md" Pack="true" PackagePath="/" Condition="Exists('../README.md')" />
+  </ItemGroup>
+</Project>
