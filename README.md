@@ -1,6 +1,8 @@
 # Meteroid .NET SDK
 
-Meteroid API client
+The official C# / .NET SDK for [Meteroid](https://meteroid.com), the open-source billing and pricing platform. Meteroid manages subscriptions, usage-based billing and metering, invoicing and revenue analytics; this library calls its REST API and verifies its webhooks, against Meteroid Cloud (`https://api.meteroid.com`) or a self-hosted instance.
+
+[Website](https://meteroid.com) · [Documentation](https://docs.meteroid.com) · [API reference](https://docs.meteroid.com/api-reference) · [Meteroid on GitHub](https://github.com/meteroid-oss/meteroid)
 
 ## Install
 
@@ -16,7 +18,7 @@ Targets .NET 8, trimming and native AOT safe. Every method of the API is listed 
 ```csharp
 using Meteroid;
 
-using var client = new MeteroidClient("your-api-key", new MeteroidClientOptions { BaseUrl = "https://api.example.com" });
+using var client = new MeteroidClient("your-api-key", new MeteroidClientOptions { BaseUrl = "https://api.meteroid.com" });
 
 var addOn = await client.AddOns.RetrieveAsync("addon_id");
 Console.WriteLine(addOn);
@@ -73,7 +75,7 @@ Connection errors, timeouts, 408, 429 and 5xx responses are retried twice with j
 otherwise), when the request is idempotent or carries an `Idempotency-Key` (POST requests get one). Each attempt times out after 60 seconds.
 
 ```csharp
-var client = new MeteroidClient(options: new() { BaseUrl = "https://api.example.com", MaxRetries = 5, Timeout = TimeSpan.FromSeconds(20) });
+var client = new MeteroidClient(options: new() { BaseUrl = "https://api.meteroid.com", MaxRetries = 5, Timeout = TimeSpan.FromSeconds(20) });
 await client.AddOns.RetrieveAsync("addon_id", requestOptions: new RequestOptions { MaxRetries = 0, Timeout = TimeSpan.FromSeconds(5) });
 ```
 
