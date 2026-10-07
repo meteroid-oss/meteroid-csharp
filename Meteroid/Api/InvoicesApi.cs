@@ -24,10 +24,12 @@ public interface IInvoicesApi
     /// <param name="options">The query and header parameters.</param>
     /// <param name="requestOptions">Headers, timeout, retries or idempotency key of this call.</param>
     /// <param name="cancellationToken">Cancels the call.</param>
+    /// <returns>Awaited, the first <see cref="InvoicesListPage"/>; enumerated with <c>await foreach</c>,
+    /// every item of every page, each page fetched as the enumeration reaches it.</returns>
     /// <exception cref="UnauthorizedException">401: <c>Error</c> is the <see cref="Models.RestErrorResponse"/> body.</exception>
     /// <exception cref="RateLimitException">429: <c>Error</c> is the <see cref="Models.RestErrorResponse"/> body.</exception>
     /// <exception cref="ServerErrorException">500: <c>Error</c> is the <see cref="Models.RestErrorResponse"/> body.</exception>
-    Task<InvoiceListResponse> ListAsync(
+    AsyncPager<InvoicesListPage, Invoice> ListAsync(
         InvoicesListOptions? options = null,
         RequestOptions? requestOptions = null,
         CancellationToken cancellationToken = default
@@ -143,7 +145,7 @@ public interface IInvoicesApi
 /// <summary>The <c>invoices</c> operations, returning the status and headers of the response with its body.</summary>
 public interface IInvoicesApiWithRawResponse
 {
-    /// <summary><see cref="IInvoicesApi.ListAsync"/>, with the status and headers of the response.</summary>
+    /// <summary>The single request of a page of <see cref="IInvoicesApi.ListAsync"/>, with the status and headers of the response.</summary>
     /// <param name="options">The query and header parameters.</param>
     /// <param name="requestOptions">Headers, timeout, retries or idempotency key of this call.</param>
     /// <param name="cancellationToken">Cancels the call.</param>
@@ -220,16 +222,23 @@ public sealed partial class InvoicesApi : IInvoicesApi
     IInvoicesApiWithRawResponse IInvoicesApi.WithRawResponse => WithRawResponse;
 
     /// <inheritdoc/>
-    public async Task<InvoiceListResponse> ListAsync(
+    public AsyncPager<InvoicesListPage, Invoice> ListAsync(
         InvoicesListOptions? options = null,
         RequestOptions? requestOptions = null,
         CancellationToken cancellationToken = default
     )
     {
-        var response = await WithRawResponse
-            .ListAsync(options, requestOptions, cancellationToken)
-            .ConfigureAwait(false);
-        return response.Value;
+        return Paging.Numbered<InvoicesListPage, InvoiceListResponse, Invoice>(
+            options?.Page ?? 0,
+            0,
+            pages: true,
+            (param, ct) => WithRawResponse.ListAsync((options ?? new()) with { Page = (int)param }, requestOptions, ct),
+            (body, items, next) => new(body, items, next),
+            body => body.Data,
+            null,
+            body => (long?)body.PaginationMeta?.TotalPages,
+            cancellationToken
+        );
     }
 
     /// <inheritdoc/>
@@ -477,4 +486,26 @@ public sealed class InvoicesApiWithRawResponse : IInvoicesApiWithRawResponse
         };
         return _transport.SendBytesAsync(request, requestOptions, cancellationToken);
     }
+}
+
+/// <summary>A page of <see cref="InvoicesApi.ListAsync"/>: its <see cref="InvoiceListResponse"/> body,
+/// whose properties it repeats, and the paging members.</summary>
+public sealed class InvoicesListPage : Page<InvoicesListPage, InvoiceListResponse, Invoice>
+{
+    /// <summary>A page of <paramref name="items"/> from <paramref name="body"/>, for fakes of the operation in tests.</summary>
+    /// <param name="body">The decoded response body.</param>
+    /// <param name="items">The items of the page.</param>
+    /// <param name="next">Fetches the next page; <c>null</c> on the last page.</param>
+    public InvoicesListPage(
+        InvoiceListResponse body,
+        IReadOnlyList<Invoice> items,
+        Func<CancellationToken, Task<InvoicesListPage>>? next = null
+    )
+        : base(body, items, next) { }
+
+    /// <inheritdoc cref="InvoiceListResponse.Data"/>
+    public IReadOnlyList<Invoice> Data => Body.Data;
+
+    /// <inheritdoc cref="InvoiceListResponse.PaginationMeta"/>
+    public PaginationResponse PaginationMeta => Body.PaginationMeta;
 }

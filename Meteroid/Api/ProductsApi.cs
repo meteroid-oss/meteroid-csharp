@@ -24,9 +24,11 @@ public interface IProductsApi
     /// <param name="options">The query and header parameters.</param>
     /// <param name="requestOptions">Headers, timeout, retries or idempotency key of this call.</param>
     /// <param name="cancellationToken">Cancels the call.</param>
+    /// <returns>Awaited, the first <see cref="ProductsListPage"/>; enumerated with <c>await foreach</c>,
+    /// every item of every page, each page fetched as the enumeration reaches it.</returns>
     /// <exception cref="UnauthorizedException">401: <c>Error</c> is the <see cref="Models.RestErrorResponse"/> body.</exception>
     /// <exception cref="RateLimitException">429: <c>Error</c> is the <see cref="Models.RestErrorResponse"/> body.</exception>
-    Task<ProductListResponse> ListAsync(
+    AsyncPager<ProductsListPage, Product> ListAsync(
         ProductsListOptions? options = null,
         RequestOptions? requestOptions = null,
         CancellationToken cancellationToken = default
@@ -162,7 +164,7 @@ public interface IProductsApi
 /// <summary>The <c>products</c> operations, returning the status and headers of the response with its body.</summary>
 public interface IProductsApiWithRawResponse
 {
-    /// <summary><see cref="IProductsApi.ListAsync"/>, with the status and headers of the response.</summary>
+    /// <summary>The single request of a page of <see cref="IProductsApi.ListAsync"/>, with the status and headers of the response.</summary>
     /// <param name="options">The query and header parameters.</param>
     /// <param name="requestOptions">Headers, timeout, retries or idempotency key of this call.</param>
     /// <param name="cancellationToken">Cancels the call.</param>
@@ -261,16 +263,23 @@ public sealed partial class ProductsApi : IProductsApi
     IProductsApiWithRawResponse IProductsApi.WithRawResponse => WithRawResponse;
 
     /// <inheritdoc/>
-    public async Task<ProductListResponse> ListAsync(
+    public AsyncPager<ProductsListPage, Product> ListAsync(
         ProductsListOptions? options = null,
         RequestOptions? requestOptions = null,
         CancellationToken cancellationToken = default
     )
     {
-        var response = await WithRawResponse
-            .ListAsync(options, requestOptions, cancellationToken)
-            .ConfigureAwait(false);
-        return response.Value;
+        return Paging.Numbered<ProductsListPage, ProductListResponse, Product>(
+            options?.Page ?? 0,
+            0,
+            pages: true,
+            (param, ct) => WithRawResponse.ListAsync((options ?? new()) with { Page = (int)param }, requestOptions, ct),
+            (body, items, next) => new(body, items, next),
+            body => body.Data,
+            null,
+            body => (long?)body.PaginationMeta?.TotalPages,
+            cancellationToken
+        );
     }
 
     /// <inheritdoc/>
@@ -581,4 +590,26 @@ public sealed class ProductsApiWithRawResponse : IProductsApiWithRawResponse
         };
         return _transport.SendAsync(request, requestOptions, cancellationToken);
     }
+}
+
+/// <summary>A page of <see cref="ProductsApi.ListAsync"/>: its <see cref="ProductListResponse"/> body,
+/// whose properties it repeats, and the paging members.</summary>
+public sealed class ProductsListPage : Page<ProductsListPage, ProductListResponse, Product>
+{
+    /// <summary>A page of <paramref name="items"/> from <paramref name="body"/>, for fakes of the operation in tests.</summary>
+    /// <param name="body">The decoded response body.</param>
+    /// <param name="items">The items of the page.</param>
+    /// <param name="next">Fetches the next page; <c>null</c> on the last page.</param>
+    public ProductsListPage(
+        ProductListResponse body,
+        IReadOnlyList<Product> items,
+        Func<CancellationToken, Task<ProductsListPage>>? next = null
+    )
+        : base(body, items, next) { }
+
+    /// <inheritdoc cref="ProductListResponse.Data"/>
+    public IReadOnlyList<Product> Data => Body.Data;
+
+    /// <inheritdoc cref="ProductListResponse.PaginationMeta"/>
+    public PaginationResponse PaginationMeta => Body.PaginationMeta;
 }

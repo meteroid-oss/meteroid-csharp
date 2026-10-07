@@ -24,9 +24,11 @@ public interface IMetricsApi
     /// <param name="options">The query and header parameters.</param>
     /// <param name="requestOptions">Headers, timeout, retries or idempotency key of this call.</param>
     /// <param name="cancellationToken">Cancels the call.</param>
+    /// <returns>Awaited, the first <see cref="MetricsListPage"/>; enumerated with <c>await foreach</c>,
+    /// every item of every page, each page fetched as the enumeration reaches it.</returns>
     /// <exception cref="UnauthorizedException">401: <c>Error</c> is the <see cref="Models.RestErrorResponse"/> body.</exception>
     /// <exception cref="RateLimitException">429: <c>Error</c> is the <see cref="Models.RestErrorResponse"/> body.</exception>
-    Task<MetricListResponse> ListAsync(
+    AsyncPager<MetricsListPage, MetricSummary> ListAsync(
         MetricsListOptions? options = null,
         RequestOptions? requestOptions = null,
         CancellationToken cancellationToken = default
@@ -117,7 +119,7 @@ public interface IMetricsApi
 /// <summary>The <c>metrics</c> operations, returning the status and headers of the response with its body.</summary>
 public interface IMetricsApiWithRawResponse
 {
-    /// <summary><see cref="IMetricsApi.ListAsync"/>, with the status and headers of the response.</summary>
+    /// <summary>The single request of a page of <see cref="IMetricsApi.ListAsync"/>, with the status and headers of the response.</summary>
     /// <param name="options">The query and header parameters.</param>
     /// <param name="requestOptions">Headers, timeout, retries or idempotency key of this call.</param>
     /// <param name="cancellationToken">Cancels the call.</param>
@@ -194,16 +196,23 @@ public sealed partial class MetricsApi : IMetricsApi
     IMetricsApiWithRawResponse IMetricsApi.WithRawResponse => WithRawResponse;
 
     /// <inheritdoc/>
-    public async Task<MetricListResponse> ListAsync(
+    public AsyncPager<MetricsListPage, MetricSummary> ListAsync(
         MetricsListOptions? options = null,
         RequestOptions? requestOptions = null,
         CancellationToken cancellationToken = default
     )
     {
-        var response = await WithRawResponse
-            .ListAsync(options, requestOptions, cancellationToken)
-            .ConfigureAwait(false);
-        return response.Value;
+        return Paging.Numbered<MetricsListPage, MetricListResponse, MetricSummary>(
+            options?.Page ?? 0,
+            0,
+            pages: true,
+            (param, ct) => WithRawResponse.ListAsync((options ?? new()) with { Page = (int)param }, requestOptions, ct),
+            (body, items, next) => new(body, items, next),
+            body => body.Data,
+            null,
+            body => (long?)body.PaginationMeta?.TotalPages,
+            cancellationToken
+        );
     }
 
     /// <inheritdoc/>
@@ -412,4 +421,26 @@ public sealed class MetricsApiWithRawResponse : IMetricsApiWithRawResponse
         };
         return _transport.SendAsync(request, requestOptions, cancellationToken);
     }
+}
+
+/// <summary>A page of <see cref="MetricsApi.ListAsync"/>: its <see cref="MetricListResponse"/> body,
+/// whose properties it repeats, and the paging members.</summary>
+public sealed class MetricsListPage : Page<MetricsListPage, MetricListResponse, MetricSummary>
+{
+    /// <summary>A page of <paramref name="items"/> from <paramref name="body"/>, for fakes of the operation in tests.</summary>
+    /// <param name="body">The decoded response body.</param>
+    /// <param name="items">The items of the page.</param>
+    /// <param name="next">Fetches the next page; <c>null</c> on the last page.</param>
+    public MetricsListPage(
+        MetricListResponse body,
+        IReadOnlyList<MetricSummary> items,
+        Func<CancellationToken, Task<MetricsListPage>>? next = null
+    )
+        : base(body, items, next) { }
+
+    /// <inheritdoc cref="MetricListResponse.Data"/>
+    public IReadOnlyList<MetricSummary> Data => Body.Data;
+
+    /// <inheritdoc cref="MetricListResponse.PaginationMeta"/>
+    public PaginationResponse PaginationMeta => Body.PaginationMeta;
 }

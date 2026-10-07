@@ -24,10 +24,12 @@ public interface ICustomersApi
     /// <param name="options">The query and header parameters.</param>
     /// <param name="requestOptions">Headers, timeout, retries or idempotency key of this call.</param>
     /// <param name="cancellationToken">Cancels the call.</param>
+    /// <returns>Awaited, the first <see cref="CustomersListPage"/>; enumerated with <c>await foreach</c>,
+    /// every item of every page, each page fetched as the enumeration reaches it.</returns>
     /// <exception cref="UnauthorizedException">401: <c>Error</c> is the <see cref="Models.RestErrorResponse"/> body.</exception>
     /// <exception cref="RateLimitException">429: <c>Error</c> is the <see cref="Models.RestErrorResponse"/> body.</exception>
     /// <exception cref="ServerErrorException">500: <c>Error</c> is the <see cref="Models.RestErrorResponse"/> body.</exception>
-    Task<CustomerListResponse> ListAsync(
+    AsyncPager<CustomersListPage, Customer> ListAsync(
         CustomersListOptions? options = null,
         RequestOptions? requestOptions = null,
         CancellationToken cancellationToken = default
@@ -187,7 +189,7 @@ public interface ICustomersApi
 /// <summary>The <c>customers</c> operations, returning the status and headers of the response with its body.</summary>
 public interface ICustomersApiWithRawResponse
 {
-    /// <summary><see cref="ICustomersApi.ListAsync"/>, with the status and headers of the response.</summary>
+    /// <summary>The single request of a page of <see cref="ICustomersApi.ListAsync"/>, with the status and headers of the response.</summary>
     /// <param name="options">The query and header parameters.</param>
     /// <param name="requestOptions">Headers, timeout, retries or idempotency key of this call.</param>
     /// <param name="cancellationToken">Cancels the call.</param>
@@ -298,16 +300,23 @@ public sealed partial class CustomersApi : ICustomersApi
     ICustomersApiWithRawResponse ICustomersApi.WithRawResponse => WithRawResponse;
 
     /// <inheritdoc/>
-    public async Task<CustomerListResponse> ListAsync(
+    public AsyncPager<CustomersListPage, Customer> ListAsync(
         CustomersListOptions? options = null,
         RequestOptions? requestOptions = null,
         CancellationToken cancellationToken = default
     )
     {
-        var response = await WithRawResponse
-            .ListAsync(options, requestOptions, cancellationToken)
-            .ConfigureAwait(false);
-        return response.Value;
+        return Paging.Numbered<CustomersListPage, CustomerListResponse, Customer>(
+            options?.Page ?? 0,
+            0,
+            pages: true,
+            (param, ct) => WithRawResponse.ListAsync((options ?? new()) with { Page = (int)param }, requestOptions, ct),
+            (body, items, next) => new(body, items, next),
+            body => body.Data,
+            null,
+            body => (long?)body.PaginationMeta?.TotalPages,
+            cancellationToken
+        );
     }
 
     /// <inheritdoc/>
@@ -673,4 +682,26 @@ public sealed class CustomersApiWithRawResponse : ICustomersApiWithRawResponse
         };
         return _transport.SendAsync(request, requestOptions, cancellationToken);
     }
+}
+
+/// <summary>A page of <see cref="CustomersApi.ListAsync"/>: its <see cref="CustomerListResponse"/> body,
+/// whose properties it repeats, and the paging members.</summary>
+public sealed class CustomersListPage : Page<CustomersListPage, CustomerListResponse, Customer>
+{
+    /// <summary>A page of <paramref name="items"/> from <paramref name="body"/>, for fakes of the operation in tests.</summary>
+    /// <param name="body">The decoded response body.</param>
+    /// <param name="items">The items of the page.</param>
+    /// <param name="next">Fetches the next page; <c>null</c> on the last page.</param>
+    public CustomersListPage(
+        CustomerListResponse body,
+        IReadOnlyList<Customer> items,
+        Func<CancellationToken, Task<CustomersListPage>>? next = null
+    )
+        : base(body, items, next) { }
+
+    /// <inheritdoc cref="CustomerListResponse.Data"/>
+    public IReadOnlyList<Customer> Data => Body.Data;
+
+    /// <inheritdoc cref="CustomerListResponse.PaginationMeta"/>
+    public PaginationResponse PaginationMeta => Body.PaginationMeta;
 }

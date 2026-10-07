@@ -24,8 +24,10 @@ public interface IProductFamiliesApi
     /// <param name="options">The query and header parameters.</param>
     /// <param name="requestOptions">Headers, timeout, retries or idempotency key of this call.</param>
     /// <param name="cancellationToken">Cancels the call.</param>
+    /// <returns>Awaited, the first <see cref="ProductFamiliesListPage"/>; enumerated with <c>await foreach</c>,
+    /// every item of every page, each page fetched as the enumeration reaches it.</returns>
     /// <exception cref="RateLimitException">429: <c>Error</c> is the <see cref="Models.RestErrorResponse"/> body.</exception>
-    Task<ProductFamilyListResponse> ListAsync(
+    AsyncPager<ProductFamiliesListPage, ProductFamily> ListAsync(
         ProductFamiliesListOptions? options = null,
         RequestOptions? requestOptions = null,
         CancellationToken cancellationToken = default
@@ -64,7 +66,7 @@ public interface IProductFamiliesApi
 /// <summary>The <c>product_families</c> operations, returning the status and headers of the response with its body.</summary>
 public interface IProductFamiliesApiWithRawResponse
 {
-    /// <summary><see cref="IProductFamiliesApi.ListAsync"/>, with the status and headers of the response.</summary>
+    /// <summary>The single request of a page of <see cref="IProductFamiliesApi.ListAsync"/>, with the status and headers of the response.</summary>
     /// <param name="options">The query and header parameters.</param>
     /// <param name="requestOptions">Headers, timeout, retries or idempotency key of this call.</param>
     /// <param name="cancellationToken">Cancels the call.</param>
@@ -109,16 +111,23 @@ public sealed partial class ProductFamiliesApi : IProductFamiliesApi
     IProductFamiliesApiWithRawResponse IProductFamiliesApi.WithRawResponse => WithRawResponse;
 
     /// <inheritdoc/>
-    public async Task<ProductFamilyListResponse> ListAsync(
+    public AsyncPager<ProductFamiliesListPage, ProductFamily> ListAsync(
         ProductFamiliesListOptions? options = null,
         RequestOptions? requestOptions = null,
         CancellationToken cancellationToken = default
     )
     {
-        var response = await WithRawResponse
-            .ListAsync(options, requestOptions, cancellationToken)
-            .ConfigureAwait(false);
-        return response.Value;
+        return Paging.Numbered<ProductFamiliesListPage, ProductFamilyListResponse, ProductFamily>(
+            options?.Page ?? 0,
+            0,
+            pages: true,
+            (param, ct) => WithRawResponse.ListAsync((options ?? new()) with { Page = (int)param }, requestOptions, ct),
+            (body, items, next) => new(body, items, next),
+            body => body.Data,
+            null,
+            body => (long?)body.PaginationMeta?.TotalPages,
+            cancellationToken
+        );
     }
 
     /// <inheritdoc/>
@@ -230,4 +239,26 @@ public sealed class ProductFamiliesApiWithRawResponse : IProductFamiliesApiWithR
             cancellationToken
         );
     }
+}
+
+/// <summary>A page of <see cref="ProductFamiliesApi.ListAsync"/>: its <see cref="ProductFamilyListResponse"/> body,
+/// whose properties it repeats, and the paging members.</summary>
+public sealed class ProductFamiliesListPage : Page<ProductFamiliesListPage, ProductFamilyListResponse, ProductFamily>
+{
+    /// <summary>A page of <paramref name="items"/> from <paramref name="body"/>, for fakes of the operation in tests.</summary>
+    /// <param name="body">The decoded response body.</param>
+    /// <param name="items">The items of the page.</param>
+    /// <param name="next">Fetches the next page; <c>null</c> on the last page.</param>
+    public ProductFamiliesListPage(
+        ProductFamilyListResponse body,
+        IReadOnlyList<ProductFamily> items,
+        Func<CancellationToken, Task<ProductFamiliesListPage>>? next = null
+    )
+        : base(body, items, next) { }
+
+    /// <inheritdoc cref="ProductFamilyListResponse.Data"/>
+    public IReadOnlyList<ProductFamily> Data => Body.Data;
+
+    /// <inheritdoc cref="ProductFamilyListResponse.PaginationMeta"/>
+    public PaginationResponse PaginationMeta => Body.PaginationMeta;
 }

@@ -24,10 +24,15 @@ public interface ICustomPropertiesApi
     /// <param name="options">The query and header parameters.</param>
     /// <param name="requestOptions">Headers, timeout, retries or idempotency key of this call.</param>
     /// <param name="cancellationToken">Cancels the call.</param>
+    /// <returns>Awaited, the first <see cref="CustomPropertiesListCustomPropertyDefinitionsPage"/>; enumerated with <c>await foreach</c>,
+    /// every item of every page, each page fetched as the enumeration reaches it.</returns>
     /// <exception cref="UnauthorizedException">401: <c>Error</c> is the <see cref="Models.RestErrorResponse"/> body.</exception>
     /// <exception cref="RateLimitException">429: <c>Error</c> is the <see cref="Models.RestErrorResponse"/> body.</exception>
     /// <exception cref="ServerErrorException">500: <c>Error</c> is the <see cref="Models.RestErrorResponse"/> body.</exception>
-    Task<CustomPropertyDefinitionListResponse> ListCustomPropertyDefinitionsAsync(
+    AsyncPager<
+        CustomPropertiesListCustomPropertyDefinitionsPage,
+        CustomPropertyDefinition
+    > ListCustomPropertyDefinitionsAsync(
         CustomPropertiesListCustomPropertyDefinitionsOptions? options = null,
         RequestOptions? requestOptions = null,
         CancellationToken cancellationToken = default
@@ -104,7 +109,7 @@ public interface ICustomPropertiesApi
 /// <summary>The <c>custom_properties</c> operations, returning the status and headers of the response with its body.</summary>
 public interface ICustomPropertiesApiWithRawResponse
 {
-    /// <summary><see cref="ICustomPropertiesApi.ListCustomPropertyDefinitionsAsync"/>, with the status and headers of the response.</summary>
+    /// <summary>The single request of a page of <see cref="ICustomPropertiesApi.ListCustomPropertyDefinitionsAsync"/>, with the status and headers of the response.</summary>
     /// <param name="options">The query and header parameters.</param>
     /// <param name="requestOptions">Headers, timeout, retries or idempotency key of this call.</param>
     /// <param name="cancellationToken">Cancels the call.</param>
@@ -171,16 +176,38 @@ public sealed partial class CustomPropertiesApi : ICustomPropertiesApi
     ICustomPropertiesApiWithRawResponse ICustomPropertiesApi.WithRawResponse => WithRawResponse;
 
     /// <inheritdoc/>
-    public async Task<CustomPropertyDefinitionListResponse> ListCustomPropertyDefinitionsAsync(
+    public AsyncPager<
+        CustomPropertiesListCustomPropertyDefinitionsPage,
+        CustomPropertyDefinition
+    > ListCustomPropertyDefinitionsAsync(
         CustomPropertiesListCustomPropertyDefinitionsOptions? options = null,
         RequestOptions? requestOptions = null,
         CancellationToken cancellationToken = default
     )
     {
-        var response = await WithRawResponse
-            .ListCustomPropertyDefinitionsAsync(options, requestOptions, cancellationToken)
-            .ConfigureAwait(false);
-        return response.Value;
+        return Paging.Numbered<
+            CustomPropertiesListCustomPropertyDefinitionsPage,
+            CustomPropertyDefinitionListResponse,
+            CustomPropertyDefinition
+        >(
+            options?.Page ?? 0,
+            0,
+            pages: true,
+            (param, ct) =>
+                WithRawResponse.ListCustomPropertyDefinitionsAsync(
+                    (options ?? new()) with
+                    {
+                        Page = (int)param,
+                    },
+                    requestOptions,
+                    ct
+                ),
+            (body, items, next) => new(body, items, next),
+            body => body.Data,
+            null,
+            body => (long?)body.PaginationMeta?.TotalPages,
+            cancellationToken
+        );
     }
 
     /// <inheritdoc/>
@@ -408,4 +435,31 @@ public sealed class CustomPropertiesApiWithRawResponse : ICustomPropertiesApiWit
             cancellationToken
         );
     }
+}
+
+/// <summary>A page of <see cref="CustomPropertiesApi.ListCustomPropertyDefinitionsAsync"/>: its <see cref="CustomPropertyDefinitionListResponse"/> body,
+/// whose properties it repeats, and the paging members.</summary>
+public sealed class CustomPropertiesListCustomPropertyDefinitionsPage
+    : Page<
+        CustomPropertiesListCustomPropertyDefinitionsPage,
+        CustomPropertyDefinitionListResponse,
+        CustomPropertyDefinition
+    >
+{
+    /// <summary>A page of <paramref name="items"/> from <paramref name="body"/>, for fakes of the operation in tests.</summary>
+    /// <param name="body">The decoded response body.</param>
+    /// <param name="items">The items of the page.</param>
+    /// <param name="next">Fetches the next page; <c>null</c> on the last page.</param>
+    public CustomPropertiesListCustomPropertyDefinitionsPage(
+        CustomPropertyDefinitionListResponse body,
+        IReadOnlyList<CustomPropertyDefinition> items,
+        Func<CancellationToken, Task<CustomPropertiesListCustomPropertyDefinitionsPage>>? next = null
+    )
+        : base(body, items, next) { }
+
+    /// <inheritdoc cref="CustomPropertyDefinitionListResponse.Data"/>
+    public IReadOnlyList<CustomPropertyDefinition> Data => Body.Data;
+
+    /// <inheritdoc cref="CustomPropertyDefinitionListResponse.PaginationMeta"/>
+    public PaginationResponse PaginationMeta => Body.PaginationMeta;
 }

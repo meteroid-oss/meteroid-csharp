@@ -272,8 +272,9 @@ public sealed partial class MeteroidClient : IMeteroidClient
 /// <summary>The default base URL and the credentials the API's security schemes take.</summary>
 public sealed partial class MeteroidClientOptions
 {
-    /// <summary>None: the API declares no server.</summary>
-    internal const string? DefaultBaseUrl = null;
+    /// <summary>The API endpoint used when neither <see cref="BaseUrl"/> nor the
+    /// <c>METEROID_BASE_URL</c> environment variable is set.</summary>
+    public const string DefaultBaseUrl = "https://api.meteroid.com";
 
     /// <summary>Called before each request for a fresh bearer token, e.g. an OAuth2 access token,
     /// instead of the constructor token.</summary>
