@@ -1,5 +1,16 @@
 # Changelog
 
+## [0.28.0](https://github.com/meteroid-oss/meteroid-csharp/compare/v0.27.1...v0.28.0) (2026-10-07)
+
+
+### ⚠ BREAKING CHANGES
+
+* **api:** update SDKs to meteroid 0.1.0 ([#7](https://github.com/meteroid-oss/meteroid-csharp/issues/7))
+
+### Features
+
+* **api:** update SDKs to meteroid 0.1.0 ([#7](https://github.com/meteroid-oss/meteroid-csharp/issues/7)) ([a121b1a](https://github.com/meteroid-oss/meteroid-csharp/commit/a121b1a76a849d57dc2bfa679c096621cbfcbea3))
+
 ## [0.27.1](https://github.com/meteroid-oss/meteroid-csharp/compare/v0.27.0...v0.27.1) (2026-10-06)
 
 
