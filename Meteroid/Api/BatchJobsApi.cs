@@ -24,10 +24,12 @@ public interface IBatchJobsApi
     /// <param name="options">The query and header parameters.</param>
     /// <param name="requestOptions">Headers, timeout, retries or idempotency key of this call.</param>
     /// <param name="cancellationToken">Cancels the call.</param>
+    /// <returns>Awaited, the first <see cref="BatchJobsListPage"/>; enumerated with <c>await foreach</c>,
+    /// every item of every page, each page fetched as the enumeration reaches it.</returns>
     /// <exception cref="UnauthorizedException">401: <c>Error</c> is the <see cref="Models.RestErrorResponse"/> body.</exception>
     /// <exception cref="RateLimitException">429: <c>Error</c> is the <see cref="Models.RestErrorResponse"/> body.</exception>
     /// <exception cref="ServerErrorException">500: <c>Error</c> is the <see cref="Models.RestErrorResponse"/> body.</exception>
-    Task<BatchJobListResponse> ListAsync(
+    AsyncPager<BatchJobsListPage, BatchJobResponse> ListAsync(
         BatchJobsListOptions? options = null,
         RequestOptions? requestOptions = null,
         CancellationToken cancellationToken = default
@@ -62,11 +64,13 @@ public interface IBatchJobsApi
     /// <param name="options">The query and header parameters.</param>
     /// <param name="requestOptions">Headers, timeout, retries or idempotency key of this call.</param>
     /// <param name="cancellationToken">Cancels the call.</param>
+    /// <returns>Awaited, the first <see cref="BatchJobsListFailuresPage"/>; enumerated with <c>await foreach</c>,
+    /// every item of every page, each page fetched as the enumeration reaches it.</returns>
     /// <exception cref="UnauthorizedException">401: <c>Error</c> is the <see cref="Models.RestErrorResponse"/> body.</exception>
     /// <exception cref="NotFoundException">404: <c>Error</c> is the <see cref="Models.RestErrorResponse"/> body.</exception>
     /// <exception cref="RateLimitException">429: <c>Error</c> is the <see cref="Models.RestErrorResponse"/> body.</exception>
     /// <exception cref="ServerErrorException">500: <c>Error</c> is the <see cref="Models.RestErrorResponse"/> body.</exception>
-    Task<BatchJobFailuresResponse> ListFailuresAsync(
+    AsyncPager<BatchJobsListFailuresPage, BatchJobItemFailureResponse> ListFailuresAsync(
         string batchJobId,
         BatchJobsListFailuresOptions? options = null,
         RequestOptions? requestOptions = null,
@@ -77,7 +81,7 @@ public interface IBatchJobsApi
 /// <summary>The <c>batch_jobs</c> operations, returning the status and headers of the response with its body.</summary>
 public interface IBatchJobsApiWithRawResponse
 {
-    /// <summary><see cref="IBatchJobsApi.ListAsync"/>, with the status and headers of the response.</summary>
+    /// <summary>The single request of a page of <see cref="IBatchJobsApi.ListAsync"/>, with the status and headers of the response.</summary>
     /// <param name="options">The query and header parameters.</param>
     /// <param name="requestOptions">Headers, timeout, retries or idempotency key of this call.</param>
     /// <param name="cancellationToken">Cancels the call.</param>
@@ -97,7 +101,7 @@ public interface IBatchJobsApiWithRawResponse
         CancellationToken cancellationToken = default
     );
 
-    /// <summary><see cref="IBatchJobsApi.ListFailuresAsync"/>, with the status and headers of the response.</summary>
+    /// <summary>The single request of a page of <see cref="IBatchJobsApi.ListFailuresAsync"/>, with the status and headers of the response.</summary>
     /// <param name="batchJobId">The <c>batch_job_id</c> path parameter.</param>
     /// <param name="options">The query and header parameters.</param>
     /// <param name="requestOptions">Headers, timeout, retries or idempotency key of this call.</param>
@@ -124,16 +128,23 @@ public sealed partial class BatchJobsApi : IBatchJobsApi
     IBatchJobsApiWithRawResponse IBatchJobsApi.WithRawResponse => WithRawResponse;
 
     /// <inheritdoc/>
-    public async Task<BatchJobListResponse> ListAsync(
+    public AsyncPager<BatchJobsListPage, BatchJobResponse> ListAsync(
         BatchJobsListOptions? options = null,
         RequestOptions? requestOptions = null,
         CancellationToken cancellationToken = default
     )
     {
-        var response = await WithRawResponse
-            .ListAsync(options, requestOptions, cancellationToken)
-            .ConfigureAwait(false);
-        return response.Value;
+        return Paging.Numbered<BatchJobsListPage, BatchJobListResponse, BatchJobResponse>(
+            options?.Page ?? 0,
+            0,
+            pages: true,
+            (param, ct) => WithRawResponse.ListAsync((options ?? new()) with { Page = (int)param }, requestOptions, ct),
+            (body, items, next) => new(body, items, next),
+            body => body.Data,
+            null,
+            body => (long?)body.PaginationMeta?.TotalPages,
+            cancellationToken
+        );
     }
 
     /// <inheritdoc/>
@@ -150,17 +161,34 @@ public sealed partial class BatchJobsApi : IBatchJobsApi
     }
 
     /// <inheritdoc/>
-    public async Task<BatchJobFailuresResponse> ListFailuresAsync(
+    public AsyncPager<BatchJobsListFailuresPage, BatchJobItemFailureResponse> ListFailuresAsync(
         string batchJobId,
         BatchJobsListFailuresOptions? options = null,
         RequestOptions? requestOptions = null,
         CancellationToken cancellationToken = default
     )
     {
-        var response = await WithRawResponse
-            .ListFailuresAsync(batchJobId, options, requestOptions, cancellationToken)
-            .ConfigureAwait(false);
-        return response.Value;
+        ArgumentException.ThrowIfNullOrEmpty(batchJobId);
+        return Paging.Numbered<BatchJobsListFailuresPage, BatchJobFailuresResponse, BatchJobItemFailureResponse>(
+            options?.Offset ?? 0,
+            1,
+            pages: false,
+            (param, ct) =>
+                WithRawResponse.ListFailuresAsync(
+                    batchJobId,
+                    (options ?? new()) with
+                    {
+                        Offset = (int)param,
+                    },
+                    requestOptions,
+                    ct
+                ),
+            (body, items, next) => new(body, items, next),
+            body => body.Data,
+            null,
+            body => (long?)body.TotalCount,
+            cancellationToken
+        );
     }
 }
 
@@ -261,4 +289,49 @@ public sealed class BatchJobsApiWithRawResponse : IBatchJobsApiWithRawResponse
             cancellationToken
         );
     }
+}
+
+/// <summary>A page of <see cref="BatchJobsApi.ListAsync"/>: its <see cref="BatchJobListResponse"/> body,
+/// whose properties it repeats, and the paging members.</summary>
+public sealed class BatchJobsListPage : Page<BatchJobsListPage, BatchJobListResponse, BatchJobResponse>
+{
+    /// <summary>A page of <paramref name="items"/> from <paramref name="body"/>, for fakes of the operation in tests.</summary>
+    /// <param name="body">The decoded response body.</param>
+    /// <param name="items">The items of the page.</param>
+    /// <param name="next">Fetches the next page; <c>null</c> on the last page.</param>
+    public BatchJobsListPage(
+        BatchJobListResponse body,
+        IReadOnlyList<BatchJobResponse> items,
+        Func<CancellationToken, Task<BatchJobsListPage>>? next = null
+    )
+        : base(body, items, next) { }
+
+    /// <inheritdoc cref="BatchJobListResponse.Data"/>
+    public IReadOnlyList<BatchJobResponse> Data => Body.Data;
+
+    /// <inheritdoc cref="BatchJobListResponse.PaginationMeta"/>
+    public PaginationResponse PaginationMeta => Body.PaginationMeta;
+}
+
+/// <summary>A page of <see cref="BatchJobsApi.ListFailuresAsync"/>: its <see cref="BatchJobFailuresResponse"/> body,
+/// whose properties it repeats, and the paging members.</summary>
+public sealed class BatchJobsListFailuresPage
+    : Page<BatchJobsListFailuresPage, BatchJobFailuresResponse, BatchJobItemFailureResponse>
+{
+    /// <summary>A page of <paramref name="items"/> from <paramref name="body"/>, for fakes of the operation in tests.</summary>
+    /// <param name="body">The decoded response body.</param>
+    /// <param name="items">The items of the page.</param>
+    /// <param name="next">Fetches the next page; <c>null</c> on the last page.</param>
+    public BatchJobsListFailuresPage(
+        BatchJobFailuresResponse body,
+        IReadOnlyList<BatchJobItemFailureResponse> items,
+        Func<CancellationToken, Task<BatchJobsListFailuresPage>>? next = null
+    )
+        : base(body, items, next) { }
+
+    /// <inheritdoc cref="BatchJobFailuresResponse.Data"/>
+    public IReadOnlyList<BatchJobItemFailureResponse> Data => Body.Data;
+
+    /// <inheritdoc cref="BatchJobFailuresResponse.TotalCount"/>
+    public long TotalCount => Body.TotalCount;
 }

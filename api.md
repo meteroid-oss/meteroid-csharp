@@ -4,7 +4,9 @@
 Every operation of the API, as a method of a `MeteroidClient` (`client` below), by
 resource. Each method also takes a last `RequestOptions? requestOptions` (headers, timeout,
 retries, idempotency key) and a `CancellationToken`, and `WithRawResponse` on a resource has the
-same methods returning an `ApiResponse<T>` with the status and headers. Models are in
+same methods returning an `ApiResponse<T>` with the status and headers (of a single page, for a
+paginated operation). A paginated operation returns an `AsyncPager`: awaited, its first page, with
+the properties of the response body; enumerated, every item of every page. Models are in
 [`Meteroid.Models`](Meteroid/Models).
 
 [Add ons](#add-ons) · [Batch jobs](#batch-jobs) · [Checkout sessions](#checkout-sessions) · [Connect](#connect) · [Coupons](#coupons) · [Credit notes](#credit-notes) · [Custom properties](#custom-properties) · [Customers](#customers) · [Entitlements](#entitlements) · [Events](#events) · [Features](#features) · [Invoices](#invoices) · [Metrics](#metrics) · [Oauth](#oauth) · [Oauth apps](#oauth-apps) · [Plans](#plans) · [Product families](#product-families) · [Products](#products) · [Subscriptions](#subscriptions) · [Usage](#usage)
@@ -15,7 +17,7 @@ same methods returning an `ApiResponse<T>` with the status and headers. Models a
 
 | Method | Request | Returns |
 | --- | --- | --- |
-| `Task<AddOnListResponse> client.AddOns.ListAsync(AddOnsListOptions? options)` | `GET /api/v1/addons` | [`AddOnListResponse`](Meteroid/Models/AddOnListResponse.cs) |
+| `AsyncPager<AddOnsListPage, AddOn> client.AddOns.ListAsync(AddOnsListOptions? options)` | `GET /api/v1/addons` | pages of [`AddOnListResponse`](Meteroid/Models/AddOnListResponse.cs), every [`AddOn`](Meteroid/Models/AddOn.cs) |
 | `Task<AddOn> client.AddOns.CreateAsync(CreateAddOnRequest createAddOnRequest)` | `POST /api/v1/addons` | [`AddOn`](Meteroid/Models/AddOn.cs) |
 | `Task<AddOn> client.AddOns.RetrieveAsync(string addonId)` | `GET /api/v1/addons/{addon_id}` | [`AddOn`](Meteroid/Models/AddOn.cs) |
 | `Task<AddOn> client.AddOns.UpdateAsync(string addonId, UpdateAddOnRequest updateAddOnRequest)` | `PATCH /api/v1/addons/{addon_id}` | [`AddOn`](Meteroid/Models/AddOn.cs) |
@@ -30,9 +32,9 @@ same methods returning an `ApiResponse<T>` with the status and headers. Models a
 
 | Method | Request | Returns |
 | --- | --- | --- |
-| `Task<BatchJobListResponse> client.BatchJobs.ListAsync(BatchJobsListOptions? options)` | `GET /api/v1/batch-jobs` | [`BatchJobListResponse`](Meteroid/Models/BatchJobListResponse.cs) |
+| `AsyncPager<BatchJobsListPage, BatchJobResponse> client.BatchJobs.ListAsync(BatchJobsListOptions? options)` | `GET /api/v1/batch-jobs` | pages of [`BatchJobListResponse`](Meteroid/Models/BatchJobListResponse.cs), every [`BatchJobResponse`](Meteroid/Models/BatchJobResponse.cs) |
 | `Task<BatchJobDetailResponse> client.BatchJobs.RetrieveAsync(string batchJobId)` | `GET /api/v1/batch-jobs/{batch_job_id}` | [`BatchJobDetailResponse`](Meteroid/Models/BatchJobDetailResponse.cs) |
-| `Task<BatchJobFailuresResponse> client.BatchJobs.ListFailuresAsync(string batchJobId, BatchJobsListFailuresOptions? options)` | `GET /api/v1/batch-jobs/{batch_job_id}/failures` | [`BatchJobFailuresResponse`](Meteroid/Models/BatchJobFailuresResponse.cs) |
+| `AsyncPager<BatchJobsListFailuresPage, BatchJobItemFailureResponse> client.BatchJobs.ListFailuresAsync(string batchJobId, BatchJobsListFailuresOptions? options)` | `GET /api/v1/batch-jobs/{batch_job_id}/failures` | pages of [`BatchJobFailuresResponse`](Meteroid/Models/BatchJobFailuresResponse.cs), every [`BatchJobItemFailureResponse`](Meteroid/Models/BatchJobItemFailureResponse.cs) |
 
 ## Checkout sessions
 
@@ -63,7 +65,7 @@ same methods returning an `ApiResponse<T>` with the status and headers. Models a
 
 | Method | Request | Returns |
 | --- | --- | --- |
-| `Task<CouponListResponse> client.Coupons.ListAsync(CouponsListOptions? options)` | `GET /api/v1/coupons` | [`CouponListResponse`](Meteroid/Models/CouponListResponse.cs) |
+| `AsyncPager<CouponsListPage, Coupon> client.Coupons.ListAsync(CouponsListOptions? options)` | `GET /api/v1/coupons` | pages of [`CouponListResponse`](Meteroid/Models/CouponListResponse.cs), every [`Coupon`](Meteroid/Models/Coupon.cs) |
 | `Task<Coupon> client.Coupons.CreateAsync(CreateCouponRequest createCouponRequest)` | `POST /api/v1/coupons` | [`Coupon`](Meteroid/Models/Coupon.cs) |
 | `Task<Coupon> client.Coupons.RetrieveAsync(string couponId)` | `GET /api/v1/coupons/{coupon_id}` | [`Coupon`](Meteroid/Models/Coupon.cs) |
 | `Task<Coupon> client.Coupons.UpdateAsync(string couponId, UpdateCouponRequest updateCouponRequest)` | `PATCH /api/v1/coupons/{coupon_id}` | [`Coupon`](Meteroid/Models/Coupon.cs) |
@@ -78,7 +80,7 @@ same methods returning an `ApiResponse<T>` with the status and headers. Models a
 
 | Method | Request | Returns |
 | --- | --- | --- |
-| `Task<CreditNoteListResponse> client.CreditNotes.ListAsync(CreditNotesListOptions? options)` | `GET /api/v1/credit-notes` | [`CreditNoteListResponse`](Meteroid/Models/CreditNoteListResponse.cs) |
+| `AsyncPager<CreditNotesListPage, CreditNote> client.CreditNotes.ListAsync(CreditNotesListOptions? options)` | `GET /api/v1/credit-notes` | pages of [`CreditNoteListResponse`](Meteroid/Models/CreditNoteListResponse.cs), every [`CreditNote`](Meteroid/Models/CreditNote.cs) |
 | `Task<CreditNote> client.CreditNotes.RetrieveAsync(string creditNoteId)` | `GET /api/v1/credit-notes/{credit_note_id}` | [`CreditNote`](Meteroid/Models/CreditNote.cs) |
 | `Task<CreditNote> client.CreditNotes.UpdateCustomPropertiesAsync(string creditNoteId, CreditNoteCustomPropertiesRequest creditNoteCustomPropertiesRequest)` | `PATCH /api/v1/credit-notes/{credit_note_id}/custom-properties` | [`CreditNote`](Meteroid/Models/CreditNote.cs) |
 | `Task<byte[]> client.CreditNotes.DownloadAsync(string creditNoteId)` | `GET /api/v1/credit-notes/{credit_note_id}/download` | bytes |
@@ -90,7 +92,7 @@ same methods returning an `ApiResponse<T>` with the status and headers. Models a
 
 | Method | Request | Returns |
 | --- | --- | --- |
-| `Task<CustomPropertyDefinitionListResponse> client.CustomProperties.ListCustomPropertyDefinitionsAsync(CustomPropertiesListCustomPropertyDefinitionsOptions? options)` | `GET /api/v1/custom-property-definitions` | [`CustomPropertyDefinitionListResponse`](Meteroid/Models/CustomPropertyDefinitionListResponse.cs) |
+| `AsyncPager<CustomPropertiesListCustomPropertyDefinitionsPage, CustomPropertyDefinition> client.CustomProperties.ListCustomPropertyDefinitionsAsync(CustomPropertiesListCustomPropertyDefinitionsOptions? options)` | `GET /api/v1/custom-property-definitions` | pages of [`CustomPropertyDefinitionListResponse`](Meteroid/Models/CustomPropertyDefinitionListResponse.cs), every [`CustomPropertyDefinition`](Meteroid/Models/CustomPropertyDefinition.cs) |
 | `Task<CustomPropertyDefinition> client.CustomProperties.CreateCustomPropertyDefinitionAsync(CustomPropertyDefinitionCreateRequest customPropertyDefinitionCreateRequest)` | `POST /api/v1/custom-property-definitions` | [`CustomPropertyDefinition`](Meteroid/Models/CustomPropertyDefinition.cs) |
 | `Task<CustomPropertyDefinition> client.CustomProperties.RetrieveCustomPropertyDefinitionAsync(string id)` | `GET /api/v1/custom-property-definitions/{id}` | [`CustomPropertyDefinition`](Meteroid/Models/CustomPropertyDefinition.cs) |
 | `Task<CustomPropertyDefinition> client.CustomProperties.UpdateCustomPropertyDefinitionAsync(string id, CustomPropertyDefinitionUpdateRequest customPropertyDefinitionUpdateRequest)` | `PUT /api/v1/custom-property-definitions/{id}` | [`CustomPropertyDefinition`](Meteroid/Models/CustomPropertyDefinition.cs) |
@@ -102,7 +104,7 @@ same methods returning an `ApiResponse<T>` with the status and headers. Models a
 
 | Method | Request | Returns |
 | --- | --- | --- |
-| `Task<CustomerListResponse> client.Customers.ListAsync(CustomersListOptions? options)` | `GET /api/v1/customers` | [`CustomerListResponse`](Meteroid/Models/CustomerListResponse.cs) |
+| `AsyncPager<CustomersListPage, Customer> client.Customers.ListAsync(CustomersListOptions? options)` | `GET /api/v1/customers` | pages of [`CustomerListResponse`](Meteroid/Models/CustomerListResponse.cs), every [`Customer`](Meteroid/Models/Customer.cs) |
 | `Task<Customer> client.Customers.CreateAsync(CustomerCreateRequest customerCreateRequest)` | `POST /api/v1/customers` | [`Customer`](Meteroid/Models/Customer.cs) |
 | `Task<Customer> client.Customers.RetrieveAsync(string idOrAlias)` | `GET /api/v1/customers/{id_or_alias}` | [`Customer`](Meteroid/Models/Customer.cs) |
 | `Task<Customer> client.Customers.ReplaceAsync(string idOrAlias, CustomerUpdateRequest customerUpdateRequest)` | `PUT /api/v1/customers/{id_or_alias}` | [`Customer`](Meteroid/Models/Customer.cs) |
@@ -136,7 +138,7 @@ same methods returning an `ApiResponse<T>` with the status and headers. Models a
 
 | Method | Request | Returns |
 | --- | --- | --- |
-| `Task<FeatureListResponse> client.Features.ListAsync(FeaturesListOptions? options)` | `GET /api/v1/features` | [`FeatureListResponse`](Meteroid/Models/FeatureListResponse.cs) |
+| `AsyncPager<FeaturesListPage, Feature> client.Features.ListAsync(FeaturesListOptions? options)` | `GET /api/v1/features` | pages of [`FeatureListResponse`](Meteroid/Models/FeatureListResponse.cs), every [`Feature`](Meteroid/Models/Feature.cs) |
 | `Task<Feature> client.Features.CreateAsync(CreateFeatureRequest createFeatureRequest)` | `POST /api/v1/features` | [`Feature`](Meteroid/Models/Feature.cs) |
 | `Task<Feature> client.Features.RetrieveAsync(string idOrCode)` | `GET /api/v1/features/{id_or_code}` | [`Feature`](Meteroid/Models/Feature.cs) |
 | `Task<Feature> client.Features.UpdateAsync(string idOrCode, UpdateFeatureRequest updateFeatureRequest)` | `PATCH /api/v1/features/{id_or_code}` | [`Feature`](Meteroid/Models/Feature.cs) |
@@ -149,7 +151,7 @@ same methods returning an `ApiResponse<T>` with the status and headers. Models a
 
 | Method | Request | Returns |
 | --- | --- | --- |
-| `Task<InvoiceListResponse> client.Invoices.ListAsync(InvoicesListOptions? options)` | `GET /api/v1/invoices` | [`InvoiceListResponse`](Meteroid/Models/InvoiceListResponse.cs) |
+| `AsyncPager<InvoicesListPage, Invoice> client.Invoices.ListAsync(InvoicesListOptions? options)` | `GET /api/v1/invoices` | pages of [`InvoiceListResponse`](Meteroid/Models/InvoiceListResponse.cs), every [`Invoice`](Meteroid/Models/Invoice.cs) |
 | `Task<Invoice> client.Invoices.RetrieveAsync(string invoiceId)` | `GET /api/v1/invoices/{invoice_id}` | [`Invoice`](Meteroid/Models/Invoice.cs) |
 | `Task<Invoice> client.Invoices.UpdateCustomPropertiesAsync(string invoiceId, InvoiceCustomPropertiesRequest invoiceCustomPropertiesRequest)` | `PATCH /api/v1/invoices/{invoice_id}/custom-properties` | [`Invoice`](Meteroid/Models/Invoice.cs) |
 | `Task<byte[]> client.Invoices.DownloadAsync(string invoiceId)` | `GET /api/v1/invoices/{invoice_id}/download` | bytes |
@@ -162,7 +164,7 @@ same methods returning an `ApiResponse<T>` with the status and headers. Models a
 
 | Method | Request | Returns |
 | --- | --- | --- |
-| `Task<MetricListResponse> client.Metrics.ListAsync(MetricsListOptions? options)` | `GET /api/v1/metrics` | [`MetricListResponse`](Meteroid/Models/MetricListResponse.cs) |
+| `AsyncPager<MetricsListPage, MetricSummary> client.Metrics.ListAsync(MetricsListOptions? options)` | `GET /api/v1/metrics` | pages of [`MetricListResponse`](Meteroid/Models/MetricListResponse.cs), every [`MetricSummary`](Meteroid/Models/MetricSummary.cs) |
 | `Task<Metric> client.Metrics.CreateAsync(CreateMetricRequest createMetricRequest)` | `POST /api/v1/metrics` | [`Metric`](Meteroid/Models/Metric.cs) |
 | `Task<Metric> client.Metrics.RetrieveAsync(string metricId)` | `GET /api/v1/metrics/{metric_id}` | [`Metric`](Meteroid/Models/Metric.cs) |
 | `Task<Metric> client.Metrics.UpdateAsync(string metricId, UpdateMetricRequest updateMetricRequest)` | `PATCH /api/v1/metrics/{metric_id}` | [`Metric`](Meteroid/Models/Metric.cs) |
@@ -199,7 +201,7 @@ same methods returning an `ApiResponse<T>` with the status and headers. Models a
 | --- | --- | --- |
 | `Task<ResolvedEntitlementListResponse> client.Plans.ListPlanVersionEntitlementsAsync(string planVersionId)` | `GET /api/v1/plan-versions/{plan_version_id}/entitlements` | [`ResolvedEntitlementListResponse`](Meteroid/Models/ResolvedEntitlementListResponse.cs) |
 | `Task<EntitlementListResponse> client.Plans.CreatePlanVersionEntitlementAsync(string planVersionId, CreateEntitlementsRequest createEntitlementsRequest)` | `POST /api/v1/plan-versions/{plan_version_id}/entitlements` | [`EntitlementListResponse`](Meteroid/Models/EntitlementListResponse.cs) |
-| `Task<PlanListResponse> client.Plans.ListAsync(PlansListOptions? options)` | `GET /api/v1/plans` | [`PlanListResponse`](Meteroid/Models/PlanListResponse.cs) |
+| `AsyncPager<PlansListPage, Plan> client.Plans.ListAsync(PlansListOptions? options)` | `GET /api/v1/plans` | pages of [`PlanListResponse`](Meteroid/Models/PlanListResponse.cs), every [`Plan`](Meteroid/Models/Plan.cs) |
 | `Task<Plan> client.Plans.CreateAsync(CreatePlanRequest createPlanRequest)` | `POST /api/v1/plans` | [`Plan`](Meteroid/Models/Plan.cs) |
 | `Task<MinimumCommitment> client.Plans.UpdateVersionMinimumAsync(string planVersionId, MinimumCommitment minimumCommitment)` | `PUT /api/v1/plans/versions/{plan_version_id}/minimum` | [`MinimumCommitment`](Meteroid/Models/MinimumCommitment.cs) |
 | `Task client.Plans.DeleteVersionMinimumAsync(string planVersionId)` | `DELETE /api/v1/plans/versions/{plan_version_id}/minimum` | nothing |
@@ -209,7 +211,7 @@ same methods returning an `ApiResponse<T>` with the status and headers. Models a
 | `Task client.Plans.ArchiveAsync(string planId)` | `POST /api/v1/plans/{plan_id}/archive` | nothing |
 | `Task<Plan> client.Plans.PublishAsync(string planId)` | `POST /api/v1/plans/{plan_id}/publish` | [`Plan`](Meteroid/Models/Plan.cs) |
 | `Task client.Plans.UnarchiveAsync(string planId)` | `POST /api/v1/plans/{plan_id}/unarchive` | nothing |
-| `Task<PlanVersionListResponse> client.Plans.ListVersionsAsync(string planId, PlansListVersionsOptions? options)` | `GET /api/v1/plans/{plan_id}/versions` | [`PlanVersionListResponse`](Meteroid/Models/PlanVersionListResponse.cs) |
+| `AsyncPager<PlansListVersionsPage, PlanVersionSummary> client.Plans.ListVersionsAsync(string planId, PlansListVersionsOptions? options)` | `GET /api/v1/plans/{plan_id}/versions` | pages of [`PlanVersionListResponse`](Meteroid/Models/PlanVersionListResponse.cs), every [`PlanVersionSummary`](Meteroid/Models/PlanVersionSummary.cs) |
 
 ## Product families
 
@@ -217,7 +219,7 @@ same methods returning an `ApiResponse<T>` with the status and headers. Models a
 
 | Method | Request | Returns |
 | --- | --- | --- |
-| `Task<ProductFamilyListResponse> client.ProductFamilies.ListAsync(ProductFamiliesListOptions? options)` | `GET /api/v1/product_families` | [`ProductFamilyListResponse`](Meteroid/Models/ProductFamilyListResponse.cs) |
+| `AsyncPager<ProductFamiliesListPage, ProductFamily> client.ProductFamilies.ListAsync(ProductFamiliesListOptions? options)` | `GET /api/v1/product_families` | pages of [`ProductFamilyListResponse`](Meteroid/Models/ProductFamilyListResponse.cs), every [`ProductFamily`](Meteroid/Models/ProductFamily.cs) |
 | `Task<ProductFamily> client.ProductFamilies.CreateAsync(ProductFamilyCreateRequest productFamilyCreateRequest)` | `POST /api/v1/product_families` | [`ProductFamily`](Meteroid/Models/ProductFamily.cs) |
 | `Task<ProductFamily> client.ProductFamilies.RetrieveAsync(string idOrAlias)` | `GET /api/v1/product_families/{id_or_alias}` | [`ProductFamily`](Meteroid/Models/ProductFamily.cs) |
 
@@ -227,7 +229,7 @@ same methods returning an `ApiResponse<T>` with the status and headers. Models a
 
 | Method | Request | Returns |
 | --- | --- | --- |
-| `Task<ProductListResponse> client.Products.ListAsync(ProductsListOptions? options)` | `GET /api/v1/products` | [`ProductListResponse`](Meteroid/Models/ProductListResponse.cs) |
+| `AsyncPager<ProductsListPage, Product> client.Products.ListAsync(ProductsListOptions? options)` | `GET /api/v1/products` | pages of [`ProductListResponse`](Meteroid/Models/ProductListResponse.cs), every [`Product`](Meteroid/Models/Product.cs) |
 | `Task<Product> client.Products.CreateAsync(CreateProductRequest createProductRequest)` | `POST /api/v1/products` | [`Product`](Meteroid/Models/Product.cs) |
 | `Task<Product> client.Products.RetrieveAsync(string productId)` | `GET /api/v1/products/{product_id}` | [`Product`](Meteroid/Models/Product.cs) |
 | `Task<Product> client.Products.UpdateAsync(string productId, UpdateProductRequest updateProductRequest)` | `PATCH /api/v1/products/{product_id}` | [`Product`](Meteroid/Models/Product.cs) |
@@ -242,7 +244,7 @@ same methods returning an `ApiResponse<T>` with the status and headers. Models a
 
 | Method | Request | Returns |
 | --- | --- | --- |
-| `Task<SubscriptionListResponse> client.Subscriptions.ListAsync(SubscriptionsListOptions? options)` | `GET /api/v1/subscriptions` | [`SubscriptionListResponse`](Meteroid/Models/SubscriptionListResponse.cs) |
+| `AsyncPager<SubscriptionsListPage, Subscription> client.Subscriptions.ListAsync(SubscriptionsListOptions? options)` | `GET /api/v1/subscriptions` | pages of [`SubscriptionListResponse`](Meteroid/Models/SubscriptionListResponse.cs), every [`Subscription`](Meteroid/Models/Subscription.cs) |
 | `Task<SubscriptionDetails> client.Subscriptions.CreateAsync(SubscriptionCreateRequest subscriptionCreateRequest)` | `POST /api/v1/subscriptions` | [`SubscriptionDetails`](Meteroid/Models/SubscriptionDetails.cs) |
 | `Task<SubscriptionDetails> client.Subscriptions.RetrieveAsync(string subscriptionId)` | `GET /api/v1/subscriptions/{subscription_id}` | [`SubscriptionDetails`](Meteroid/Models/SubscriptionDetails.cs) |
 | `Task<SubscriptionUpdateResponse> client.Subscriptions.UpdateAsync(string subscriptionId, SubscriptionUpdateRequest subscriptionUpdateRequest)` | `PATCH /api/v1/subscriptions/{subscription_id}` | [`SubscriptionUpdateResponse`](Meteroid/Models/SubscriptionUpdateResponse.cs) |

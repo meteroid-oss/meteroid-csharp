@@ -60,9 +60,11 @@ public interface IPlansApi
     /// <param name="options">The query and header parameters.</param>
     /// <param name="requestOptions">Headers, timeout, retries or idempotency key of this call.</param>
     /// <param name="cancellationToken">Cancels the call.</param>
+    /// <returns>Awaited, the first <see cref="PlansListPage"/>; enumerated with <c>await foreach</c>,
+    /// every item of every page, each page fetched as the enumeration reaches it.</returns>
     /// <exception cref="UnauthorizedException">401: <c>Error</c> is the <see cref="Models.RestErrorResponse"/> body.</exception>
     /// <exception cref="RateLimitException">429: <c>Error</c> is the <see cref="Models.RestErrorResponse"/> body.</exception>
-    Task<PlanListResponse> ListAsync(
+    AsyncPager<PlansListPage, Plan> ListAsync(
         PlansListOptions? options = null,
         RequestOptions? requestOptions = null,
         CancellationToken cancellationToken = default
@@ -243,10 +245,12 @@ public interface IPlansApi
     /// <param name="options">The query and header parameters.</param>
     /// <param name="requestOptions">Headers, timeout, retries or idempotency key of this call.</param>
     /// <param name="cancellationToken">Cancels the call.</param>
+    /// <returns>Awaited, the first <see cref="PlansListVersionsPage"/>; enumerated with <c>await foreach</c>,
+    /// every item of every page, each page fetched as the enumeration reaches it.</returns>
     /// <exception cref="UnauthorizedException">401: <c>Error</c> is the <see cref="Models.RestErrorResponse"/> body.</exception>
     /// <exception cref="NotFoundException">404: <c>Error</c> is the <see cref="Models.RestErrorResponse"/> body.</exception>
     /// <exception cref="RateLimitException">429: <c>Error</c> is the <see cref="Models.RestErrorResponse"/> body.</exception>
-    Task<PlanVersionListResponse> ListVersionsAsync(
+    AsyncPager<PlansListVersionsPage, PlanVersionSummary> ListVersionsAsync(
         string planId,
         PlansListVersionsOptions? options = null,
         RequestOptions? requestOptions = null,
@@ -279,7 +283,7 @@ public interface IPlansApiWithRawResponse
         CancellationToken cancellationToken = default
     );
 
-    /// <summary><see cref="IPlansApi.ListAsync"/>, with the status and headers of the response.</summary>
+    /// <summary>The single request of a page of <see cref="IPlansApi.ListAsync"/>, with the status and headers of the response.</summary>
     /// <param name="options">The query and header parameters.</param>
     /// <param name="requestOptions">Headers, timeout, retries or idempotency key of this call.</param>
     /// <param name="cancellationToken">Cancels the call.</param>
@@ -387,7 +391,7 @@ public interface IPlansApiWithRawResponse
         CancellationToken cancellationToken = default
     );
 
-    /// <summary><see cref="IPlansApi.ListVersionsAsync"/>, with the status and headers of the response.</summary>
+    /// <summary>The single request of a page of <see cref="IPlansApi.ListVersionsAsync"/>, with the status and headers of the response.</summary>
     /// <param name="planId">The <c>plan_id</c> path parameter.</param>
     /// <param name="options">The query and header parameters.</param>
     /// <param name="requestOptions">Headers, timeout, retries or idempotency key of this call.</param>
@@ -446,16 +450,23 @@ public sealed partial class PlansApi : IPlansApi
     }
 
     /// <inheritdoc/>
-    public async Task<PlanListResponse> ListAsync(
+    public AsyncPager<PlansListPage, Plan> ListAsync(
         PlansListOptions? options = null,
         RequestOptions? requestOptions = null,
         CancellationToken cancellationToken = default
     )
     {
-        var response = await WithRawResponse
-            .ListAsync(options, requestOptions, cancellationToken)
-            .ConfigureAwait(false);
-        return response.Value;
+        return Paging.Numbered<PlansListPage, PlanListResponse, Plan>(
+            options?.Page ?? 0,
+            0,
+            pages: true,
+            (param, ct) => WithRawResponse.ListAsync((options ?? new()) with { Page = (int)param }, requestOptions, ct),
+            (body, items, next) => new(body, items, next),
+            body => body.Data,
+            null,
+            body => (long?)body.PaginationMeta?.TotalPages,
+            cancellationToken
+        );
     }
 
     /// <inheritdoc/>
@@ -562,17 +573,34 @@ public sealed partial class PlansApi : IPlansApi
     ) => WithRawResponse.UnarchiveAsync(planId, requestOptions, cancellationToken);
 
     /// <inheritdoc/>
-    public async Task<PlanVersionListResponse> ListVersionsAsync(
+    public AsyncPager<PlansListVersionsPage, PlanVersionSummary> ListVersionsAsync(
         string planId,
         PlansListVersionsOptions? options = null,
         RequestOptions? requestOptions = null,
         CancellationToken cancellationToken = default
     )
     {
-        var response = await WithRawResponse
-            .ListVersionsAsync(planId, options, requestOptions, cancellationToken)
-            .ConfigureAwait(false);
-        return response.Value;
+        ArgumentException.ThrowIfNullOrEmpty(planId);
+        return Paging.Numbered<PlansListVersionsPage, PlanVersionListResponse, PlanVersionSummary>(
+            options?.Page ?? 0,
+            0,
+            pages: true,
+            (param, ct) =>
+                WithRawResponse.ListVersionsAsync(
+                    planId,
+                    (options ?? new()) with
+                    {
+                        Page = (int)param,
+                    },
+                    requestOptions,
+                    ct
+                ),
+            (body, items, next) => new(body, items, next),
+            body => body.Data,
+            null,
+            body => (long?)body.PaginationMeta?.TotalPages,
+            cancellationToken
+        );
     }
 }
 
@@ -917,4 +945,48 @@ public sealed class PlansApiWithRawResponse : IPlansApiWithRawResponse
             cancellationToken
         );
     }
+}
+
+/// <summary>A page of <see cref="PlansApi.ListAsync"/>: its <see cref="PlanListResponse"/> body,
+/// whose properties it repeats, and the paging members.</summary>
+public sealed class PlansListPage : Page<PlansListPage, PlanListResponse, Plan>
+{
+    /// <summary>A page of <paramref name="items"/> from <paramref name="body"/>, for fakes of the operation in tests.</summary>
+    /// <param name="body">The decoded response body.</param>
+    /// <param name="items">The items of the page.</param>
+    /// <param name="next">Fetches the next page; <c>null</c> on the last page.</param>
+    public PlansListPage(
+        PlanListResponse body,
+        IReadOnlyList<Plan> items,
+        Func<CancellationToken, Task<PlansListPage>>? next = null
+    )
+        : base(body, items, next) { }
+
+    /// <inheritdoc cref="PlanListResponse.Data"/>
+    public IReadOnlyList<Plan> Data => Body.Data;
+
+    /// <inheritdoc cref="PlanListResponse.PaginationMeta"/>
+    public PaginationResponse PaginationMeta => Body.PaginationMeta;
+}
+
+/// <summary>A page of <see cref="PlansApi.ListVersionsAsync"/>: its <see cref="PlanVersionListResponse"/> body,
+/// whose properties it repeats, and the paging members.</summary>
+public sealed class PlansListVersionsPage : Page<PlansListVersionsPage, PlanVersionListResponse, PlanVersionSummary>
+{
+    /// <summary>A page of <paramref name="items"/> from <paramref name="body"/>, for fakes of the operation in tests.</summary>
+    /// <param name="body">The decoded response body.</param>
+    /// <param name="items">The items of the page.</param>
+    /// <param name="next">Fetches the next page; <c>null</c> on the last page.</param>
+    public PlansListVersionsPage(
+        PlanVersionListResponse body,
+        IReadOnlyList<PlanVersionSummary> items,
+        Func<CancellationToken, Task<PlansListVersionsPage>>? next = null
+    )
+        : base(body, items, next) { }
+
+    /// <inheritdoc cref="PlanVersionListResponse.Data"/>
+    public IReadOnlyList<PlanVersionSummary> Data => Body.Data;
+
+    /// <inheritdoc cref="PlanVersionListResponse.PaginationMeta"/>
+    public PaginationResponse PaginationMeta => Body.PaginationMeta;
 }

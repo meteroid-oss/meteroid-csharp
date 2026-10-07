@@ -27,10 +27,12 @@ public interface ICreditNotesApi
     /// <param name="options">The query and header parameters.</param>
     /// <param name="requestOptions">Headers, timeout, retries or idempotency key of this call.</param>
     /// <param name="cancellationToken">Cancels the call.</param>
+    /// <returns>Awaited, the first <see cref="CreditNotesListPage"/>; enumerated with <c>await foreach</c>,
+    /// every item of every page, each page fetched as the enumeration reaches it.</returns>
     /// <exception cref="UnauthorizedException">401: <c>Error</c> is the <see cref="Models.RestErrorResponse"/> body.</exception>
     /// <exception cref="RateLimitException">429: <c>Error</c> is the <see cref="Models.RestErrorResponse"/> body.</exception>
     /// <exception cref="ServerErrorException">500: <c>Error</c> is the <see cref="Models.RestErrorResponse"/> body.</exception>
-    Task<CreditNoteListResponse> ListAsync(
+    AsyncPager<CreditNotesListPage, CreditNote> ListAsync(
         CreditNotesListOptions? options = null,
         RequestOptions? requestOptions = null,
         CancellationToken cancellationToken = default
@@ -118,7 +120,7 @@ public interface ICreditNotesApi
 /// <summary>The <c>credit_notes</c> operations, returning the status and headers of the response with its body.</summary>
 public interface ICreditNotesApiWithRawResponse
 {
-    /// <summary><see cref="ICreditNotesApi.ListAsync"/>, with the status and headers of the response.</summary>
+    /// <summary>The single request of a page of <see cref="ICreditNotesApi.ListAsync"/>, with the status and headers of the response.</summary>
     /// <param name="options">The query and header parameters.</param>
     /// <param name="requestOptions">Headers, timeout, retries or idempotency key of this call.</param>
     /// <param name="cancellationToken">Cancels the call.</param>
@@ -185,16 +187,23 @@ public sealed partial class CreditNotesApi : ICreditNotesApi
     ICreditNotesApiWithRawResponse ICreditNotesApi.WithRawResponse => WithRawResponse;
 
     /// <inheritdoc/>
-    public async Task<CreditNoteListResponse> ListAsync(
+    public AsyncPager<CreditNotesListPage, CreditNote> ListAsync(
         CreditNotesListOptions? options = null,
         RequestOptions? requestOptions = null,
         CancellationToken cancellationToken = default
     )
     {
-        var response = await WithRawResponse
-            .ListAsync(options, requestOptions, cancellationToken)
-            .ConfigureAwait(false);
-        return response.Value;
+        return Paging.Numbered<CreditNotesListPage, CreditNoteListResponse, CreditNote>(
+            options?.Page ?? 0,
+            0,
+            pages: true,
+            (param, ct) => WithRawResponse.ListAsync((options ?? new()) with { Page = (int)param }, requestOptions, ct),
+            (body, items, next) => new(body, items, next),
+            body => body.Data,
+            null,
+            body => (long?)body.PaginationMeta?.TotalPages,
+            cancellationToken
+        );
     }
 
     /// <inheritdoc/>
@@ -407,4 +416,26 @@ public sealed class CreditNotesApiWithRawResponse : ICreditNotesApiWithRawRespon
         };
         return _transport.SendBytesAsync(request, requestOptions, cancellationToken);
     }
+}
+
+/// <summary>A page of <see cref="CreditNotesApi.ListAsync"/>: its <see cref="CreditNoteListResponse"/> body,
+/// whose properties it repeats, and the paging members.</summary>
+public sealed class CreditNotesListPage : Page<CreditNotesListPage, CreditNoteListResponse, CreditNote>
+{
+    /// <summary>A page of <paramref name="items"/> from <paramref name="body"/>, for fakes of the operation in tests.</summary>
+    /// <param name="body">The decoded response body.</param>
+    /// <param name="items">The items of the page.</param>
+    /// <param name="next">Fetches the next page; <c>null</c> on the last page.</param>
+    public CreditNotesListPage(
+        CreditNoteListResponse body,
+        IReadOnlyList<CreditNote> items,
+        Func<CancellationToken, Task<CreditNotesListPage>>? next = null
+    )
+        : base(body, items, next) { }
+
+    /// <inheritdoc cref="CreditNoteListResponse.Data"/>
+    public IReadOnlyList<CreditNote> Data => Body.Data;
+
+    /// <inheritdoc cref="CreditNoteListResponse.PaginationMeta"/>
+    public PaginationResponse PaginationMeta => Body.PaginationMeta;
 }
