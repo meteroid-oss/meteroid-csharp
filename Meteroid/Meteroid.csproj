@@ -12,8 +12,8 @@
     <PackageId>Meteroid</PackageId>
     <Version>0.27.1</Version><!-- x-release-please-version -->
     <Authors>Meteroid</Authors>
-    <Description>Meteroid API client</Description>
-    <PackageTags>meteroid;api;sdk</PackageTags>
+    <Description>Official C# / .NET SDK for Meteroid, the open-source billing platform: subscriptions, invoicing, usage-based billing and webhooks.</Description>
+    <PackageTags>meteroid;billing;subscriptions;invoicing;usage-based-billing;metering;pricing;webhooks;api;sdk;dotnet</PackageTags>
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
     <PackageProjectUrl>https://meteroid.com</PackageProjectUrl>
     <RepositoryUrl>https://github.com/meteroid-oss/meteroid-csharp</RepositoryUrl><RepositoryType>git</RepositoryType>
