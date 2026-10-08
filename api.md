@@ -9,7 +9,7 @@ paginated operation). A paginated operation returns an `AsyncPager`: awaited, it
 the properties of the response body; enumerated, every item of every page. Models are in
 [`Meteroid.Models`](Meteroid/Models).
 
-[Add ons](#add-ons) · [Batch jobs](#batch-jobs) · [Checkout sessions](#checkout-sessions) · [Connect](#connect) · [Coupons](#coupons) · [Credit notes](#credit-notes) · [Custom properties](#custom-properties) · [Customers](#customers) · [Entitlements](#entitlements) · [Events](#events) · [Features](#features) · [Invoices](#invoices) · [Metrics](#metrics) · [Oauth](#oauth) · [Oauth apps](#oauth-apps) · [Plans](#plans) · [Product families](#product-families) · [Products](#products) · [Subscriptions](#subscriptions) · [Usage](#usage)
+[Add ons](#add-ons) · [Add ons entitlements](#add-ons-entitlements) · [Batch jobs](#batch-jobs) · [Checkout sessions](#checkout-sessions) · [Connect](#connect) · [Coupons](#coupons) · [Credit notes](#credit-notes) · [Custom properties](#custom-properties) · [Customers](#customers) · [Entitlements](#entitlements) · [Events](#events) · [Features](#features) · [Invoices](#invoices) · [Metrics](#metrics) · [Oauth](#oauth) · [Oauth apps](#oauth-apps) · [Plans](#plans) · [Plans versions](#plans-versions) · [Product families](#product-families) · [Products](#products) · [Products entitlements](#products-entitlements) · [Subscriptions](#subscriptions) · [Usage](#usage)
 
 ## Add ons
 
@@ -22,9 +22,16 @@ the properties of the response body; enumerated, every item of every page. Model
 | `Task<AddOn> client.AddOns.RetrieveAsync(string addonId)` | `GET /api/v1/addons/{addon_id}` | [`AddOn`](Meteroid/Models/AddOn.cs) |
 | `Task<AddOn> client.AddOns.UpdateAsync(string addonId, UpdateAddOnRequest updateAddOnRequest)` | `PATCH /api/v1/addons/{addon_id}` | [`AddOn`](Meteroid/Models/AddOn.cs) |
 | `Task client.AddOns.ArchiveAsync(string addonId)` | `POST /api/v1/addons/{addon_id}/archive` | nothing |
-| `Task<ResolvedEntitlementListResponse> client.AddOns.ListEntitlementsAsync(string addonId)` | `GET /api/v1/addons/{addon_id}/entitlements` | [`ResolvedEntitlementListResponse`](Meteroid/Models/ResolvedEntitlementListResponse.cs) |
-| `Task<EntitlementListResponse> client.AddOns.CreateEntitlementAsync(string addonId, CreateEntitlementsRequest createEntitlementsRequest)` | `POST /api/v1/addons/{addon_id}/entitlements` | [`EntitlementListResponse`](Meteroid/Models/EntitlementListResponse.cs) |
 | `Task client.AddOns.UnarchiveAsync(string addonId)` | `POST /api/v1/addons/{addon_id}/unarchive` | nothing |
+
+### Add ons entitlements
+
+[`client.AddOns.Entitlements`](Meteroid/Api/AddOnsEntitlementsApi.cs)
+
+| Method | Request | Returns |
+| --- | --- | --- |
+| `Task<ResolvedEntitlementListResponse> client.AddOns.Entitlements.ListAsync(string addonId)` | `GET /api/v1/addons/{addon_id}/entitlements` | [`ResolvedEntitlementListResponse`](Meteroid/Models/ResolvedEntitlementListResponse.cs) |
+| `Task<EntitlementListResponse> client.AddOns.Entitlements.CreateAsync(string addonId, CreateEntitlementsRequest createEntitlementsRequest)` | `POST /api/v1/addons/{addon_id}/entitlements` | [`EntitlementListResponse`](Meteroid/Models/EntitlementListResponse.cs) |
 
 ## Batch jobs
 
@@ -203,15 +210,22 @@ the properties of the response body; enumerated, every item of every page. Model
 | `Task<EntitlementListResponse> client.Plans.CreatePlanVersionEntitlementAsync(string planVersionId, CreateEntitlementsRequest createEntitlementsRequest)` | `POST /api/v1/plan-versions/{plan_version_id}/entitlements` | [`EntitlementListResponse`](Meteroid/Models/EntitlementListResponse.cs) |
 | `AsyncPager<PlansListPage, Plan> client.Plans.ListAsync(PlansListOptions? options)` | `GET /api/v1/plans` | pages of [`PlanListResponse`](Meteroid/Models/PlanListResponse.cs), every [`Plan`](Meteroid/Models/Plan.cs) |
 | `Task<Plan> client.Plans.CreateAsync(CreatePlanRequest createPlanRequest)` | `POST /api/v1/plans` | [`Plan`](Meteroid/Models/Plan.cs) |
-| `Task<MinimumCommitment> client.Plans.UpdateVersionMinimumAsync(string planVersionId, MinimumCommitment minimumCommitment)` | `PUT /api/v1/plans/versions/{plan_version_id}/minimum` | [`MinimumCommitment`](Meteroid/Models/MinimumCommitment.cs) |
-| `Task client.Plans.DeleteVersionMinimumAsync(string planVersionId)` | `DELETE /api/v1/plans/versions/{plan_version_id}/minimum` | nothing |
 | `Task<Plan> client.Plans.RetrieveAsync(string planId, PlansRetrieveOptions? options)` | `GET /api/v1/plans/{plan_id}` | [`Plan`](Meteroid/Models/Plan.cs) |
 | `Task<Plan> client.Plans.ReplaceAsync(string planId, ReplacePlanRequest replacePlanRequest)` | `PUT /api/v1/plans/{plan_id}` | [`Plan`](Meteroid/Models/Plan.cs) |
 | `Task<Plan> client.Plans.UpdateAsync(string planId, PatchPlanRequest patchPlanRequest)` | `PATCH /api/v1/plans/{plan_id}` | [`Plan`](Meteroid/Models/Plan.cs) |
 | `Task client.Plans.ArchiveAsync(string planId)` | `POST /api/v1/plans/{plan_id}/archive` | nothing |
 | `Task<Plan> client.Plans.PublishAsync(string planId)` | `POST /api/v1/plans/{plan_id}/publish` | [`Plan`](Meteroid/Models/Plan.cs) |
 | `Task client.Plans.UnarchiveAsync(string planId)` | `POST /api/v1/plans/{plan_id}/unarchive` | nothing |
-| `AsyncPager<PlansListVersionsPage, PlanVersionSummary> client.Plans.ListVersionsAsync(string planId, PlansListVersionsOptions? options)` | `GET /api/v1/plans/{plan_id}/versions` | pages of [`PlanVersionListResponse`](Meteroid/Models/PlanVersionListResponse.cs), every [`PlanVersionSummary`](Meteroid/Models/PlanVersionSummary.cs) |
+
+### Plans versions
+
+[`client.Plans.Versions`](Meteroid/Api/PlansVersionsApi.cs)
+
+| Method | Request | Returns |
+| --- | --- | --- |
+| `Task<MinimumCommitment> client.Plans.Versions.UpdateMinimumAsync(string planVersionId, MinimumCommitment minimumCommitment)` | `PUT /api/v1/plans/versions/{plan_version_id}/minimum` | [`MinimumCommitment`](Meteroid/Models/MinimumCommitment.cs) |
+| `Task client.Plans.Versions.DeleteMinimumAsync(string planVersionId)` | `DELETE /api/v1/plans/versions/{plan_version_id}/minimum` | nothing |
+| `AsyncPager<PlansVersionsListPage, PlanVersionSummary> client.Plans.Versions.ListAsync(string planId, PlansVersionsListOptions? options)` | `GET /api/v1/plans/{plan_id}/versions` | pages of [`PlanVersionListResponse`](Meteroid/Models/PlanVersionListResponse.cs), every [`PlanVersionSummary`](Meteroid/Models/PlanVersionSummary.cs) |
 
 ## Product families
 
@@ -234,9 +248,16 @@ the properties of the response body; enumerated, every item of every page. Model
 | `Task<Product> client.Products.RetrieveAsync(string productId)` | `GET /api/v1/products/{product_id}` | [`Product`](Meteroid/Models/Product.cs) |
 | `Task<Product> client.Products.UpdateAsync(string productId, UpdateProductRequest updateProductRequest)` | `PATCH /api/v1/products/{product_id}` | [`Product`](Meteroid/Models/Product.cs) |
 | `Task client.Products.ArchiveAsync(string productId)` | `POST /api/v1/products/{product_id}/archive` | nothing |
-| `Task<ResolvedEntitlementListResponse> client.Products.ListEntitlementsAsync(string productId)` | `GET /api/v1/products/{product_id}/entitlements` | [`ResolvedEntitlementListResponse`](Meteroid/Models/ResolvedEntitlementListResponse.cs) |
-| `Task<EntitlementListResponse> client.Products.CreateEntitlementAsync(string productId, CreateEntitlementsRequest createEntitlementsRequest)` | `POST /api/v1/products/{product_id}/entitlements` | [`EntitlementListResponse`](Meteroid/Models/EntitlementListResponse.cs) |
 | `Task client.Products.UnarchiveAsync(string productId)` | `POST /api/v1/products/{product_id}/unarchive` | nothing |
+
+### Products entitlements
+
+[`client.Products.Entitlements`](Meteroid/Api/ProductsEntitlementsApi.cs)
+
+| Method | Request | Returns |
+| --- | --- | --- |
+| `Task<ResolvedEntitlementListResponse> client.Products.Entitlements.ListAsync(string productId)` | `GET /api/v1/products/{product_id}/entitlements` | [`ResolvedEntitlementListResponse`](Meteroid/Models/ResolvedEntitlementListResponse.cs) |
+| `Task<EntitlementListResponse> client.Products.Entitlements.CreateAsync(string productId, CreateEntitlementsRequest createEntitlementsRequest)` | `POST /api/v1/products/{product_id}/entitlements` | [`EntitlementListResponse`](Meteroid/Models/EntitlementListResponse.cs) |
 
 ## Subscriptions
 

@@ -8,8 +8,8 @@ using Meteroid.Models;
 
 namespace Meteroid;
 
-/// <summary>Query and header parameters of <see cref="PlansApi.ListVersionsAsync"/>.</summary>
-public sealed record PlansListVersionsOptions
+/// <summary>Query and header parameters of <see cref="PlansVersionsApi.ListAsync"/>.</summary>
+public sealed record PlansVersionsListOptions
 {
     /// <summary>
     /// Page number (0-indexed)

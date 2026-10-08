@@ -18,6 +18,9 @@ public interface IProductsApi
     /// <summary>The same operations, returning the status and headers of the response with its body.</summary>
     IProductsApiWithRawResponse WithRawResponse { get; }
 
+    /// <summary>The <c>entitlements</c> operations.</summary>
+    IProductsEntitlementsApi Entitlements { get; }
+
     /// <summary>
     /// List products
     /// </summary>
@@ -101,51 +104,6 @@ public interface IProductsApi
     );
 
     /// <summary>
-    /// List product entitlements
-    /// </summary>
-    /// <param name="productId">The <c>product_id</c> path parameter.</param>
-    /// <param name="requestOptions">Headers, timeout, retries or idempotency key of this call.</param>
-    /// <param name="cancellationToken">Cancels the call.</param>
-    /// <exception cref="UnauthorizedException">401: <c>Error</c> is the <see cref="Models.RestErrorResponse"/> body.</exception>
-    /// <exception cref="NotFoundException">404: <c>Error</c> is the <see cref="Models.RestErrorResponse"/> body.</exception>
-    /// <exception cref="RateLimitException">429: <c>Error</c> is the <see cref="Models.RestErrorResponse"/> body.</exception>
-    Task<ResolvedEntitlementListResponse> ListEntitlementsAsync(
-        string productId,
-        RequestOptions? requestOptions = null,
-        CancellationToken cancellationToken = default
-    );
-
-    /// <summary>
-    /// Create product entitlements
-    /// </summary>
-    /// <remarks>
-    /// <para>
-    /// A product has no entitlement rows of its own: its entitlements are the feature-level
-    /// defaults of the features scoped to it, which is what <c>GET</c> on this path resolves. Every
-    /// spec must therefore target a feature belonging to <c>product_id</c>. Features that already
-    /// carry a default entitlement are skipped.
-    /// </para>
-    /// <para>
-    /// Specs are validated up front, but the writes are not atomic: each feature is written on
-    /// its own, so a failure part-way can leave earlier specs committed. Retrying is safe.
-    /// </para>
-    /// </remarks>
-    /// <param name="productId">The <c>product_id</c> path parameter.</param>
-    /// <param name="createEntitlementsRequest">The request body.</param>
-    /// <param name="requestOptions">Headers, timeout, retries or idempotency key of this call.</param>
-    /// <param name="cancellationToken">Cancels the call.</param>
-    /// <exception cref="BadRequestException">400: <c>Error</c> is the <see cref="Models.RestErrorResponse"/> body.</exception>
-    /// <exception cref="UnauthorizedException">401: <c>Error</c> is the <see cref="Models.RestErrorResponse"/> body.</exception>
-    /// <exception cref="NotFoundException">404: <c>Error</c> is the <see cref="Models.RestErrorResponse"/> body.</exception>
-    /// <exception cref="RateLimitException">429: <c>Error</c> is the <see cref="Models.RestErrorResponse"/> body.</exception>
-    Task<EntitlementListResponse> CreateEntitlementAsync(
-        string productId,
-        CreateEntitlementsRequest createEntitlementsRequest,
-        RequestOptions? requestOptions = null,
-        CancellationToken cancellationToken = default
-    );
-
-    /// <summary>
     /// Unarchive a product
     /// </summary>
     /// <param name="productId">The <c>product_id</c> path parameter.</param>
@@ -164,6 +122,9 @@ public interface IProductsApi
 /// <summary>The <c>products</c> operations, returning the status and headers of the response with its body.</summary>
 public interface IProductsApiWithRawResponse
 {
+    /// <summary>The <c>entitlements</c> operations, returning the status and headers of the response with its body.</summary>
+    IProductsEntitlementsApiWithRawResponse Entitlements { get; }
+
     /// <summary>The single request of a page of <see cref="IProductsApi.ListAsync"/>, with the status and headers of the response.</summary>
     /// <param name="options">The query and header parameters.</param>
     /// <param name="requestOptions">Headers, timeout, retries or idempotency key of this call.</param>
@@ -216,28 +177,6 @@ public interface IProductsApiWithRawResponse
         CancellationToken cancellationToken = default
     );
 
-    /// <summary><see cref="IProductsApi.ListEntitlementsAsync"/>, with the status and headers of the response.</summary>
-    /// <param name="productId">The <c>product_id</c> path parameter.</param>
-    /// <param name="requestOptions">Headers, timeout, retries or idempotency key of this call.</param>
-    /// <param name="cancellationToken">Cancels the call.</param>
-    Task<ApiResponse<ResolvedEntitlementListResponse>> ListEntitlementsAsync(
-        string productId,
-        RequestOptions? requestOptions = null,
-        CancellationToken cancellationToken = default
-    );
-
-    /// <summary><see cref="IProductsApi.CreateEntitlementAsync"/>, with the status and headers of the response.</summary>
-    /// <param name="productId">The <c>product_id</c> path parameter.</param>
-    /// <param name="createEntitlementsRequest">The request body.</param>
-    /// <param name="requestOptions">Headers, timeout, retries or idempotency key of this call.</param>
-    /// <param name="cancellationToken">Cancels the call.</param>
-    Task<ApiResponse<EntitlementListResponse>> CreateEntitlementAsync(
-        string productId,
-        CreateEntitlementsRequest createEntitlementsRequest,
-        RequestOptions? requestOptions = null,
-        CancellationToken cancellationToken = default
-    );
-
     /// <summary><see cref="IProductsApi.UnarchiveAsync"/>, with the status and headers of the response.</summary>
     /// <param name="productId">The <c>product_id</c> path parameter.</param>
     /// <param name="requestOptions">Headers, timeout, retries or idempotency key of this call.</param>
@@ -255,12 +194,18 @@ public sealed partial class ProductsApi : IProductsApi
     internal ProductsApi(ApiTransport transport)
     {
         WithRawResponse = new(transport);
+        Entitlements = new(transport);
     }
 
     /// <inheritdoc cref="IProductsApi.WithRawResponse"/>
     public ProductsApiWithRawResponse WithRawResponse { get; }
 
     IProductsApiWithRawResponse IProductsApi.WithRawResponse => WithRawResponse;
+
+    /// <inheritdoc cref="IProductsApi.Entitlements"/>
+    public ProductsEntitlementsApi Entitlements { get; }
+
+    IProductsEntitlementsApi IProductsApi.Entitlements => Entitlements;
 
     /// <inheritdoc/>
     public AsyncPager<ProductsListPage, Product> ListAsync(
@@ -330,33 +275,6 @@ public sealed partial class ProductsApi : IProductsApi
     ) => WithRawResponse.ArchiveAsync(productId, requestOptions, cancellationToken);
 
     /// <inheritdoc/>
-    public async Task<ResolvedEntitlementListResponse> ListEntitlementsAsync(
-        string productId,
-        RequestOptions? requestOptions = null,
-        CancellationToken cancellationToken = default
-    )
-    {
-        var response = await WithRawResponse
-            .ListEntitlementsAsync(productId, requestOptions, cancellationToken)
-            .ConfigureAwait(false);
-        return response.Value;
-    }
-
-    /// <inheritdoc/>
-    public async Task<EntitlementListResponse> CreateEntitlementAsync(
-        string productId,
-        CreateEntitlementsRequest createEntitlementsRequest,
-        RequestOptions? requestOptions = null,
-        CancellationToken cancellationToken = default
-    )
-    {
-        var response = await WithRawResponse
-            .CreateEntitlementAsync(productId, createEntitlementsRequest, requestOptions, cancellationToken)
-            .ConfigureAwait(false);
-        return response.Value;
-    }
-
-    /// <inheritdoc/>
     public Task UnarchiveAsync(
         string productId,
         RequestOptions? requestOptions = null,
@@ -372,7 +290,13 @@ public sealed class ProductsApiWithRawResponse : IProductsApiWithRawResponse
     internal ProductsApiWithRawResponse(ApiTransport transport)
     {
         _transport = transport;
+        Entitlements = new(transport);
     }
+
+    /// <inheritdoc cref="IProductsApiWithRawResponse.Entitlements"/>
+    public ProductsEntitlementsApiWithRawResponse Entitlements { get; }
+
+    IProductsEntitlementsApiWithRawResponse IProductsApiWithRawResponse.Entitlements => Entitlements;
 
     /// <inheritdoc/>
     public Task<ApiResponse<ProductListResponse>> ListAsync(
@@ -506,66 +430,6 @@ public sealed class ProductsApiWithRawResponse : IProductsApiWithRawResponse
             new("429", MeteroidJsonContext.Default.RestErrorResponse),
         };
         return _transport.SendAsync(request, requestOptions, cancellationToken);
-    }
-
-    /// <inheritdoc/>
-    public Task<ApiResponse<ResolvedEntitlementListResponse>> ListEntitlementsAsync(
-        string productId,
-        RequestOptions? requestOptions = null,
-        CancellationToken cancellationToken = default
-    )
-    {
-        ArgumentException.ThrowIfNullOrEmpty(productId);
-
-        var request = new ApiRequest(
-            HttpMethod.Get,
-            $"/api/v1/products/{Uri.EscapeDataString(productId)}/entitlements",
-            "products.list_entitlements"
-        );
-        request.ErrorTypes = new KeyValuePair<string, JsonTypeInfo>[]
-        {
-            new("401", MeteroidJsonContext.Default.RestErrorResponse),
-            new("404", MeteroidJsonContext.Default.RestErrorResponse),
-            new("429", MeteroidJsonContext.Default.RestErrorResponse),
-        };
-        return _transport.SendJsonAsync(
-            request,
-            MeteroidJsonContext.Default.ResolvedEntitlementListResponse,
-            requestOptions,
-            cancellationToken
-        );
-    }
-
-    /// <inheritdoc/>
-    public Task<ApiResponse<EntitlementListResponse>> CreateEntitlementAsync(
-        string productId,
-        CreateEntitlementsRequest createEntitlementsRequest,
-        RequestOptions? requestOptions = null,
-        CancellationToken cancellationToken = default
-    )
-    {
-        ArgumentException.ThrowIfNullOrEmpty(productId);
-        ArgumentNullException.ThrowIfNull(createEntitlementsRequest);
-
-        var request = new ApiRequest(
-            HttpMethod.Post,
-            $"/api/v1/products/{Uri.EscapeDataString(productId)}/entitlements",
-            "products.create_entitlement"
-        );
-        request.ErrorTypes = new KeyValuePair<string, JsonTypeInfo>[]
-        {
-            new("400", MeteroidJsonContext.Default.RestErrorResponse),
-            new("401", MeteroidJsonContext.Default.RestErrorResponse),
-            new("404", MeteroidJsonContext.Default.RestErrorResponse),
-            new("429", MeteroidJsonContext.Default.RestErrorResponse),
-        };
-        request.SetJsonBody(createEntitlementsRequest, MeteroidJsonContext.Default.CreateEntitlementsRequest);
-        return _transport.SendJsonAsync(
-            request,
-            MeteroidJsonContext.Default.EntitlementListResponse,
-            requestOptions,
-            cancellationToken
-        );
     }
 
     /// <inheritdoc/>

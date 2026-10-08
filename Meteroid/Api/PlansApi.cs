@@ -18,6 +18,9 @@ public interface IPlansApi
     /// <summary>The same operations, returning the status and headers of the response with its body.</summary>
     IPlansApiWithRawResponse WithRawResponse { get; }
 
+    /// <summary>The <c>versions</c> operations.</summary>
+    IPlansVersionsApi Versions { get; }
+
     /// <summary>
     /// List plan version entitlements
     /// </summary>
@@ -86,39 +89,6 @@ public interface IPlansApi
     /// <exception cref="RateLimitException">429: <c>Error</c> is the <see cref="Models.RestErrorResponse"/> body.</exception>
     Task<Plan> CreateAsync(
         CreatePlanRequest createPlanRequest,
-        RequestOptions? requestOptions = null,
-        CancellationToken cancellationToken = default
-    );
-
-    /// <summary>
-    /// Set or replace the plan-level minimum commitment for a draft plan version.
-    /// </summary>
-    /// <param name="planVersionId">The <c>plan_version_id</c> path parameter.</param>
-    /// <param name="minimumCommitment">The request body.</param>
-    /// <param name="requestOptions">Headers, timeout, retries or idempotency key of this call.</param>
-    /// <param name="cancellationToken">Cancels the call.</param>
-    /// <exception cref="BadRequestException">400: <c>Error</c> is the <see cref="Models.RestErrorResponse"/> body.</exception>
-    /// <exception cref="UnauthorizedException">401: <c>Error</c> is the <see cref="Models.RestErrorResponse"/> body.</exception>
-    /// <exception cref="NotFoundException">404: <c>Error</c> is the <see cref="Models.RestErrorResponse"/> body.</exception>
-    /// <exception cref="RateLimitException">429: <c>Error</c> is the <see cref="Models.RestErrorResponse"/> body.</exception>
-    Task<MinimumCommitment> UpdateVersionMinimumAsync(
-        string planVersionId,
-        MinimumCommitment minimumCommitment,
-        RequestOptions? requestOptions = null,
-        CancellationToken cancellationToken = default
-    );
-
-    /// <summary>
-    /// Remove the plan-level minimum commitment for a draft plan version.
-    /// </summary>
-    /// <param name="planVersionId">The <c>plan_version_id</c> path parameter.</param>
-    /// <param name="requestOptions">Headers, timeout, retries or idempotency key of this call.</param>
-    /// <param name="cancellationToken">Cancels the call.</param>
-    /// <exception cref="UnauthorizedException">401: <c>Error</c> is the <see cref="Models.RestErrorResponse"/> body.</exception>
-    /// <exception cref="NotFoundException">404: <c>Error</c> is the <see cref="Models.RestErrorResponse"/> body.</exception>
-    /// <exception cref="RateLimitException">429: <c>Error</c> is the <see cref="Models.RestErrorResponse"/> body.</exception>
-    Task DeleteVersionMinimumAsync(
-        string planVersionId,
         RequestOptions? requestOptions = null,
         CancellationToken cancellationToken = default
     );
@@ -237,30 +207,14 @@ public interface IPlansApi
         RequestOptions? requestOptions = null,
         CancellationToken cancellationToken = default
     );
-
-    /// <summary>
-    /// List plan versions
-    /// </summary>
-    /// <param name="planId">The <c>plan_id</c> path parameter.</param>
-    /// <param name="options">The query and header parameters.</param>
-    /// <param name="requestOptions">Headers, timeout, retries or idempotency key of this call.</param>
-    /// <param name="cancellationToken">Cancels the call.</param>
-    /// <returns>Awaited, the first <see cref="PlansListVersionsPage"/>; enumerated with <c>await foreach</c>,
-    /// every item of every page, each page fetched as the enumeration reaches it.</returns>
-    /// <exception cref="UnauthorizedException">401: <c>Error</c> is the <see cref="Models.RestErrorResponse"/> body.</exception>
-    /// <exception cref="NotFoundException">404: <c>Error</c> is the <see cref="Models.RestErrorResponse"/> body.</exception>
-    /// <exception cref="RateLimitException">429: <c>Error</c> is the <see cref="Models.RestErrorResponse"/> body.</exception>
-    AsyncPager<PlansListVersionsPage, PlanVersionSummary> ListVersionsAsync(
-        string planId,
-        PlansListVersionsOptions? options = null,
-        RequestOptions? requestOptions = null,
-        CancellationToken cancellationToken = default
-    );
 }
 
 /// <summary>The <c>plans</c> operations, returning the status and headers of the response with its body.</summary>
 public interface IPlansApiWithRawResponse
 {
+    /// <summary>The <c>versions</c> operations, returning the status and headers of the response with its body.</summary>
+    IPlansVersionsApiWithRawResponse Versions { get; }
+
     /// <summary><see cref="IPlansApi.ListPlanVersionEntitlementsAsync"/>, with the status and headers of the response.</summary>
     /// <param name="planVersionId">The <c>plan_version_id</c> path parameter.</param>
     /// <param name="requestOptions">Headers, timeout, retries or idempotency key of this call.</param>
@@ -299,28 +253,6 @@ public interface IPlansApiWithRawResponse
     /// <param name="cancellationToken">Cancels the call.</param>
     Task<ApiResponse<Plan>> CreateAsync(
         CreatePlanRequest createPlanRequest,
-        RequestOptions? requestOptions = null,
-        CancellationToken cancellationToken = default
-    );
-
-    /// <summary><see cref="IPlansApi.UpdateVersionMinimumAsync"/>, with the status and headers of the response.</summary>
-    /// <param name="planVersionId">The <c>plan_version_id</c> path parameter.</param>
-    /// <param name="minimumCommitment">The request body.</param>
-    /// <param name="requestOptions">Headers, timeout, retries or idempotency key of this call.</param>
-    /// <param name="cancellationToken">Cancels the call.</param>
-    Task<ApiResponse<MinimumCommitment>> UpdateVersionMinimumAsync(
-        string planVersionId,
-        MinimumCommitment minimumCommitment,
-        RequestOptions? requestOptions = null,
-        CancellationToken cancellationToken = default
-    );
-
-    /// <summary><see cref="IPlansApi.DeleteVersionMinimumAsync"/>, with the status and headers of the response.</summary>
-    /// <param name="planVersionId">The <c>plan_version_id</c> path parameter.</param>
-    /// <param name="requestOptions">Headers, timeout, retries or idempotency key of this call.</param>
-    /// <param name="cancellationToken">Cancels the call.</param>
-    Task<ApiResponse> DeleteVersionMinimumAsync(
-        string planVersionId,
         RequestOptions? requestOptions = null,
         CancellationToken cancellationToken = default
     );
@@ -390,18 +322,6 @@ public interface IPlansApiWithRawResponse
         RequestOptions? requestOptions = null,
         CancellationToken cancellationToken = default
     );
-
-    /// <summary>The single request of a page of <see cref="IPlansApi.ListVersionsAsync"/>, with the status and headers of the response.</summary>
-    /// <param name="planId">The <c>plan_id</c> path parameter.</param>
-    /// <param name="options">The query and header parameters.</param>
-    /// <param name="requestOptions">Headers, timeout, retries or idempotency key of this call.</param>
-    /// <param name="cancellationToken">Cancels the call.</param>
-    Task<ApiResponse<PlanVersionListResponse>> ListVersionsAsync(
-        string planId,
-        PlansListVersionsOptions? options = null,
-        RequestOptions? requestOptions = null,
-        CancellationToken cancellationToken = default
-    );
 }
 
 /// <summary>The <c>plans</c> operations. Get it from <see cref="MeteroidClient.Plans"/>.</summary>
@@ -410,12 +330,18 @@ public sealed partial class PlansApi : IPlansApi
     internal PlansApi(ApiTransport transport)
     {
         WithRawResponse = new(transport);
+        Versions = new(transport);
     }
 
     /// <inheritdoc cref="IPlansApi.WithRawResponse"/>
     public PlansApiWithRawResponse WithRawResponse { get; }
 
     IPlansApiWithRawResponse IPlansApi.WithRawResponse => WithRawResponse;
+
+    /// <inheritdoc cref="IPlansApi.Versions"/>
+    public PlansVersionsApi Versions { get; }
+
+    IPlansVersionsApi IPlansApi.Versions => Versions;
 
     /// <inheritdoc/>
     public async Task<ResolvedEntitlementListResponse> ListPlanVersionEntitlementsAsync(
@@ -481,27 +407,6 @@ public sealed partial class PlansApi : IPlansApi
             .ConfigureAwait(false);
         return response.Value;
     }
-
-    /// <inheritdoc/>
-    public async Task<MinimumCommitment> UpdateVersionMinimumAsync(
-        string planVersionId,
-        MinimumCommitment minimumCommitment,
-        RequestOptions? requestOptions = null,
-        CancellationToken cancellationToken = default
-    )
-    {
-        var response = await WithRawResponse
-            .UpdateVersionMinimumAsync(planVersionId, minimumCommitment, requestOptions, cancellationToken)
-            .ConfigureAwait(false);
-        return response.Value;
-    }
-
-    /// <inheritdoc/>
-    public Task DeleteVersionMinimumAsync(
-        string planVersionId,
-        RequestOptions? requestOptions = null,
-        CancellationToken cancellationToken = default
-    ) => WithRawResponse.DeleteVersionMinimumAsync(planVersionId, requestOptions, cancellationToken);
 
     /// <inheritdoc/>
     public async Task<Plan> RetrieveAsync(
@@ -571,37 +476,6 @@ public sealed partial class PlansApi : IPlansApi
         RequestOptions? requestOptions = null,
         CancellationToken cancellationToken = default
     ) => WithRawResponse.UnarchiveAsync(planId, requestOptions, cancellationToken);
-
-    /// <inheritdoc/>
-    public AsyncPager<PlansListVersionsPage, PlanVersionSummary> ListVersionsAsync(
-        string planId,
-        PlansListVersionsOptions? options = null,
-        RequestOptions? requestOptions = null,
-        CancellationToken cancellationToken = default
-    )
-    {
-        ArgumentException.ThrowIfNullOrEmpty(planId);
-        return Paging.Numbered<PlansListVersionsPage, PlanVersionListResponse, PlanVersionSummary>(
-            options?.Page ?? 0,
-            0,
-            pages: true,
-            (param, ct) =>
-                WithRawResponse.ListVersionsAsync(
-                    planId,
-                    (options ?? new()) with
-                    {
-                        Page = (int)param,
-                    },
-                    requestOptions,
-                    ct
-                ),
-            (body, items, next) => new(body, items, next),
-            body => body.Data,
-            null,
-            body => (long?)body.PaginationMeta?.TotalPages,
-            cancellationToken
-        );
-    }
 }
 
 /// <summary>The <c>plans</c> operations, returning the status and headers of the response with its body.</summary>
@@ -612,7 +486,13 @@ public sealed class PlansApiWithRawResponse : IPlansApiWithRawResponse
     internal PlansApiWithRawResponse(ApiTransport transport)
     {
         _transport = transport;
+        Versions = new(transport);
     }
+
+    /// <inheritdoc cref="IPlansApiWithRawResponse.Versions"/>
+    public PlansVersionsApiWithRawResponse Versions { get; }
+
+    IPlansVersionsApiWithRawResponse IPlansApiWithRawResponse.Versions => Versions;
 
     /// <inheritdoc/>
     public Task<ApiResponse<ResolvedEntitlementListResponse>> ListPlanVersionEntitlementsAsync(
@@ -721,61 +601,6 @@ public sealed class PlansApiWithRawResponse : IPlansApiWithRawResponse
         };
         request.SetJsonBody(createPlanRequest, MeteroidJsonContext.Default.CreatePlanRequest);
         return _transport.SendJsonAsync(request, MeteroidJsonContext.Default.Plan, requestOptions, cancellationToken);
-    }
-
-    /// <inheritdoc/>
-    public Task<ApiResponse<MinimumCommitment>> UpdateVersionMinimumAsync(
-        string planVersionId,
-        MinimumCommitment minimumCommitment,
-        RequestOptions? requestOptions = null,
-        CancellationToken cancellationToken = default
-    )
-    {
-        ArgumentException.ThrowIfNullOrEmpty(planVersionId);
-        ArgumentNullException.ThrowIfNull(minimumCommitment);
-
-        var request = new ApiRequest(
-            HttpMethod.Put,
-            $"/api/v1/plans/versions/{Uri.EscapeDataString(planVersionId)}/minimum",
-            "plans.update_version_minimum"
-        );
-        request.ErrorTypes = new KeyValuePair<string, JsonTypeInfo>[]
-        {
-            new("400", MeteroidJsonContext.Default.RestErrorResponse),
-            new("401", MeteroidJsonContext.Default.RestErrorResponse),
-            new("404", MeteroidJsonContext.Default.RestErrorResponse),
-            new("429", MeteroidJsonContext.Default.RestErrorResponse),
-        };
-        request.SetJsonBody(minimumCommitment, MeteroidJsonContext.Default.MinimumCommitment);
-        return _transport.SendJsonAsync(
-            request,
-            MeteroidJsonContext.Default.MinimumCommitment,
-            requestOptions,
-            cancellationToken
-        );
-    }
-
-    /// <inheritdoc/>
-    public Task<ApiResponse> DeleteVersionMinimumAsync(
-        string planVersionId,
-        RequestOptions? requestOptions = null,
-        CancellationToken cancellationToken = default
-    )
-    {
-        ArgumentException.ThrowIfNullOrEmpty(planVersionId);
-
-        var request = new ApiRequest(
-            HttpMethod.Delete,
-            $"/api/v1/plans/versions/{Uri.EscapeDataString(planVersionId)}/minimum",
-            "plans.delete_version_minimum"
-        );
-        request.ErrorTypes = new KeyValuePair<string, JsonTypeInfo>[]
-        {
-            new("401", MeteroidJsonContext.Default.RestErrorResponse),
-            new("404", MeteroidJsonContext.Default.RestErrorResponse),
-            new("429", MeteroidJsonContext.Default.RestErrorResponse),
-        };
-        return _transport.SendAsync(request, requestOptions, cancellationToken);
     }
 
     /// <inheritdoc/>
@@ -914,37 +739,6 @@ public sealed class PlansApiWithRawResponse : IPlansApiWithRawResponse
         };
         return _transport.SendAsync(request, requestOptions, cancellationToken);
     }
-
-    /// <inheritdoc/>
-    public Task<ApiResponse<PlanVersionListResponse>> ListVersionsAsync(
-        string planId,
-        PlansListVersionsOptions? options = null,
-        RequestOptions? requestOptions = null,
-        CancellationToken cancellationToken = default
-    )
-    {
-        ArgumentException.ThrowIfNullOrEmpty(planId);
-
-        var request = new ApiRequest(
-            HttpMethod.Get,
-            $"/api/v1/plans/{Uri.EscapeDataString(planId)}/versions",
-            "plans.list_versions"
-        );
-        request.ErrorTypes = new KeyValuePair<string, JsonTypeInfo>[]
-        {
-            new("401", MeteroidJsonContext.Default.RestErrorResponse),
-            new("404", MeteroidJsonContext.Default.RestErrorResponse),
-            new("429", MeteroidJsonContext.Default.RestErrorResponse),
-        };
-        request.AddQuery("page", options?.Page);
-        request.AddQuery("per_page", options?.PerPage);
-        return _transport.SendJsonAsync(
-            request,
-            MeteroidJsonContext.Default.PlanVersionListResponse,
-            requestOptions,
-            cancellationToken
-        );
-    }
 }
 
 /// <summary>A page of <see cref="PlansApi.ListAsync"/>: its <see cref="PlanListResponse"/> body,
@@ -966,27 +760,5 @@ public sealed class PlansListPage : Page<PlansListPage, PlanListResponse, Plan>
     public IReadOnlyList<Plan> Data => Body.Data;
 
     /// <inheritdoc cref="PlanListResponse.PaginationMeta"/>
-    public PaginationResponse PaginationMeta => Body.PaginationMeta;
-}
-
-/// <summary>A page of <see cref="PlansApi.ListVersionsAsync"/>: its <see cref="PlanVersionListResponse"/> body,
-/// whose properties it repeats, and the paging members.</summary>
-public sealed class PlansListVersionsPage : Page<PlansListVersionsPage, PlanVersionListResponse, PlanVersionSummary>
-{
-    /// <summary>A page of <paramref name="items"/> from <paramref name="body"/>, for fakes of the operation in tests.</summary>
-    /// <param name="body">The decoded response body.</param>
-    /// <param name="items">The items of the page.</param>
-    /// <param name="next">Fetches the next page; <c>null</c> on the last page.</param>
-    public PlansListVersionsPage(
-        PlanVersionListResponse body,
-        IReadOnlyList<PlanVersionSummary> items,
-        Func<CancellationToken, Task<PlansListVersionsPage>>? next = null
-    )
-        : base(body, items, next) { }
-
-    /// <inheritdoc cref="PlanVersionListResponse.Data"/>
-    public IReadOnlyList<PlanVersionSummary> Data => Body.Data;
-
-    /// <inheritdoc cref="PlanVersionListResponse.PaginationMeta"/>
     public PaginationResponse PaginationMeta => Body.PaginationMeta;
 }
