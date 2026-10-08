@@ -18,6 +18,9 @@ public interface IAddOnsApi
     /// <summary>The same operations, returning the status and headers of the response with its body.</summary>
     IAddOnsApiWithRawResponse WithRawResponse { get; }
 
+    /// <summary>The <c>entitlements</c> operations.</summary>
+    IAddOnsEntitlementsApi Entitlements { get; }
+
     /// <summary>
     /// List add-ons
     /// </summary>
@@ -98,42 +101,6 @@ public interface IAddOnsApi
     );
 
     /// <summary>
-    /// List add-on entitlements
-    /// </summary>
-    /// <param name="addonId">The <c>addon_id</c> path parameter.</param>
-    /// <param name="requestOptions">Headers, timeout, retries or idempotency key of this call.</param>
-    /// <param name="cancellationToken">Cancels the call.</param>
-    /// <exception cref="UnauthorizedException">401: <c>Error</c> is the <see cref="Models.RestErrorResponse"/> body.</exception>
-    /// <exception cref="NotFoundException">404: <c>Error</c> is the <see cref="Models.RestErrorResponse"/> body.</exception>
-    /// <exception cref="RateLimitException">429: <c>Error</c> is the <see cref="Models.RestErrorResponse"/> body.</exception>
-    Task<ResolvedEntitlementListResponse> ListEntitlementsAsync(
-        string addonId,
-        RequestOptions? requestOptions = null,
-        CancellationToken cancellationToken = default
-    );
-
-    /// <summary>
-    /// Create add-on entitlements
-    /// </summary>
-    /// <remarks>
-    /// Entitlements already present on this add-on are skipped.
-    /// </remarks>
-    /// <param name="addonId">The <c>addon_id</c> path parameter.</param>
-    /// <param name="createEntitlementsRequest">The request body.</param>
-    /// <param name="requestOptions">Headers, timeout, retries or idempotency key of this call.</param>
-    /// <param name="cancellationToken">Cancels the call.</param>
-    /// <exception cref="BadRequestException">400: <c>Error</c> is the <see cref="Models.RestErrorResponse"/> body.</exception>
-    /// <exception cref="UnauthorizedException">401: <c>Error</c> is the <see cref="Models.RestErrorResponse"/> body.</exception>
-    /// <exception cref="NotFoundException">404: <c>Error</c> is the <see cref="Models.RestErrorResponse"/> body.</exception>
-    /// <exception cref="RateLimitException">429: <c>Error</c> is the <see cref="Models.RestErrorResponse"/> body.</exception>
-    Task<EntitlementListResponse> CreateEntitlementAsync(
-        string addonId,
-        CreateEntitlementsRequest createEntitlementsRequest,
-        RequestOptions? requestOptions = null,
-        CancellationToken cancellationToken = default
-    );
-
-    /// <summary>
     /// Unarchive an add-on
     /// </summary>
     /// <param name="addonId">The <c>addon_id</c> path parameter.</param>
@@ -152,6 +119,9 @@ public interface IAddOnsApi
 /// <summary>The <c>add_ons</c> operations, returning the status and headers of the response with its body.</summary>
 public interface IAddOnsApiWithRawResponse
 {
+    /// <summary>The <c>entitlements</c> operations, returning the status and headers of the response with its body.</summary>
+    IAddOnsEntitlementsApiWithRawResponse Entitlements { get; }
+
     /// <summary>The single request of a page of <see cref="IAddOnsApi.ListAsync"/>, with the status and headers of the response.</summary>
     /// <param name="options">The query and header parameters.</param>
     /// <param name="requestOptions">Headers, timeout, retries or idempotency key of this call.</param>
@@ -204,28 +174,6 @@ public interface IAddOnsApiWithRawResponse
         CancellationToken cancellationToken = default
     );
 
-    /// <summary><see cref="IAddOnsApi.ListEntitlementsAsync"/>, with the status and headers of the response.</summary>
-    /// <param name="addonId">The <c>addon_id</c> path parameter.</param>
-    /// <param name="requestOptions">Headers, timeout, retries or idempotency key of this call.</param>
-    /// <param name="cancellationToken">Cancels the call.</param>
-    Task<ApiResponse<ResolvedEntitlementListResponse>> ListEntitlementsAsync(
-        string addonId,
-        RequestOptions? requestOptions = null,
-        CancellationToken cancellationToken = default
-    );
-
-    /// <summary><see cref="IAddOnsApi.CreateEntitlementAsync"/>, with the status and headers of the response.</summary>
-    /// <param name="addonId">The <c>addon_id</c> path parameter.</param>
-    /// <param name="createEntitlementsRequest">The request body.</param>
-    /// <param name="requestOptions">Headers, timeout, retries or idempotency key of this call.</param>
-    /// <param name="cancellationToken">Cancels the call.</param>
-    Task<ApiResponse<EntitlementListResponse>> CreateEntitlementAsync(
-        string addonId,
-        CreateEntitlementsRequest createEntitlementsRequest,
-        RequestOptions? requestOptions = null,
-        CancellationToken cancellationToken = default
-    );
-
     /// <summary><see cref="IAddOnsApi.UnarchiveAsync"/>, with the status and headers of the response.</summary>
     /// <param name="addonId">The <c>addon_id</c> path parameter.</param>
     /// <param name="requestOptions">Headers, timeout, retries or idempotency key of this call.</param>
@@ -243,12 +191,18 @@ public sealed partial class AddOnsApi : IAddOnsApi
     internal AddOnsApi(ApiTransport transport)
     {
         WithRawResponse = new(transport);
+        Entitlements = new(transport);
     }
 
     /// <inheritdoc cref="IAddOnsApi.WithRawResponse"/>
     public AddOnsApiWithRawResponse WithRawResponse { get; }
 
     IAddOnsApiWithRawResponse IAddOnsApi.WithRawResponse => WithRawResponse;
+
+    /// <inheritdoc cref="IAddOnsApi.Entitlements"/>
+    public AddOnsEntitlementsApi Entitlements { get; }
+
+    IAddOnsEntitlementsApi IAddOnsApi.Entitlements => Entitlements;
 
     /// <inheritdoc/>
     public AsyncPager<AddOnsListPage, AddOn> ListAsync(
@@ -318,33 +272,6 @@ public sealed partial class AddOnsApi : IAddOnsApi
     ) => WithRawResponse.ArchiveAsync(addonId, requestOptions, cancellationToken);
 
     /// <inheritdoc/>
-    public async Task<ResolvedEntitlementListResponse> ListEntitlementsAsync(
-        string addonId,
-        RequestOptions? requestOptions = null,
-        CancellationToken cancellationToken = default
-    )
-    {
-        var response = await WithRawResponse
-            .ListEntitlementsAsync(addonId, requestOptions, cancellationToken)
-            .ConfigureAwait(false);
-        return response.Value;
-    }
-
-    /// <inheritdoc/>
-    public async Task<EntitlementListResponse> CreateEntitlementAsync(
-        string addonId,
-        CreateEntitlementsRequest createEntitlementsRequest,
-        RequestOptions? requestOptions = null,
-        CancellationToken cancellationToken = default
-    )
-    {
-        var response = await WithRawResponse
-            .CreateEntitlementAsync(addonId, createEntitlementsRequest, requestOptions, cancellationToken)
-            .ConfigureAwait(false);
-        return response.Value;
-    }
-
-    /// <inheritdoc/>
     public Task UnarchiveAsync(
         string addonId,
         RequestOptions? requestOptions = null,
@@ -360,7 +287,13 @@ public sealed class AddOnsApiWithRawResponse : IAddOnsApiWithRawResponse
     internal AddOnsApiWithRawResponse(ApiTransport transport)
     {
         _transport = transport;
+        Entitlements = new(transport);
     }
+
+    /// <inheritdoc cref="IAddOnsApiWithRawResponse.Entitlements"/>
+    public AddOnsEntitlementsApiWithRawResponse Entitlements { get; }
+
+    IAddOnsEntitlementsApiWithRawResponse IAddOnsApiWithRawResponse.Entitlements => Entitlements;
 
     /// <inheritdoc/>
     public Task<ApiResponse<AddOnListResponse>> ListAsync(
@@ -480,66 +413,6 @@ public sealed class AddOnsApiWithRawResponse : IAddOnsApiWithRawResponse
             new("429", MeteroidJsonContext.Default.RestErrorResponse),
         };
         return _transport.SendAsync(request, requestOptions, cancellationToken);
-    }
-
-    /// <inheritdoc/>
-    public Task<ApiResponse<ResolvedEntitlementListResponse>> ListEntitlementsAsync(
-        string addonId,
-        RequestOptions? requestOptions = null,
-        CancellationToken cancellationToken = default
-    )
-    {
-        ArgumentException.ThrowIfNullOrEmpty(addonId);
-
-        var request = new ApiRequest(
-            HttpMethod.Get,
-            $"/api/v1/addons/{Uri.EscapeDataString(addonId)}/entitlements",
-            "add_ons.list_entitlements"
-        );
-        request.ErrorTypes = new KeyValuePair<string, JsonTypeInfo>[]
-        {
-            new("401", MeteroidJsonContext.Default.RestErrorResponse),
-            new("404", MeteroidJsonContext.Default.RestErrorResponse),
-            new("429", MeteroidJsonContext.Default.RestErrorResponse),
-        };
-        return _transport.SendJsonAsync(
-            request,
-            MeteroidJsonContext.Default.ResolvedEntitlementListResponse,
-            requestOptions,
-            cancellationToken
-        );
-    }
-
-    /// <inheritdoc/>
-    public Task<ApiResponse<EntitlementListResponse>> CreateEntitlementAsync(
-        string addonId,
-        CreateEntitlementsRequest createEntitlementsRequest,
-        RequestOptions? requestOptions = null,
-        CancellationToken cancellationToken = default
-    )
-    {
-        ArgumentException.ThrowIfNullOrEmpty(addonId);
-        ArgumentNullException.ThrowIfNull(createEntitlementsRequest);
-
-        var request = new ApiRequest(
-            HttpMethod.Post,
-            $"/api/v1/addons/{Uri.EscapeDataString(addonId)}/entitlements",
-            "add_ons.create_entitlement"
-        );
-        request.ErrorTypes = new KeyValuePair<string, JsonTypeInfo>[]
-        {
-            new("400", MeteroidJsonContext.Default.RestErrorResponse),
-            new("401", MeteroidJsonContext.Default.RestErrorResponse),
-            new("404", MeteroidJsonContext.Default.RestErrorResponse),
-            new("429", MeteroidJsonContext.Default.RestErrorResponse),
-        };
-        request.SetJsonBody(createEntitlementsRequest, MeteroidJsonContext.Default.CreateEntitlementsRequest);
-        return _transport.SendJsonAsync(
-            request,
-            MeteroidJsonContext.Default.EntitlementListResponse,
-            requestOptions,
-            cancellationToken
-        );
     }
 
     /// <inheritdoc/>
