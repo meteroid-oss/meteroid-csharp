@@ -9,7 +9,7 @@ paginated operation). A paginated operation returns an `AsyncPager`: awaited, it
 the properties of the response body; enumerated, every item of every page. Models are in
 [`Meteroid.Models`](Meteroid/Models).
 
-[Add ons](#add-ons) · [Add ons entitlements](#add-ons-entitlements) · [Batch jobs](#batch-jobs) · [Checkout sessions](#checkout-sessions) · [Connect](#connect) · [Coupons](#coupons) · [Credit notes](#credit-notes) · [Custom properties](#custom-properties) · [Customers](#customers) · [Entitlements](#entitlements) · [Events](#events) · [Features](#features) · [Invoices](#invoices) · [Metrics](#metrics) · [Oauth](#oauth) · [Oauth apps](#oauth-apps) · [Plans](#plans) · [Plans versions](#plans-versions) · [Product families](#product-families) · [Products](#products) · [Products entitlements](#products-entitlements) · [Subscriptions](#subscriptions) · [Usage](#usage)
+[Add ons](#add-ons) · [Add ons entitlements](#add-ons-entitlements) · [Batch jobs](#batch-jobs) · [Checkout sessions](#checkout-sessions) · [Connect](#connect) · [Coupons](#coupons) · [Credit notes](#credit-notes) · [Custom properties](#custom-properties) · [Customers](#customers) · [Entitlements](#entitlements) · [Events](#events) · [Features](#features) · [Invoices](#invoices) · [Metrics](#metrics) · [Oauth](#oauth) · [Oauth apps](#oauth-apps) · [Plans](#plans) · [Plans versions](#plans-versions) · [Product families](#product-families) · [Products](#products) · [Products entitlements](#products-entitlements) · [Subscriptions](#subscriptions) · [Usage](#usage) · [Webhook endpoints](#webhook-endpoints) · [Webhook endpoints endpoints](#webhook-endpoints-endpoints)
 
 ## Add ons
 
@@ -282,3 +282,26 @@ the properties of the response body; enumerated, every item of every page. Model
 | `Task<UsageResponse> client.Usage.RetrieveCustomerAsync(string customerId, UsageRetrieveCustomerOptions options)` | `GET /api/v1/usage/customer/{customer_id}` | [`UsageResponse`](Meteroid/Models/UsageResponse.cs) |
 | `Task<UsageResponse> client.Usage.RetrieveSubscriptionAsync(string subscriptionId, UsageRetrieveSubscriptionOptions? options)` | `GET /api/v1/usage/subscription/{subscription_id}` | [`UsageResponse`](Meteroid/Models/UsageResponse.cs) |
 | `Task<UsageResponse> client.Usage.RetrieveSummaryAsync(UsageRetrieveSummaryOptions options)` | `GET /api/v1/usage/summary` | [`UsageResponse`](Meteroid/Models/UsageResponse.cs) |
+
+## Webhook endpoints
+
+[`client.WebhookEndpoints`](Meteroid/Api/WebhookEndpointsApi.cs)
+
+| Method | Request | Returns |
+| --- | --- | --- |
+| `Task<WebhookDelivery> client.WebhookEndpoints.ResendWebhookDeliveryAsync(string deliveryId)` | `POST /api/v1/webhooks/deliveries/{delivery_id}/resend` | [`WebhookDelivery`](Meteroid/Models/WebhookDelivery.cs) |
+
+### Webhook endpoints endpoints
+
+[`client.WebhookEndpoints.Endpoints`](Meteroid/Api/WebhookEndpointsEndpointsApi.cs)
+
+| Method | Request | Returns |
+| --- | --- | --- |
+| `Task<WebhookEndpointListResponse> client.WebhookEndpoints.Endpoints.ListAsync()` | `GET /api/v1/webhooks/endpoints` | [`WebhookEndpointListResponse`](Meteroid/Models/WebhookEndpointListResponse.cs) |
+| `Task<CreatedWebhookEndpoint> client.WebhookEndpoints.Endpoints.CreateAsync(CreateWebhookEndpointRequest createWebhookEndpointRequest)` | `POST /api/v1/webhooks/endpoints` | [`CreatedWebhookEndpoint`](Meteroid/Models/CreatedWebhookEndpoint.cs) |
+| `Task<WebhookEndpoint> client.WebhookEndpoints.Endpoints.RetrieveAsync(string endpointId)` | `GET /api/v1/webhooks/endpoints/{endpoint_id}` | [`WebhookEndpoint`](Meteroid/Models/WebhookEndpoint.cs) |
+| `Task client.WebhookEndpoints.Endpoints.DeleteAsync(string endpointId)` | `DELETE /api/v1/webhooks/endpoints/{endpoint_id}` | nothing |
+| `Task<WebhookEndpoint> client.WebhookEndpoints.Endpoints.UpdateAsync(string endpointId, UpdateWebhookEndpointRequest updateWebhookEndpointRequest)` | `PATCH /api/v1/webhooks/endpoints/{endpoint_id}` | [`WebhookEndpoint`](Meteroid/Models/WebhookEndpoint.cs) |
+| `AsyncPager<WebhookEndpointsEndpointsListDeliveriesPage, WebhookDelivery> client.WebhookEndpoints.Endpoints.ListDeliveriesAsync(string endpointId, WebhookEndpointsEndpointsListDeliveriesOptions? options)` | `GET /api/v1/webhooks/endpoints/{endpoint_id}/deliveries` | pages of [`WebhookDeliveryListResponse`](Meteroid/Models/WebhookDeliveryListResponse.cs), every [`WebhookDelivery`](Meteroid/Models/WebhookDelivery.cs) |
+| `Task<WebhookEndpointSecret> client.WebhookEndpoints.Endpoints.RotateSecretAsync(string endpointId)` | `POST /api/v1/webhooks/endpoints/{endpoint_id}/rotate-secret` | [`WebhookEndpointSecret`](Meteroid/Models/WebhookEndpointSecret.cs) |
+| `Task<WebhookEndpointSecret> client.WebhookEndpoints.Endpoints.RetrieveSecretAsync(string endpointId)` | `GET /api/v1/webhooks/endpoints/{endpoint_id}/secret` | [`WebhookEndpointSecret`](Meteroid/Models/WebhookEndpointSecret.cs) |

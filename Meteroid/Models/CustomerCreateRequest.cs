@@ -48,7 +48,7 @@ public sealed partial record CustomerCreateRequest
 
     /// <summary>The <c>custom_taxes</c> property.</summary>
     [JsonPropertyName("custom_taxes")]
-    public required IReadOnlyList<CustomTaxRate> CustomTaxes { get; init; }
+    public IReadOnlyList<CustomTaxRate>? CustomTaxes { get; init; }
 
     /// <summary>
     /// <c>INDIVIDUAL</c> requires <c>first_name</c>, <c>last_name</c>, and a billing-address country.
@@ -68,7 +68,7 @@ public sealed partial record CustomerCreateRequest
 
     /// <summary>The <c>invoicing_emails</c> property.</summary>
     [JsonPropertyName("invoicing_emails")]
-    public required IReadOnlyList<string> InvoicingEmails { get; init; }
+    public IReadOnlyList<string>? InvoicingEmails { get; init; }
 
     /// <summary>The <c>invoicing_entity_id</c> property.</summary>
     [JsonPropertyName("invoicing_entity_id")]

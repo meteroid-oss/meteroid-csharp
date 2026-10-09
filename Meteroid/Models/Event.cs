@@ -41,7 +41,7 @@ public sealed partial record Event
     /// Must be between 24 hours ago and 1 hour from now. Set <c>allow_backfilling</c> to remove the past limit.
     /// </summary>
     [JsonPropertyName("timestamp")]
-    public required string Timestamp { get; init; }
+    public DateTimeOffset? Timestamp { get; init; }
 
     /// <summary>The properties of the JSON object this SDK version does not know, sent back as they came.</summary>
     [JsonExtensionData]

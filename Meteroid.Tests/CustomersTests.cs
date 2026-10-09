@@ -28,9 +28,7 @@ public class CustomersTests
             "{\"currency\":\"ERN\",\"custom_properties\":{\"key\":\"value\",\"count\":3,\"ratio\":0.5,\"flags\":[true,false],\"nested\":{\"ok\":true}},\"custom_taxes\":[{\"name\":\"sample\",\"rate\":\"sample\",\"tax_code\":\"sample\"}],\"id\":\"customer_id_1\",\"invoicing_emails\":[\"sample\"],\"invoicing_entity_id\":\"invoicing_entity_id_83\",\"name\":\"sample\",\"preferred_locales\":[\"sample\"]}"
         );
         await mock.Client.Customers.CreateAsync(
-            PerseidMock.Decode<global::Meteroid.Models.CustomerCreateRequest>(
-                "{\"currency\":\"ERN\",\"custom_taxes\":[{\"name\":\"sample\",\"rate\":\"sample\",\"tax_code\":\"sample\"}],\"invoicing_emails\":[\"sample\"]}"
-            )
+            PerseidMock.Decode<global::Meteroid.Models.CustomerCreateRequest>("{\"currency\":\"ERN\"}")
         );
         Assert.Equal(new[] { "POST /api/v1/customers" }, mock.Requests);
     }
