@@ -10,7 +10,7 @@
 
   <PropertyGroup>
     <PackageId>Meteroid</PackageId>
-    <Version>0.29.0</Version><!-- x-release-please-version -->
+    <Version>0.30.0</Version><!-- x-release-please-version -->
     <Authors>Meteroid</Authors>
     <Description>Official C# / .NET SDK for Meteroid, the open-source billing platform: subscriptions, invoicing, usage-based billing and webhooks.</Description>
     <PackageTags>meteroid;billing;subscriptions;invoicing;usage-based-billing;metering;pricing;webhooks;api;sdk;dotnet</PackageTags>
