@@ -26,7 +26,7 @@ public sealed partial record Plan
 
     /// <summary>The <c>currency</c> property.</summary>
     [JsonPropertyName("currency")]
-    public required string Currency { get; init; }
+    public required Currency Currency { get; init; }
 
     /// <summary>The <c>description</c> property.</summary>
     [JsonPropertyName("description")]

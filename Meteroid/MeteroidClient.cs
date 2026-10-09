@@ -71,6 +71,9 @@ public interface IMeteroidClient : IDisposable
 
     /// <summary>The <c>usage</c> operations.</summary>
     IUsageApi Usage { get; }
+
+    /// <summary>The <c>webhook_endpoints</c> operations.</summary>
+    IWebhookEndpointsApi WebhookEndpoints { get; }
 }
 
 /// <summary>
@@ -119,6 +122,7 @@ public sealed partial class MeteroidClient : IMeteroidClient
         Products = new(_transport);
         Subscriptions = new(_transport);
         Usage = new(_transport);
+        WebhookEndpoints = new(_transport);
     }
 
     /// <summary>
@@ -152,6 +156,7 @@ public sealed partial class MeteroidClient : IMeteroidClient
         Products = new(_transport);
         Subscriptions = new(_transport);
         Usage = new(_transport);
+        WebhookEndpoints = new(_transport);
     }
 
     private static ApiTransport CreateTransport(string? token, MeteroidClientOptions options, HttpClient? http)
@@ -264,6 +269,11 @@ public sealed partial class MeteroidClient : IMeteroidClient
     public UsageApi Usage { get; }
 
     IUsageApi IMeteroidClient.Usage => Usage;
+
+    /// <summary>The <c>webhook_endpoints</c> operations.</summary>
+    public WebhookEndpointsApi WebhookEndpoints { get; }
+
+    IWebhookEndpointsApi IMeteroidClient.WebhookEndpoints => WebhookEndpoints;
 
     /// <summary>Releases the connection pool and middleware, unless the caller owns the <see cref="HttpClient"/>.</summary>
     public void Dispose() => _transport.Dispose();
