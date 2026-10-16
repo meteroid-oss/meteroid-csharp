@@ -27,7 +27,7 @@ public interface IEventsApi
     /// </para>
     /// <para>
     /// Events are deduplicated by <c>(event_id, customer_id)</c> — re-sending the same pair will not be
-    /// double-counted. If timestamps differ across duplicates, the event with the latest timestamp is used.
+    /// double-counted. The first copy received is kept and later copies are ignored, whatever they change.
     /// </para>
     /// <para>
     /// By default, any invalid event rejects the entire batch. Set <c>allow_partial_failures</c> to <c>true</c> to ingest valid events and receive per-event failure details in the response body.
