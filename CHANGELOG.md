@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.30.1](https://github.com/meteroid-oss/meteroid-csharp/compare/v0.30.0...v0.30.1) (2026-10-16)
+
+
+### Bug Fixes
+
+* **api:** update SDKs to meteroid 0.1.0 ([#13](https://github.com/meteroid-oss/meteroid-csharp/issues/13)) ([f11d42e](https://github.com/meteroid-oss/meteroid-csharp/commit/f11d42e1d8e656393d83687728d6ff83c2cce8bf))
+
 ## [0.30.0](https://github.com/meteroid-oss/meteroid-csharp/compare/v0.29.0...v0.30.0) (2026-10-09)
 
 
