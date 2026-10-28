@@ -14,6 +14,10 @@ namespace Meteroid.Models;
 /// </summary>
 public sealed partial record BooleanConfigValue
 {
+    /// <summary>The <c>kind</c> property.</summary>
+    [JsonPropertyName("kind")]
+    public string Kind { get; init; } = "BOOLEAN";
+
     /// <summary>The <c>value</c> property.</summary>
     [JsonPropertyName("value")]
     public required bool Value { get; init; }
@@ -27,6 +31,7 @@ public sealed partial record BooleanConfigValue
     /// <returns>Whether the records are equal.</returns>
     public bool Equals(BooleanConfigValue? other) =>
         other is not null
+        && global::Meteroid.Equality.Equal(Kind, other.Kind)
         && global::Meteroid.Equality.Equal(Value, other.Value)
         && global::Meteroid.Equality.Equal(AdditionalProperties, other.AdditionalProperties);
 
@@ -34,6 +39,7 @@ public sealed partial record BooleanConfigValue
     public override int GetHashCode()
     {
         var hash = new HashCode();
+        hash.Add(global::Meteroid.Equality.Hash(Kind));
         hash.Add(global::Meteroid.Equality.Hash(Value));
         hash.Add(global::Meteroid.Equality.Hash(AdditionalProperties));
         return hash.ToHashCode();

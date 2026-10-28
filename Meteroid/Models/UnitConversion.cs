@@ -9,10 +9,17 @@ using System.Text.Json.Serialization;
 
 namespace Meteroid.Models;
 
-/// <summary>The <c>UnitConversion</c> object.</summary>
+/// <summary>
+/// Converts the aggregated usage into the unit prices are set in, e.g. tokens priced per 1M.
+/// The usage is divided by <c>factor</c>, then rounded. Rounding applies to each priced group's
+/// total for the billing period: each group of a segmented or grouped metric, and each matrix
+/// cell, is rounded on its own, never each event.
+/// </summary>
 public sealed partial record UnitConversion
 {
-    /// <summary>The <c>factor</c> property.</summary>
+    /// <summary>
+    /// Raw units per priced unit, e.g. <c>1000000</c> to price per 1M.
+    /// </summary>
     [JsonPropertyName("factor")]
     public required int Factor { get; init; }
 

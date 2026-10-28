@@ -16,6 +16,10 @@ public sealed partial record InvoiceLineItem
     [JsonPropertyName("amount_total")]
     public required long AmountTotal { get; init; }
 
+    /// <summary>The <c>credit_unit</c> property.</summary>
+    [JsonPropertyName("credit_unit")]
+    public InvoiceLineCreditUnit? CreditUnit { get; init; }
+
     /// <summary>The <c>description</c> property.</summary>
     [JsonPropertyName("description")]
     public string? Description { get; init; }
@@ -69,6 +73,7 @@ public sealed partial record InvoiceLineItem
     public bool Equals(InvoiceLineItem? other) =>
         other is not null
         && global::Meteroid.Equality.Equal(AmountTotal, other.AmountTotal)
+        && global::Meteroid.Equality.Equal(CreditUnit, other.CreditUnit)
         && global::Meteroid.Equality.Equal(Description, other.Description)
         && global::Meteroid.Equality.Equal(EndDate, other.EndDate)
         && global::Meteroid.Equality.Equal(Name, other.Name)
@@ -85,6 +90,7 @@ public sealed partial record InvoiceLineItem
     {
         var hash = new HashCode();
         hash.Add(global::Meteroid.Equality.Hash(AmountTotal));
+        hash.Add(global::Meteroid.Equality.Hash(CreditUnit));
         hash.Add(global::Meteroid.Equality.Hash(Description));
         hash.Add(global::Meteroid.Equality.Hash(EndDate));
         hash.Add(global::Meteroid.Equality.Hash(Name));

@@ -17,6 +17,13 @@ public sealed partial record Transaction
     public required long Amount { get; init; }
 
     /// <summary>
+    /// On a PAYMENT: the part of <c>amount_reversed</c> lost to disputes or chargebacks. The invoice
+    /// stays paid; only the rest of <c>amount_reversed</c> (a failed collection) reopens it.
+    /// </summary>
+    [JsonPropertyName("amount_disputed")]
+    public long? AmountDisputed { get; init; }
+
+    /// <summary>
     /// On a PAYMENT: how much was voluntarily given back (the sum of its settled REFUND
     /// children). The invoice stays paid — the Refund credit note is what reduces it.
     /// </summary>
@@ -29,6 +36,13 @@ public sealed partial record Transaction
     /// </summary>
     [JsonPropertyName("amount_reversed")]
     public required long AmountReversed { get; init; }
+
+    /// <summary>
+    /// On a PAYMENT: what the provider withdrew above what the payment still held (refunded
+    /// before). Never applied to the invoice or credit: contest it with the provider.
+    /// </summary>
+    [JsonPropertyName("amount_reversed_excess")]
+    public long? AmountReversedExcess { get; init; }
 
     /// <summary>The <c>credit_note_id</c> property.</summary>
     [JsonPropertyName("credit_note_id")]
@@ -98,8 +112,10 @@ public sealed partial record Transaction
     public bool Equals(Transaction? other) =>
         other is not null
         && global::Meteroid.Equality.Equal(Amount, other.Amount)
+        && global::Meteroid.Equality.Equal(AmountDisputed, other.AmountDisputed)
         && global::Meteroid.Equality.Equal(AmountRefunded, other.AmountRefunded)
         && global::Meteroid.Equality.Equal(AmountReversed, other.AmountReversed)
+        && global::Meteroid.Equality.Equal(AmountReversedExcess, other.AmountReversedExcess)
         && global::Meteroid.Equality.Equal(CreditNoteId, other.CreditNoteId)
         && global::Meteroid.Equality.Equal(Currency, other.Currency)
         && global::Meteroid.Equality.Equal(Error, other.Error)
@@ -121,8 +137,10 @@ public sealed partial record Transaction
     {
         var hash = new HashCode();
         hash.Add(global::Meteroid.Equality.Hash(Amount));
+        hash.Add(global::Meteroid.Equality.Hash(AmountDisputed));
         hash.Add(global::Meteroid.Equality.Hash(AmountRefunded));
         hash.Add(global::Meteroid.Equality.Hash(AmountReversed));
+        hash.Add(global::Meteroid.Equality.Hash(AmountReversedExcess));
         hash.Add(global::Meteroid.Equality.Hash(CreditNoteId));
         hash.Add(global::Meteroid.Equality.Hash(Currency));
         hash.Add(global::Meteroid.Equality.Hash(Error));

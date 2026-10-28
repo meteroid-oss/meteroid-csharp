@@ -12,6 +12,13 @@ namespace Meteroid.Models;
 /// <summary>The <c>MetricUsage</c> object.</summary>
 public sealed partial record MetricUsage
 {
+    /// <summary>
+    /// Beta: what the metric's usage adds so far to the subscription's next invoice, per currency
+    /// or credit unit; empty while it bills nothing, as during a free trial or once cancelled.
+    /// </summary>
+    [JsonPropertyName("costs")]
+    public IReadOnlyList<UsageCost>? Costs { get; init; }
+
     /// <summary>The <c>grouped_usage</c> property.</summary>
     [JsonPropertyName("grouped_usage")]
     public required IReadOnlyList<GroupedUsage> GroupedUsage { get; init; }
@@ -42,6 +49,7 @@ public sealed partial record MetricUsage
     /// <returns>Whether the records are equal.</returns>
     public bool Equals(MetricUsage? other) =>
         other is not null
+        && global::Meteroid.Equality.Equal(Costs, other.Costs)
         && global::Meteroid.Equality.Equal(GroupedUsage, other.GroupedUsage)
         && global::Meteroid.Equality.Equal(MetricCode, other.MetricCode)
         && global::Meteroid.Equality.Equal(MetricId, other.MetricId)
@@ -53,6 +61,7 @@ public sealed partial record MetricUsage
     public override int GetHashCode()
     {
         var hash = new HashCode();
+        hash.Add(global::Meteroid.Equality.Hash(Costs));
         hash.Add(global::Meteroid.Equality.Hash(GroupedUsage));
         hash.Add(global::Meteroid.Equality.Hash(MetricCode));
         hash.Add(global::Meteroid.Equality.Hash(MetricId));

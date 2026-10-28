@@ -20,6 +20,10 @@ public sealed partial record ConfigFeatureType
     [JsonPropertyName("options")]
     public IReadOnlyList<string>? Options { get; init; }
 
+    /// <summary>The <c>type</c> property.</summary>
+    [JsonPropertyName("type")]
+    public string Type { get; init; } = "CONFIG";
+
     /// <summary>
     /// The feature's value type, fixed at creation.
     /// </summary>
@@ -36,6 +40,7 @@ public sealed partial record ConfigFeatureType
     public bool Equals(ConfigFeatureType? other) =>
         other is not null
         && global::Meteroid.Equality.Equal(Options, other.Options)
+        && global::Meteroid.Equality.Equal(Type, other.Type)
         && global::Meteroid.Equality.Equal(ValueType, other.ValueType)
         && global::Meteroid.Equality.Equal(AdditionalProperties, other.AdditionalProperties);
 
@@ -44,6 +49,7 @@ public sealed partial record ConfigFeatureType
     {
         var hash = new HashCode();
         hash.Add(global::Meteroid.Equality.Hash(Options));
+        hash.Add(global::Meteroid.Equality.Hash(Type));
         hash.Add(global::Meteroid.Equality.Hash(ValueType));
         hash.Add(global::Meteroid.Equality.Hash(AdditionalProperties));
         return hash.ToHashCode();

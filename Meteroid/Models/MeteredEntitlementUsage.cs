@@ -17,6 +17,13 @@ public sealed partial record MeteredEntitlementUsage
     [JsonNumberHandling(JsonNumberHandling.AllowReadingFromString | JsonNumberHandling.WriteAsString)]
     public decimal? Consumed { get; init; }
 
+    /// <summary>
+    /// Switched on, but refused: the <c>BLOCK</c> limit (plus its grace) is reached, so <c>enabled</c> is
+    /// false until the window resets. Never set for a limit grouped by a property.
+    /// </summary>
+    [JsonPropertyName("limit_reached")]
+    public bool? LimitReached { get; init; }
+
     /// <summary>The <c>remaining</c> property.</summary>
     [JsonPropertyName("remaining")]
     [JsonNumberHandling(JsonNumberHandling.AllowReadingFromString | JsonNumberHandling.WriteAsString)]
@@ -36,6 +43,7 @@ public sealed partial record MeteredEntitlementUsage
     public bool Equals(MeteredEntitlementUsage? other) =>
         other is not null
         && global::Meteroid.Equality.Equal(Consumed, other.Consumed)
+        && global::Meteroid.Equality.Equal(LimitReached, other.LimitReached)
         && global::Meteroid.Equality.Equal(Remaining, other.Remaining)
         && global::Meteroid.Equality.Equal(ResetAt, other.ResetAt)
         && global::Meteroid.Equality.Equal(AdditionalProperties, other.AdditionalProperties);
@@ -45,6 +53,7 @@ public sealed partial record MeteredEntitlementUsage
     {
         var hash = new HashCode();
         hash.Add(global::Meteroid.Equality.Hash(Consumed));
+        hash.Add(global::Meteroid.Equality.Hash(LimitReached));
         hash.Add(global::Meteroid.Equality.Hash(Remaining));
         hash.Add(global::Meteroid.Equality.Hash(ResetAt));
         hash.Add(global::Meteroid.Equality.Hash(AdditionalProperties));

@@ -16,6 +16,12 @@ public sealed partial record PaymentEvent
     [JsonPropertyName("amount")]
     public required long Amount { get; init; }
 
+    /// <summary>
+    /// The part of <c>amount_reversed</c> lost to disputes or chargebacks: the invoice stays paid.
+    /// </summary>
+    [JsonPropertyName("amount_disputed")]
+    public long? AmountDisputed { get; init; }
+
     /// <summary>The <c>amount_refunded</c> property.</summary>
     [JsonPropertyName("amount_refunded")]
     public required long AmountRefunded { get; init; }
@@ -23,6 +29,13 @@ public sealed partial record PaymentEvent
     /// <summary>The <c>amount_reversed</c> property.</summary>
     [JsonPropertyName("amount_reversed")]
     public required long AmountReversed { get; init; }
+
+    /// <summary>
+    /// What the provider withdrew above what the payment still held (refunded before); never
+    /// applied to the invoice or credit. Contest it with the provider.
+    /// </summary>
+    [JsonPropertyName("amount_reversed_excess")]
+    public long? AmountReversedExcess { get; init; }
 
     /// <summary>The <c>credit_note_id</c> property.</summary>
     [JsonPropertyName("credit_note_id")]
@@ -98,8 +111,10 @@ public sealed partial record PaymentEvent
     public bool Equals(PaymentEvent? other) =>
         other is not null
         && global::Meteroid.Equality.Equal(Amount, other.Amount)
+        && global::Meteroid.Equality.Equal(AmountDisputed, other.AmountDisputed)
         && global::Meteroid.Equality.Equal(AmountRefunded, other.AmountRefunded)
         && global::Meteroid.Equality.Equal(AmountReversed, other.AmountReversed)
+        && global::Meteroid.Equality.Equal(AmountReversedExcess, other.AmountReversedExcess)
         && global::Meteroid.Equality.Equal(CreditNoteId, other.CreditNoteId)
         && global::Meteroid.Equality.Equal(Currency, other.Currency)
         && global::Meteroid.Equality.Equal(DeclineKind, other.DeclineKind)
@@ -123,8 +138,10 @@ public sealed partial record PaymentEvent
     {
         var hash = new HashCode();
         hash.Add(global::Meteroid.Equality.Hash(Amount));
+        hash.Add(global::Meteroid.Equality.Hash(AmountDisputed));
         hash.Add(global::Meteroid.Equality.Hash(AmountRefunded));
         hash.Add(global::Meteroid.Equality.Hash(AmountReversed));
+        hash.Add(global::Meteroid.Equality.Hash(AmountReversedExcess));
         hash.Add(global::Meteroid.Equality.Hash(CreditNoteId));
         hash.Add(global::Meteroid.Equality.Hash(Currency));
         hash.Add(global::Meteroid.Equality.Hash(DeclineKind));

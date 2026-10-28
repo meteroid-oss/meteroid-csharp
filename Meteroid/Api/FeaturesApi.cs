@@ -90,7 +90,8 @@ public interface IFeaturesApi
     /// Archive a feature
     /// </summary>
     /// <remarks>
-    /// Keeps the feature and its entitlements but hides them from resolution.
+    /// Turns the feature off and hides it and its entitlements until it is unarchived, and frees its
+    /// code for a new feature.
     /// </remarks>
     /// <param name="idOrCode">The <c>id_or_code</c> path parameter.</param>
     /// <param name="requestOptions">Headers, timeout, retries or idempotency key of this call.</param>
@@ -107,11 +108,16 @@ public interface IFeaturesApi
     /// <summary>
     /// Unarchive a feature
     /// </summary>
+    /// <remarks>
+    /// Makes the feature active again with all its entitlements. Fails while another feature uses its
+    /// code.
+    /// </remarks>
     /// <param name="idOrCode">The <c>id_or_code</c> path parameter.</param>
     /// <param name="requestOptions">Headers, timeout, retries or idempotency key of this call.</param>
     /// <param name="cancellationToken">Cancels the call.</param>
     /// <exception cref="UnauthorizedException">401: <c>Error</c> is the <see cref="Models.RestErrorResponse"/> body.</exception>
     /// <exception cref="NotFoundException">404: <c>Error</c> is the <see cref="Models.RestErrorResponse"/> body.</exception>
+    /// <exception cref="ConflictException">409: <c>Error</c> is the <see cref="Models.RestErrorResponse"/> body.</exception>
     /// <exception cref="RateLimitException">429: <c>Error</c> is the <see cref="Models.RestErrorResponse"/> body.</exception>
     Task UnarchiveAsync(
         string idOrCode,
@@ -437,6 +443,7 @@ public sealed class FeaturesApiWithRawResponse : IFeaturesApiWithRawResponse
         {
             new("401", MeteroidJsonContext.Default.RestErrorResponse),
             new("404", MeteroidJsonContext.Default.RestErrorResponse),
+            new("409", MeteroidJsonContext.Default.RestErrorResponse),
             new("429", MeteroidJsonContext.Default.RestErrorResponse),
         };
         return _transport.SendAsync(request, requestOptions, cancellationToken);

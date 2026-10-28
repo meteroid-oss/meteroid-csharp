@@ -120,7 +120,9 @@ public interface IPlansApi
     /// <remarks>
     /// Full replacement of a plan's version. On a draft plan, updates in-place.
     /// On a published plan, creates a new version. Set <c>status</c> to <c>DRAFT</c> to
-    /// stage as a new draft without publishing.
+    /// stage as a new draft without publishing. A usage or capacity component priced in a credit
+    /// unit must be sent with its <c>credit_unit</c>, or the request is refused: omitting it would bill
+    /// its credits as money.
     /// </remarks>
     /// <param name="planId">The <c>plan_id</c> path parameter.</param>
     /// <param name="replacePlanRequest">The request body.</param>

@@ -24,6 +24,10 @@ public sealed partial record SubscriptionAddOnParameterization
     [JsonPropertyName("initial_slot_count")]
     public int? InitialSlotCount { get; init; }
 
+    /// <summary>The <c>type</c> property.</summary>
+    [JsonPropertyName("type")]
+    public string Type { get; init; } = "PARAMETERIZATION";
+
     /// <summary>The properties of the JSON object this SDK version does not know, sent back as they came.</summary>
     [JsonExtensionData]
     public IDictionary<string, JsonElement>? AdditionalProperties { get; set; }
@@ -36,6 +40,7 @@ public sealed partial record SubscriptionAddOnParameterization
         && global::Meteroid.Equality.Equal(BillingPeriod, other.BillingPeriod)
         && global::Meteroid.Equality.Equal(CommittedCapacity, other.CommittedCapacity)
         && global::Meteroid.Equality.Equal(InitialSlotCount, other.InitialSlotCount)
+        && global::Meteroid.Equality.Equal(Type, other.Type)
         && global::Meteroid.Equality.Equal(AdditionalProperties, other.AdditionalProperties);
 
     /// <inheritdoc/>
@@ -45,6 +50,7 @@ public sealed partial record SubscriptionAddOnParameterization
         hash.Add(global::Meteroid.Equality.Hash(BillingPeriod));
         hash.Add(global::Meteroid.Equality.Hash(CommittedCapacity));
         hash.Add(global::Meteroid.Equality.Hash(InitialSlotCount));
+        hash.Add(global::Meteroid.Equality.Hash(Type));
         hash.Add(global::Meteroid.Equality.Hash(AdditionalProperties));
         return hash.ToHashCode();
     }

@@ -30,6 +30,10 @@ public sealed partial record SlotPlanFee
     [JsonPropertyName("slot_unit_name")]
     public required string SlotUnitName { get; init; }
 
+    /// <summary>The <c>type</c> property.</summary>
+    [JsonPropertyName("type")]
+    public string Type { get; init; } = "SLOT";
+
     /// <summary>The properties of the JSON object this SDK version does not know, sent back as they came.</summary>
     [JsonExtensionData]
     public IDictionary<string, JsonElement>? AdditionalProperties { get; set; }
@@ -43,6 +47,7 @@ public sealed partial record SlotPlanFee
         && global::Meteroid.Equality.Equal(Quota, other.Quota)
         && global::Meteroid.Equality.Equal(Rates, other.Rates)
         && global::Meteroid.Equality.Equal(SlotUnitName, other.SlotUnitName)
+        && global::Meteroid.Equality.Equal(Type, other.Type)
         && global::Meteroid.Equality.Equal(AdditionalProperties, other.AdditionalProperties);
 
     /// <inheritdoc/>
@@ -53,6 +58,7 @@ public sealed partial record SlotPlanFee
         hash.Add(global::Meteroid.Equality.Hash(Quota));
         hash.Add(global::Meteroid.Equality.Hash(Rates));
         hash.Add(global::Meteroid.Equality.Hash(SlotUnitName));
+        hash.Add(global::Meteroid.Equality.Hash(Type));
         hash.Add(global::Meteroid.Equality.Hash(AdditionalProperties));
         return hash.ToHashCode();
     }

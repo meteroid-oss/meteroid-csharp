@@ -69,6 +69,14 @@ public abstract partial record ProductFeeStructure
         public override string Type => "ONE_TIME";
     }
 
+    /// <summary>The <c>CREDIT</c> variant.</summary>
+    /// <param name="Value">The fields of the variant.</param>
+    public sealed record Credit(CreditFeeStructure Value) : ProductFeeStructure
+    {
+        /// <inheritdoc/>
+        public override string Type => "CREDIT";
+    }
+
     /// <summary>A variant unknown to this SDK version, kept as the raw JSON object.</summary>
     /// <param name="Tag">The <c>type</c> of the variant.</param>
     /// <param name="Raw">The whole JSON object.</param>
@@ -109,6 +117,7 @@ internal sealed class ProductFeeStructureConverter : JsonConverter<ProductFeeStr
                 Json.Deserialize<ExtraRecurringFeeStructure>(root, options)
             ),
             "ONE_TIME" => new ProductFeeStructure.OneTime(Json.Deserialize<OneTimeFeeStructure>(root, options)),
+            "CREDIT" => new ProductFeeStructure.Credit(Json.Deserialize<CreditFeeStructure>(root, options)),
             var tag => new ProductFeeStructure.Unrecognized(tag ?? string.Empty, root.Clone()),
         };
     }
@@ -139,6 +148,9 @@ internal sealed class ProductFeeStructureConverter : JsonConverter<ProductFeeStr
                 fields.AddRange(Json.ToObject(variant.Value, options));
                 break;
             case ProductFeeStructure.OneTime variant:
+                fields.AddRange(Json.ToObject(variant.Value, options));
+                break;
+            case ProductFeeStructure.Credit variant:
                 fields.AddRange(Json.ToObject(variant.Value, options));
                 break;
         }

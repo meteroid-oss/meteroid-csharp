@@ -25,11 +25,11 @@ public class ConnectTests
         using var mock = new PerseidMock(
             200,
             "application/json",
-            "{\"connection_type\":\"express\",\"created_at\":\"2024-03-15T10:30:45.123+02:00\",\"id\":\"connected_account_id_47\",\"onboarding_mode\":\"express\",\"platform_organization_id\":\"organization_id_83\",\"status\":\"active\"}"
+            "{\"connection_type\":\"express\",\"created_at\":\"2024-03-15T10:30:45.123+02:00\",\"id\":\"connected_account_id_47\",\"onboarding_mode\":\"express\",\"platform_organization_id\":\"organization_id_83\",\"status\":\"active\",\"onboarding_link\":{\"expires_at\":\"2023-12-31T23:59:59.999-05:30\",\"url\":\"sample\"}}"
         );
         await mock.Client.Connect.CreateConnectedAccountAsync(
             PerseidMock.Decode<global::Meteroid.Models.CreateConnectedAccountRequest>(
-                "{\"connected_organization_id\":\"00000000-0000-0000-0000-000000000000\"}"
+                "{\"email\":\"alice@example.com\",\"organization_name\":\"sample\"}"
             )
         );
         Assert.Equal(new[] { "POST /api/v1/connected-accounts" }, mock.Requests);

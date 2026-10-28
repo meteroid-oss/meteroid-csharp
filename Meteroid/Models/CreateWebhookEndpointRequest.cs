@@ -17,7 +17,8 @@ public sealed partial record CreateWebhookEndpointRequest
     public string? Description { get; init; }
 
     /// <summary>
-    /// Event types to subscribe to. Omit or leave empty to receive every event type.
+    /// Event types to subscribe to. Omit or leave empty to receive every event type except Beta
+    /// ones, which are sent only to endpoints that list them.
     /// </summary>
     [JsonPropertyName("event_types")]
     public IReadOnlyList<string>? EventTypes { get; init; }

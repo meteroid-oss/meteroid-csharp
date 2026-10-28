@@ -18,6 +18,10 @@ public sealed partial record CapacityPlanFee
     [JsonPropertyName("cadence")]
     public required BillingPeriodEnum Cadence { get; init; }
 
+    /// <summary>The <c>credit_unit</c> property.</summary>
+    [JsonPropertyName("credit_unit")]
+    public PlanFeeCreditUnit? CreditUnit { get; init; }
+
     /// <summary>The <c>metric_id</c> property.</summary>
     [JsonPropertyName("metric_id")]
     public required string MetricId { get; init; }
@@ -25,6 +29,10 @@ public sealed partial record CapacityPlanFee
     /// <summary>The <c>thresholds</c> property.</summary>
     [JsonPropertyName("thresholds")]
     public required IReadOnlyList<CapacityThreshold> Thresholds { get; init; }
+
+    /// <summary>The <c>type</c> property.</summary>
+    [JsonPropertyName("type")]
+    public string Type { get; init; } = "CAPACITY";
 
     /// <summary>The properties of the JSON object this SDK version does not know, sent back as they came.</summary>
     [JsonExtensionData]
@@ -36,8 +44,10 @@ public sealed partial record CapacityPlanFee
     public bool Equals(CapacityPlanFee? other) =>
         other is not null
         && global::Meteroid.Equality.Equal(Cadence, other.Cadence)
+        && global::Meteroid.Equality.Equal(CreditUnit, other.CreditUnit)
         && global::Meteroid.Equality.Equal(MetricId, other.MetricId)
         && global::Meteroid.Equality.Equal(Thresholds, other.Thresholds)
+        && global::Meteroid.Equality.Equal(Type, other.Type)
         && global::Meteroid.Equality.Equal(AdditionalProperties, other.AdditionalProperties);
 
     /// <inheritdoc/>
@@ -45,8 +55,10 @@ public sealed partial record CapacityPlanFee
     {
         var hash = new HashCode();
         hash.Add(global::Meteroid.Equality.Hash(Cadence));
+        hash.Add(global::Meteroid.Equality.Hash(CreditUnit));
         hash.Add(global::Meteroid.Equality.Hash(MetricId));
         hash.Add(global::Meteroid.Equality.Hash(Thresholds));
+        hash.Add(global::Meteroid.Equality.Hash(Type));
         hash.Add(global::Meteroid.Equality.Hash(AdditionalProperties));
         return hash.ToHashCode();
     }

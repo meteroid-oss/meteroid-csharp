@@ -180,6 +180,17 @@ public sealed partial record SubscriptionDetails
     [JsonPropertyName("trial_duration")]
     public int? TrialDuration { get; init; }
 
+    /// <summary>The <c>usage_filter</c> property.</summary>
+    [JsonPropertyName("usage_filter")]
+    public UsageFilter? UsageFilter { get; init; }
+
+    /// <summary>
+    /// When the current usage filter, or its removal, started to apply: the start of the usage
+    /// neither this subscription nor the customer's others had invoiced when it was set.
+    /// </summary>
+    [JsonPropertyName("usage_filter_effective_from")]
+    public DateTimeOffset? UsageFilterEffectiveFrom { get; init; }
+
     /// <summary>The properties of the JSON object this SDK version does not know, sent back as they came.</summary>
     [JsonExtensionData]
     public IDictionary<string, JsonElement>? AdditionalProperties { get; set; }
@@ -224,6 +235,8 @@ public sealed partial record SubscriptionDetails
         && global::Meteroid.Equality.Equal(Status, other.Status)
         && global::Meteroid.Equality.Equal(TaxInclusive, other.TaxInclusive)
         && global::Meteroid.Equality.Equal(TrialDuration, other.TrialDuration)
+        && global::Meteroid.Equality.Equal(UsageFilter, other.UsageFilter)
+        && global::Meteroid.Equality.Equal(UsageFilterEffectiveFrom, other.UsageFilterEffectiveFrom)
         && global::Meteroid.Equality.Equal(AdditionalProperties, other.AdditionalProperties);
 
     /// <inheritdoc/>
@@ -265,6 +278,8 @@ public sealed partial record SubscriptionDetails
         hash.Add(global::Meteroid.Equality.Hash(Status));
         hash.Add(global::Meteroid.Equality.Hash(TaxInclusive));
         hash.Add(global::Meteroid.Equality.Hash(TrialDuration));
+        hash.Add(global::Meteroid.Equality.Hash(UsageFilter));
+        hash.Add(global::Meteroid.Equality.Hash(UsageFilterEffectiveFrom));
         hash.Add(global::Meteroid.Equality.Hash(AdditionalProperties));
         return hash.ToHashCode();
     }

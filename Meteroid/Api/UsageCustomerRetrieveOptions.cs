@@ -8,8 +8,8 @@ using Meteroid.Models;
 
 namespace Meteroid;
 
-/// <summary>Query and header parameters of <see cref="UsageApi.RetrieveCustomerAsync"/>; the <c>required</c> ones must be set.</summary>
-public sealed record UsageRetrieveCustomerOptions
+/// <summary>Query and header parameters of <see cref="UsageCustomerApi.RetrieveAsync"/>; the <c>required</c> ones must be set.</summary>
+public sealed record UsageCustomerRetrieveOptions
 {
     /// <summary>The <c>start_date</c> query parameter.</summary>
     public required DateOnly StartDate { get; init; }

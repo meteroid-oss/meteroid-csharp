@@ -69,6 +69,14 @@ public abstract partial record Fee
         public override string Type => "ONE_TIME";
     }
 
+    /// <summary>The <c>CREDIT</c> variant.</summary>
+    /// <param name="Value">The fields of the variant.</param>
+    public sealed record Credit(CreditPlanFee Value) : Fee
+    {
+        /// <inheritdoc/>
+        public override string Type => "CREDIT";
+    }
+
     /// <summary>A variant unknown to this SDK version, kept as the raw JSON object.</summary>
     /// <param name="Tag">The <c>type</c> of the variant.</param>
     /// <param name="Raw">The whole JSON object.</param>
@@ -103,6 +111,7 @@ internal sealed class FeeConverter : JsonConverter<Fee>
             "USAGE" => new Fee.Usage(Json.Deserialize<UsagePlanFee>(root, options)),
             "EXTRA_RECURRING" => new Fee.ExtraRecurring(Json.Deserialize<ExtraRecurringPlanFee>(root, options)),
             "ONE_TIME" => new Fee.OneTime(Json.Deserialize<OneTimePlanFee>(root, options)),
+            "CREDIT" => new Fee.Credit(Json.Deserialize<CreditPlanFee>(root, options)),
             var tag => new Fee.Unrecognized(tag ?? string.Empty, root.Clone()),
         };
     }
@@ -133,6 +142,9 @@ internal sealed class FeeConverter : JsonConverter<Fee>
                 fields.AddRange(Json.ToObject(variant.Value, options));
                 break;
             case Fee.OneTime variant:
+                fields.AddRange(Json.ToObject(variant.Value, options));
+                break;
+            case Fee.Credit variant:
                 fields.AddRange(Json.ToObject(variant.Value, options));
                 break;
         }

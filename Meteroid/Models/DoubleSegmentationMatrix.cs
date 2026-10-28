@@ -20,6 +20,10 @@ public sealed partial record DoubleSegmentationMatrix
     [JsonPropertyName("dimension2")]
     public required MetricDimension Dimension2 { get; init; }
 
+    /// <summary>The <c>type</c> property.</summary>
+    [JsonPropertyName("type")]
+    public string Type { get; init; } = "DOUBLE";
+
     /// <summary>The properties of the JSON object this SDK version does not know, sent back as they came.</summary>
     [JsonExtensionData]
     public IDictionary<string, JsonElement>? AdditionalProperties { get; set; }
@@ -31,6 +35,7 @@ public sealed partial record DoubleSegmentationMatrix
         other is not null
         && global::Meteroid.Equality.Equal(Dimension1, other.Dimension1)
         && global::Meteroid.Equality.Equal(Dimension2, other.Dimension2)
+        && global::Meteroid.Equality.Equal(Type, other.Type)
         && global::Meteroid.Equality.Equal(AdditionalProperties, other.AdditionalProperties);
 
     /// <inheritdoc/>
@@ -39,6 +44,7 @@ public sealed partial record DoubleSegmentationMatrix
         var hash = new HashCode();
         hash.Add(global::Meteroid.Equality.Hash(Dimension1));
         hash.Add(global::Meteroid.Equality.Hash(Dimension2));
+        hash.Add(global::Meteroid.Equality.Hash(Type));
         hash.Add(global::Meteroid.Equality.Hash(AdditionalProperties));
         return hash.ToHashCode();
     }

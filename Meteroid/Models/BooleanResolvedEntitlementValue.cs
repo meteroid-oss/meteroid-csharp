@@ -16,6 +16,10 @@ public sealed partial record BooleanResolvedEntitlementValue
     [JsonPropertyName("enabled")]
     public required bool Enabled { get; init; }
 
+    /// <summary>The <c>type</c> property.</summary>
+    [JsonPropertyName("type")]
+    public string Type { get; init; } = "BOOLEAN";
+
     /// <summary>The properties of the JSON object this SDK version does not know, sent back as they came.</summary>
     [JsonExtensionData]
     public IDictionary<string, JsonElement>? AdditionalProperties { get; set; }
@@ -26,6 +30,7 @@ public sealed partial record BooleanResolvedEntitlementValue
     public bool Equals(BooleanResolvedEntitlementValue? other) =>
         other is not null
         && global::Meteroid.Equality.Equal(Enabled, other.Enabled)
+        && global::Meteroid.Equality.Equal(Type, other.Type)
         && global::Meteroid.Equality.Equal(AdditionalProperties, other.AdditionalProperties);
 
     /// <inheritdoc/>
@@ -33,6 +38,7 @@ public sealed partial record BooleanResolvedEntitlementValue
     {
         var hash = new HashCode();
         hash.Add(global::Meteroid.Equality.Hash(Enabled));
+        hash.Add(global::Meteroid.Equality.Hash(Type));
         hash.Add(global::Meteroid.Equality.Hash(AdditionalProperties));
         return hash.ToHashCode();
     }

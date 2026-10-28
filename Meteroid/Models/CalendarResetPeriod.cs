@@ -18,6 +18,10 @@ public sealed partial record CalendarResetPeriod
     [JsonPropertyName("interval")]
     public required int Interval { get; init; }
 
+    /// <summary>The <c>type</c> property.</summary>
+    [JsonPropertyName("type")]
+    public string Type { get; init; } = "CALENDAR";
+
     /// <summary>The <c>unit</c> property.</summary>
     [JsonPropertyName("unit")]
     public required CalendarUnit Unit { get; init; }
@@ -32,6 +36,7 @@ public sealed partial record CalendarResetPeriod
     public bool Equals(CalendarResetPeriod? other) =>
         other is not null
         && global::Meteroid.Equality.Equal(Interval, other.Interval)
+        && global::Meteroid.Equality.Equal(Type, other.Type)
         && global::Meteroid.Equality.Equal(Unit, other.Unit)
         && global::Meteroid.Equality.Equal(AdditionalProperties, other.AdditionalProperties);
 
@@ -40,6 +45,7 @@ public sealed partial record CalendarResetPeriod
     {
         var hash = new HashCode();
         hash.Add(global::Meteroid.Equality.Hash(Interval));
+        hash.Add(global::Meteroid.Equality.Hash(Type));
         hash.Add(global::Meteroid.Equality.Hash(Unit));
         hash.Add(global::Meteroid.Equality.Hash(AdditionalProperties));
         return hash.ToHashCode();

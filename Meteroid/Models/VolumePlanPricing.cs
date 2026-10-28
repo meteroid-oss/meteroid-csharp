@@ -20,6 +20,10 @@ public sealed partial record VolumePlanPricing
     [JsonPropertyName("tiers")]
     public required IReadOnlyList<TierRow> Tiers { get; init; }
 
+    /// <summary>The <c>type</c> property.</summary>
+    [JsonPropertyName("type")]
+    public string Type { get; init; } = "VOLUME";
+
     /// <summary>The properties of the JSON object this SDK version does not know, sent back as they came.</summary>
     [JsonExtensionData]
     public IDictionary<string, JsonElement>? AdditionalProperties { get; set; }
@@ -31,6 +35,7 @@ public sealed partial record VolumePlanPricing
         other is not null
         && global::Meteroid.Equality.Equal(BlockSize, other.BlockSize)
         && global::Meteroid.Equality.Equal(Tiers, other.Tiers)
+        && global::Meteroid.Equality.Equal(Type, other.Type)
         && global::Meteroid.Equality.Equal(AdditionalProperties, other.AdditionalProperties);
 
     /// <inheritdoc/>
@@ -39,6 +44,7 @@ public sealed partial record VolumePlanPricing
         var hash = new HashCode();
         hash.Add(global::Meteroid.Equality.Hash(BlockSize));
         hash.Add(global::Meteroid.Equality.Hash(Tiers));
+        hash.Add(global::Meteroid.Equality.Hash(Type));
         hash.Add(global::Meteroid.Equality.Hash(AdditionalProperties));
         return hash.ToHashCode();
     }

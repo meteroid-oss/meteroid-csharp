@@ -20,6 +20,10 @@ public sealed partial record LinkedSegmentationMatrix
     [JsonPropertyName("dimension2_key")]
     public required string Dimension2Key { get; init; }
 
+    /// <summary>The <c>type</c> property.</summary>
+    [JsonPropertyName("type")]
+    public string Type { get; init; } = "LINKED";
+
     /// <summary>The <c>values</c> property.</summary>
     [JsonPropertyName("values")]
     public required IReadOnlyDictionary<string, IReadOnlyList<string>> Values { get; init; }
@@ -35,6 +39,7 @@ public sealed partial record LinkedSegmentationMatrix
         other is not null
         && global::Meteroid.Equality.Equal(Dimension1Key, other.Dimension1Key)
         && global::Meteroid.Equality.Equal(Dimension2Key, other.Dimension2Key)
+        && global::Meteroid.Equality.Equal(Type, other.Type)
         && global::Meteroid.Equality.Equal(Values, other.Values)
         && global::Meteroid.Equality.Equal(AdditionalProperties, other.AdditionalProperties);
 
@@ -44,6 +49,7 @@ public sealed partial record LinkedSegmentationMatrix
         var hash = new HashCode();
         hash.Add(global::Meteroid.Equality.Hash(Dimension1Key));
         hash.Add(global::Meteroid.Equality.Hash(Dimension2Key));
+        hash.Add(global::Meteroid.Equality.Hash(Type));
         hash.Add(global::Meteroid.Equality.Hash(Values));
         hash.Add(global::Meteroid.Equality.Hash(AdditionalProperties));
         return hash.ToHashCode();

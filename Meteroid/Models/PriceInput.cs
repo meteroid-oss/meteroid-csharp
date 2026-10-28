@@ -24,6 +24,10 @@ public sealed partial record PriceInput
     [JsonPropertyName("pricing")]
     public required Pricing Pricing { get; init; }
 
+    /// <summary>The <c>type</c> property.</summary>
+    [JsonPropertyName("type")]
+    public string Type { get; init; } = "NEW";
+
     /// <summary>The properties of the JSON object this SDK version does not know, sent back as they came.</summary>
     [JsonExtensionData]
     public IDictionary<string, JsonElement>? AdditionalProperties { get; set; }
@@ -36,6 +40,7 @@ public sealed partial record PriceInput
         && global::Meteroid.Equality.Equal(Cadence, other.Cadence)
         && global::Meteroid.Equality.Equal(Currency, other.Currency)
         && global::Meteroid.Equality.Equal(Pricing, other.Pricing)
+        && global::Meteroid.Equality.Equal(Type, other.Type)
         && global::Meteroid.Equality.Equal(AdditionalProperties, other.AdditionalProperties);
 
     /// <inheritdoc/>
@@ -45,6 +50,7 @@ public sealed partial record PriceInput
         hash.Add(global::Meteroid.Equality.Hash(Cadence));
         hash.Add(global::Meteroid.Equality.Hash(Currency));
         hash.Add(global::Meteroid.Equality.Hash(Pricing));
+        hash.Add(global::Meteroid.Equality.Hash(Type));
         hash.Add(global::Meteroid.Equality.Hash(AdditionalProperties));
         return hash.ToHashCode();
     }

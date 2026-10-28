@@ -14,6 +14,10 @@ namespace Meteroid.Models;
 /// </summary>
 public sealed partial record NeverResetPeriod
 {
+    /// <summary>The <c>type</c> property.</summary>
+    [JsonPropertyName("type")]
+    public string Type { get; init; } = "NEVER";
+
     /// <summary>The properties of the JSON object this SDK version does not know, sent back as they came.</summary>
     [JsonExtensionData]
     public IDictionary<string, JsonElement>? AdditionalProperties { get; set; }
@@ -22,12 +26,15 @@ public sealed partial record NeverResetPeriod
     /// <param name="other">The record to compare with.</param>
     /// <returns>Whether the records are equal.</returns>
     public bool Equals(NeverResetPeriod? other) =>
-        other is not null && global::Meteroid.Equality.Equal(AdditionalProperties, other.AdditionalProperties);
+        other is not null
+        && global::Meteroid.Equality.Equal(Type, other.Type)
+        && global::Meteroid.Equality.Equal(AdditionalProperties, other.AdditionalProperties);
 
     /// <inheritdoc/>
     public override int GetHashCode()
     {
         var hash = new HashCode();
+        hash.Add(global::Meteroid.Equality.Hash(Type));
         hash.Add(global::Meteroid.Equality.Hash(AdditionalProperties));
         return hash.ToHashCode();
     }

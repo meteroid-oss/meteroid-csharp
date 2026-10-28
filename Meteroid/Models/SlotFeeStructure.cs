@@ -20,6 +20,10 @@ public sealed partial record SlotFeeStructure
     [JsonPropertyName("slot_unit_name")]
     public required string SlotUnitName { get; init; }
 
+    /// <summary>The <c>type</c> property.</summary>
+    [JsonPropertyName("type")]
+    public string Type { get; init; } = "SLOT";
+
     /// <summary>The <c>upgrade_policy</c> property.</summary>
     [JsonPropertyName("upgrade_policy")]
     public required SlotUpgradePolicyEnum UpgradePolicy { get; init; }
@@ -35,6 +39,7 @@ public sealed partial record SlotFeeStructure
         other is not null
         && global::Meteroid.Equality.Equal(DowngradePolicy, other.DowngradePolicy)
         && global::Meteroid.Equality.Equal(SlotUnitName, other.SlotUnitName)
+        && global::Meteroid.Equality.Equal(Type, other.Type)
         && global::Meteroid.Equality.Equal(UpgradePolicy, other.UpgradePolicy)
         && global::Meteroid.Equality.Equal(AdditionalProperties, other.AdditionalProperties);
 
@@ -44,6 +49,7 @@ public sealed partial record SlotFeeStructure
         var hash = new HashCode();
         hash.Add(global::Meteroid.Equality.Hash(DowngradePolicy));
         hash.Add(global::Meteroid.Equality.Hash(SlotUnitName));
+        hash.Add(global::Meteroid.Equality.Hash(Type));
         hash.Add(global::Meteroid.Equality.Hash(UpgradePolicy));
         hash.Add(global::Meteroid.Equality.Hash(AdditionalProperties));
         return hash.ToHashCode();

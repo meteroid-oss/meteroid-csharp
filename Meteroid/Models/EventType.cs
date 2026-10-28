@@ -122,8 +122,47 @@ public readonly partial record struct EventType(string Value) : IStringEnum<Even
     /// <summary><c>payment.reversed</c></summary>
     public static EventType PaymentReversed { get; } = new("payment.reversed");
 
+    /// <summary><c>payment.reinstated</c></summary>
+    public static EventType PaymentReinstated { get; } = new("payment.reinstated");
+
     /// <summary><c>payment.failed</c></summary>
     public static EventType PaymentFailed { get; } = new("payment.failed");
+
+    /// <summary><c>wallet.funded</c></summary>
+    public static EventType WalletFunded { get; } = new("wallet.funded");
+
+    /// <summary><c>wallet.debited</c></summary>
+    public static EventType WalletDebited { get; } = new("wallet.debited");
+
+    /// <summary><c>wallet.balance_low</c></summary>
+    public static EventType WalletBalanceLow { get; } = new("wallet.balance_low");
+
+    /// <summary><c>wallet.credit_unrecovered</c></summary>
+    public static EventType WalletCreditUnrecovered { get; } = new("wallet.credit_unrecovered");
+
+    /// <summary><c>wallet.credit_recovered</c></summary>
+    public static EventType WalletCreditRecovered { get; } = new("wallet.credit_recovered");
+
+    /// <summary><c>wallet.auto_top_up_failed</c></summary>
+    public static EventType WalletAutoTopUpFailed { get; } = new("wallet.auto_top_up_failed");
+
+    /// <summary><c>wallet.auto_top_up_suspended</c></summary>
+    public static EventType WalletAutoTopUpSuspended { get; } = new("wallet.auto_top_up_suspended");
+
+    /// <summary><c>wallet.auto_top_up_consent_changed</c></summary>
+    public static EventType WalletAutoTopUpConsentChanged { get; } = new("wallet.auto_top_up_consent_changed");
+
+    /// <summary><c>wallet.depleted</c></summary>
+    public static EventType WalletDepleted { get; } = new("wallet.depleted");
+
+    /// <summary><c>wallet.recovered</c></summary>
+    public static EventType WalletRecovered { get; } = new("wallet.recovered");
+
+    /// <summary><c>wallet.auto_top_up_cap_reached</c></summary>
+    public static EventType WalletAutoTopUpCapReached { get; } = new("wallet.auto_top_up_cap_reached");
+
+    /// <summary><c>credit_grant.expired</c></summary>
+    public static EventType CreditGrantExpired { get; } = new("credit_grant.expired");
 
     /// <summary>Whether this SDK version knows the value.</summary>
     public bool IsKnown =>
@@ -165,7 +204,20 @@ public readonly partial record struct EventType(string Value) : IStringEnum<Even
                 or "refund.settled"
                 or "refund.failed"
                 or "payment.reversed"
-                or "payment.failed";
+                or "payment.reinstated"
+                or "payment.failed"
+                or "wallet.funded"
+                or "wallet.debited"
+                or "wallet.balance_low"
+                or "wallet.credit_unrecovered"
+                or "wallet.credit_recovered"
+                or "wallet.auto_top_up_failed"
+                or "wallet.auto_top_up_suspended"
+                or "wallet.auto_top_up_consent_changed"
+                or "wallet.depleted"
+                or "wallet.recovered"
+                or "wallet.auto_top_up_cap_reached"
+                or "credit_grant.expired";
 
     /// <summary>The known values as constants, to <c>switch</c> on <see cref="Value"/>.</summary>
     public static class Values
@@ -281,8 +333,47 @@ public readonly partial record struct EventType(string Value) : IStringEnum<Even
         /// <summary><c>payment.reversed</c></summary>
         public const string PaymentReversed = "payment.reversed";
 
+        /// <summary><c>payment.reinstated</c></summary>
+        public const string PaymentReinstated = "payment.reinstated";
+
         /// <summary><c>payment.failed</c></summary>
         public const string PaymentFailed = "payment.failed";
+
+        /// <summary><c>wallet.funded</c></summary>
+        public const string WalletFunded = "wallet.funded";
+
+        /// <summary><c>wallet.debited</c></summary>
+        public const string WalletDebited = "wallet.debited";
+
+        /// <summary><c>wallet.balance_low</c></summary>
+        public const string WalletBalanceLow = "wallet.balance_low";
+
+        /// <summary><c>wallet.credit_unrecovered</c></summary>
+        public const string WalletCreditUnrecovered = "wallet.credit_unrecovered";
+
+        /// <summary><c>wallet.credit_recovered</c></summary>
+        public const string WalletCreditRecovered = "wallet.credit_recovered";
+
+        /// <summary><c>wallet.auto_top_up_failed</c></summary>
+        public const string WalletAutoTopUpFailed = "wallet.auto_top_up_failed";
+
+        /// <summary><c>wallet.auto_top_up_suspended</c></summary>
+        public const string WalletAutoTopUpSuspended = "wallet.auto_top_up_suspended";
+
+        /// <summary><c>wallet.auto_top_up_consent_changed</c></summary>
+        public const string WalletAutoTopUpConsentChanged = "wallet.auto_top_up_consent_changed";
+
+        /// <summary><c>wallet.depleted</c></summary>
+        public const string WalletDepleted = "wallet.depleted";
+
+        /// <summary><c>wallet.recovered</c></summary>
+        public const string WalletRecovered = "wallet.recovered";
+
+        /// <summary><c>wallet.auto_top_up_cap_reached</c></summary>
+        public const string WalletAutoTopUpCapReached = "wallet.auto_top_up_cap_reached";
+
+        /// <summary><c>credit_grant.expired</c></summary>
+        public const string CreditGrantExpired = "credit_grant.expired";
     }
 
     static EventType IStringEnum<EventType>.FromValue(string value) => new(value);

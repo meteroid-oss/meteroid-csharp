@@ -16,7 +16,10 @@ public sealed partial record Invoice
     [JsonPropertyName("amount_due")]
     public required long AmountDue { get; init; }
 
-    /// <summary>The <c>applied_credits</c> property.</summary>
+    /// <summary>
+    /// Paid credit applied after tax, in minor units of the invoice currency: it settles part of
+    /// <c>total</c> like a payment, and <c>amount_due</c> is net of it.
+    /// </summary>
     [JsonPropertyName("applied_credits")]
     public required long AppliedCredits { get; init; }
 
@@ -110,9 +113,25 @@ public sealed partial record Invoice
     [JsonPropertyName("parent_invoice_id")]
     public string? ParentInvoiceId { get; init; }
 
+    /// <summary>
+    /// When a dispute or chargeback first took money still lost on this invoice's payments. The
+    /// invoice stays paid; absent when nothing is disputed.
+    /// </summary>
+    [JsonPropertyName("payment_disputed_at")]
+    public DateTimeOffset? PaymentDisputedAt { get; init; }
+
     /// <summary>The <c>payment_status</c> property.</summary>
     [JsonPropertyName("payment_status")]
     public required InvoicePaymentStatus PaymentStatus { get; init; }
+
+    /// <summary>
+    /// Promotional credit applied before tax (credit included with the plan, coupon credit, bonus
+    /// credit), in minor units of the invoice currency. Like a discount, it reduces the taxable
+    /// amount: <c>tax_amount</c> and <c>total</c> already exclude it, <c>subtotal</c> does not. Unlike
+    /// <c>applied_credits</c>, which settles part of the <c>total</c> after tax.
+    /// </summary>
+    [JsonPropertyName("promotional_credits")]
+    public long? PromotionalCredits { get; init; }
 
     /// <summary>The <c>purchase_order</c> property.</summary>
     [JsonPropertyName("purchase_order")]
@@ -121,6 +140,13 @@ public sealed partial record Invoice
     /// <summary>The <c>reference</c> property.</summary>
     [JsonPropertyName("reference")]
     public string? Reference { get; init; }
+
+    /// <summary>
+    /// True when the invoice is <c>PAID</c> without any payment: finalized credit notes cancelled its
+    /// whole total. Nothing was collected, so it books no cash.
+    /// </summary>
+    [JsonPropertyName("settled_by_credit_notes")]
+    public required bool SettledByCreditNotes { get; init; }
 
     /// <summary>The <c>status</c> property.</summary>
     [JsonPropertyName("status")]
@@ -201,9 +227,12 @@ public sealed partial record Invoice
         && global::Meteroid.Equality.Equal(NetTerms, other.NetTerms)
         && global::Meteroid.Equality.Equal(PaidAt, other.PaidAt)
         && global::Meteroid.Equality.Equal(ParentInvoiceId, other.ParentInvoiceId)
+        && global::Meteroid.Equality.Equal(PaymentDisputedAt, other.PaymentDisputedAt)
         && global::Meteroid.Equality.Equal(PaymentStatus, other.PaymentStatus)
+        && global::Meteroid.Equality.Equal(PromotionalCredits, other.PromotionalCredits)
         && global::Meteroid.Equality.Equal(PurchaseOrder, other.PurchaseOrder)
         && global::Meteroid.Equality.Equal(Reference, other.Reference)
+        && global::Meteroid.Equality.Equal(SettledByCreditNotes, other.SettledByCreditNotes)
         && global::Meteroid.Equality.Equal(Status, other.Status)
         && global::Meteroid.Equality.Equal(SubscriptionId, other.SubscriptionId)
         && global::Meteroid.Equality.Equal(Subtotal, other.Subtotal)
@@ -244,9 +273,12 @@ public sealed partial record Invoice
         hash.Add(global::Meteroid.Equality.Hash(NetTerms));
         hash.Add(global::Meteroid.Equality.Hash(PaidAt));
         hash.Add(global::Meteroid.Equality.Hash(ParentInvoiceId));
+        hash.Add(global::Meteroid.Equality.Hash(PaymentDisputedAt));
         hash.Add(global::Meteroid.Equality.Hash(PaymentStatus));
+        hash.Add(global::Meteroid.Equality.Hash(PromotionalCredits));
         hash.Add(global::Meteroid.Equality.Hash(PurchaseOrder));
         hash.Add(global::Meteroid.Equality.Hash(Reference));
+        hash.Add(global::Meteroid.Equality.Hash(SettledByCreditNotes));
         hash.Add(global::Meteroid.Equality.Hash(Status));
         hash.Add(global::Meteroid.Equality.Hash(SubscriptionId));
         hash.Add(global::Meteroid.Equality.Hash(Subtotal));

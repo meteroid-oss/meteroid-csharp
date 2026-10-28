@@ -54,6 +54,21 @@ public sealed partial record CreateMetricRequest
     [JsonPropertyName("unit_conversion")]
     public UnitConversion? UnitConversion { get; init; }
 
+    /// <summary>
+    /// What several units of the metric are called, e.g. <c>tokens</c>. Set together with
+    /// <c>unit_singular</c>. Trimmed; at most 32 characters.
+    /// </summary>
+    [JsonPropertyName("unit_plural")]
+    public string? UnitPlural { get; init; }
+
+    /// <summary>
+    /// What one unit of the metric is called, e.g. <c>token</c>, used to label quantities and
+    /// prices ("$12.00 per 1M tokens"). Set both <c>unit_singular</c> and <c>unit_plural</c>, or neither.
+    /// Trimmed; at most 32 characters.
+    /// </summary>
+    [JsonPropertyName("unit_singular")]
+    public string? UnitSingular { get; init; }
+
     /// <summary>The <c>usage_group_key</c> property.</summary>
     [JsonPropertyName("usage_group_key")]
     public string? UsageGroupKey { get; init; }
@@ -77,6 +92,8 @@ public sealed partial record CreateMetricRequest
         && global::Meteroid.Equality.Equal(ProductId, other.ProductId)
         && global::Meteroid.Equality.Equal(SegmentationMatrix, other.SegmentationMatrix)
         && global::Meteroid.Equality.Equal(UnitConversion, other.UnitConversion)
+        && global::Meteroid.Equality.Equal(UnitPlural, other.UnitPlural)
+        && global::Meteroid.Equality.Equal(UnitSingular, other.UnitSingular)
         && global::Meteroid.Equality.Equal(UsageGroupKey, other.UsageGroupKey)
         && global::Meteroid.Equality.Equal(AdditionalProperties, other.AdditionalProperties);
 
@@ -94,6 +111,8 @@ public sealed partial record CreateMetricRequest
         hash.Add(global::Meteroid.Equality.Hash(ProductId));
         hash.Add(global::Meteroid.Equality.Hash(SegmentationMatrix));
         hash.Add(global::Meteroid.Equality.Hash(UnitConversion));
+        hash.Add(global::Meteroid.Equality.Hash(UnitPlural));
+        hash.Add(global::Meteroid.Equality.Hash(UnitSingular));
         hash.Add(global::Meteroid.Equality.Hash(UsageGroupKey));
         hash.Add(global::Meteroid.Equality.Hash(AdditionalProperties));
         return hash.ToHashCode();

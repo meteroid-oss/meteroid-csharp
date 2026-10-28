@@ -21,6 +21,10 @@ public sealed partial record PackagePricing
     [JsonNumberHandling(JsonNumberHandling.AllowReadingFromString | JsonNumberHandling.WriteAsString)]
     public required decimal Rate { get; init; }
 
+    /// <summary>The <c>type</c> property.</summary>
+    [JsonPropertyName("type")]
+    public string Type { get; init; } = "PACKAGE";
+
     /// <summary>The properties of the JSON object this SDK version does not know, sent back as they came.</summary>
     [JsonExtensionData]
     public IDictionary<string, JsonElement>? AdditionalProperties { get; set; }
@@ -32,6 +36,7 @@ public sealed partial record PackagePricing
         other is not null
         && global::Meteroid.Equality.Equal(BlockSize, other.BlockSize)
         && global::Meteroid.Equality.Equal(Rate, other.Rate)
+        && global::Meteroid.Equality.Equal(Type, other.Type)
         && global::Meteroid.Equality.Equal(AdditionalProperties, other.AdditionalProperties);
 
     /// <inheritdoc/>
@@ -40,6 +45,7 @@ public sealed partial record PackagePricing
         var hash = new HashCode();
         hash.Add(global::Meteroid.Equality.Hash(BlockSize));
         hash.Add(global::Meteroid.Equality.Hash(Rate));
+        hash.Add(global::Meteroid.Equality.Hash(Type));
         hash.Add(global::Meteroid.Equality.Hash(AdditionalProperties));
         return hash.ToHashCode();
     }
