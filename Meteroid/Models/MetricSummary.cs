@@ -44,6 +44,18 @@ public sealed partial record MetricSummary
     [JsonPropertyName("name")]
     public required string Name { get; init; }
 
+    /// <summary>
+    /// What several units of the metric are called, e.g. <c>tokens</c>.
+    /// </summary>
+    [JsonPropertyName("unit_plural")]
+    public string? UnitPlural { get; init; }
+
+    /// <summary>
+    /// What one unit of the metric is called, e.g. <c>token</c>.
+    /// </summary>
+    [JsonPropertyName("unit_singular")]
+    public string? UnitSingular { get; init; }
+
     /// <summary>The properties of the JSON object this SDK version does not know, sent back as they came.</summary>
     [JsonExtensionData]
     public IDictionary<string, JsonElement>? AdditionalProperties { get; set; }
@@ -61,6 +73,8 @@ public sealed partial record MetricSummary
         && global::Meteroid.Equality.Equal(Description, other.Description)
         && global::Meteroid.Equality.Equal(Id, other.Id)
         && global::Meteroid.Equality.Equal(Name, other.Name)
+        && global::Meteroid.Equality.Equal(UnitPlural, other.UnitPlural)
+        && global::Meteroid.Equality.Equal(UnitSingular, other.UnitSingular)
         && global::Meteroid.Equality.Equal(AdditionalProperties, other.AdditionalProperties);
 
     /// <inheritdoc/>
@@ -75,6 +89,8 @@ public sealed partial record MetricSummary
         hash.Add(global::Meteroid.Equality.Hash(Description));
         hash.Add(global::Meteroid.Equality.Hash(Id));
         hash.Add(global::Meteroid.Equality.Hash(Name));
+        hash.Add(global::Meteroid.Equality.Hash(UnitPlural));
+        hash.Add(global::Meteroid.Equality.Hash(UnitSingular));
         hash.Add(global::Meteroid.Equality.Hash(AdditionalProperties));
         return hash.ToHashCode();
     }

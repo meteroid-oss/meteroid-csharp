@@ -20,6 +20,10 @@ public sealed partial record SlotPricing
     [JsonPropertyName("min_slots")]
     public int? MinSlots { get; init; }
 
+    /// <summary>The <c>type</c> property.</summary>
+    [JsonPropertyName("type")]
+    public string Type { get; init; } = "SLOT";
+
     /// <summary>The <c>unit_rate</c> property.</summary>
     [JsonPropertyName("unit_rate")]
     [JsonNumberHandling(JsonNumberHandling.AllowReadingFromString | JsonNumberHandling.WriteAsString)]
@@ -36,6 +40,7 @@ public sealed partial record SlotPricing
         other is not null
         && global::Meteroid.Equality.Equal(MaxSlots, other.MaxSlots)
         && global::Meteroid.Equality.Equal(MinSlots, other.MinSlots)
+        && global::Meteroid.Equality.Equal(Type, other.Type)
         && global::Meteroid.Equality.Equal(UnitRate, other.UnitRate)
         && global::Meteroid.Equality.Equal(AdditionalProperties, other.AdditionalProperties);
 
@@ -45,6 +50,7 @@ public sealed partial record SlotPricing
         var hash = new HashCode();
         hash.Add(global::Meteroid.Equality.Hash(MaxSlots));
         hash.Add(global::Meteroid.Equality.Hash(MinSlots));
+        hash.Add(global::Meteroid.Equality.Hash(Type));
         hash.Add(global::Meteroid.Equality.Hash(UnitRate));
         hash.Add(global::Meteroid.Equality.Hash(AdditionalProperties));
         return hash.ToHashCode();

@@ -36,14 +36,14 @@ public interface IConnectApi
     /// Create connected account
     /// </summary>
     /// <remarks>
-    /// Create a new connected account (Express flow). Returns the account
-    /// and an onboarding link for the user to complete setup.
+    /// Create a new pending connected account (Express flow). Returns the
+    /// account and an onboarding link for the user to complete setup.
     /// </remarks>
     /// <param name="createConnectedAccountRequest">The request body.</param>
     /// <param name="requestOptions">Headers, timeout, retries or idempotency key of this call.</param>
     /// <param name="cancellationToken">Cancels the call.</param>
     /// <exception cref="RateLimitException">429: <c>Error</c> is the <see cref="Models.RestErrorResponse"/> body.</exception>
-    Task<ConnectedAccount> CreateConnectedAccountAsync(
+    Task<CreateConnectedAccountResponse> CreateConnectedAccountAsync(
         CreateConnectedAccountRequest createConnectedAccountRequest,
         RequestOptions? requestOptions = null,
         CancellationToken cancellationToken = default
@@ -116,7 +116,7 @@ public interface IConnectApiWithRawResponse
     /// <param name="createConnectedAccountRequest">The request body.</param>
     /// <param name="requestOptions">Headers, timeout, retries or idempotency key of this call.</param>
     /// <param name="cancellationToken">Cancels the call.</param>
-    Task<ApiResponse<ConnectedAccount>> CreateConnectedAccountAsync(
+    Task<ApiResponse<CreateConnectedAccountResponse>> CreateConnectedAccountAsync(
         CreateConnectedAccountRequest createConnectedAccountRequest,
         RequestOptions? requestOptions = null,
         CancellationToken cancellationToken = default
@@ -181,7 +181,7 @@ public sealed partial class ConnectApi : IConnectApi
     }
 
     /// <inheritdoc/>
-    public async Task<ConnectedAccount> CreateConnectedAccountAsync(
+    public async Task<CreateConnectedAccountResponse> CreateConnectedAccountAsync(
         CreateConnectedAccountRequest createConnectedAccountRequest,
         RequestOptions? requestOptions = null,
         CancellationToken cancellationToken = default
@@ -258,7 +258,7 @@ public sealed class ConnectApiWithRawResponse : IConnectApiWithRawResponse
     }
 
     /// <inheritdoc/>
-    public Task<ApiResponse<ConnectedAccount>> CreateConnectedAccountAsync(
+    public Task<ApiResponse<CreateConnectedAccountResponse>> CreateConnectedAccountAsync(
         CreateConnectedAccountRequest createConnectedAccountRequest,
         RequestOptions? requestOptions = null,
         CancellationToken cancellationToken = default
@@ -274,7 +274,7 @@ public sealed class ConnectApiWithRawResponse : IConnectApiWithRawResponse
         request.SetJsonBody(createConnectedAccountRequest, MeteroidJsonContext.Default.CreateConnectedAccountRequest);
         return _transport.SendJsonAsync(
             request,
-            MeteroidJsonContext.Default.ConnectedAccount,
+            MeteroidJsonContext.Default.CreateConnectedAccountResponse,
             requestOptions,
             cancellationToken
         );

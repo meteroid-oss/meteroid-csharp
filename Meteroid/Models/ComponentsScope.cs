@@ -18,6 +18,10 @@ public sealed partial record ComponentsScope
     [JsonPropertyName("component_names")]
     public required IReadOnlyList<string> ComponentNames { get; init; }
 
+    /// <summary>The <c>type</c> property.</summary>
+    [JsonPropertyName("type")]
+    public string Type { get; init; } = "components";
+
     /// <summary>The properties of the JSON object this SDK version does not know, sent back as they came.</summary>
     [JsonExtensionData]
     public IDictionary<string, JsonElement>? AdditionalProperties { get; set; }
@@ -28,6 +32,7 @@ public sealed partial record ComponentsScope
     public bool Equals(ComponentsScope? other) =>
         other is not null
         && global::Meteroid.Equality.Equal(ComponentNames, other.ComponentNames)
+        && global::Meteroid.Equality.Equal(Type, other.Type)
         && global::Meteroid.Equality.Equal(AdditionalProperties, other.AdditionalProperties);
 
     /// <inheritdoc/>
@@ -35,6 +40,7 @@ public sealed partial record ComponentsScope
     {
         var hash = new HashCode();
         hash.Add(global::Meteroid.Equality.Hash(ComponentNames));
+        hash.Add(global::Meteroid.Equality.Hash(Type));
         hash.Add(global::Meteroid.Equality.Hash(AdditionalProperties));
         return hash.ToHashCode();
     }

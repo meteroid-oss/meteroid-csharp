@@ -16,6 +16,10 @@ public sealed partial record PercentageDiscount
     [JsonPropertyName("percentage")]
     public required string Percentage { get; init; }
 
+    /// <summary>The <c>type</c> property.</summary>
+    [JsonPropertyName("type")]
+    public string Type { get; init; } = "PERCENTAGE";
+
     /// <summary>The properties of the JSON object this SDK version does not know, sent back as they came.</summary>
     [JsonExtensionData]
     public IDictionary<string, JsonElement>? AdditionalProperties { get; set; }
@@ -26,6 +30,7 @@ public sealed partial record PercentageDiscount
     public bool Equals(PercentageDiscount? other) =>
         other is not null
         && global::Meteroid.Equality.Equal(Percentage, other.Percentage)
+        && global::Meteroid.Equality.Equal(Type, other.Type)
         && global::Meteroid.Equality.Equal(AdditionalProperties, other.AdditionalProperties);
 
     /// <inheritdoc/>
@@ -33,6 +38,7 @@ public sealed partial record PercentageDiscount
     {
         var hash = new HashCode();
         hash.Add(global::Meteroid.Equality.Hash(Percentage));
+        hash.Add(global::Meteroid.Equality.Hash(Type));
         hash.Add(global::Meteroid.Equality.Hash(AdditionalProperties));
         return hash.ToHashCode();
     }

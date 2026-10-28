@@ -69,6 +69,14 @@ public abstract partial record SubscriptionFee
         public override string Type => "USAGE";
     }
 
+    /// <summary>The <c>CREDIT</c> variant.</summary>
+    /// <param name="Value">The fields of the variant.</param>
+    public sealed record Credit(CreditFee Value) : SubscriptionFee
+    {
+        /// <inheritdoc/>
+        public override string Type => "CREDIT";
+    }
+
     /// <summary>A variant unknown to this SDK version, kept as the raw JSON object.</summary>
     /// <param name="Tag">The <c>type</c> of the variant.</param>
     /// <param name="Raw">The whole JSON object.</param>
@@ -103,6 +111,7 @@ internal sealed class SubscriptionFeeConverter : JsonConverter<SubscriptionFee>
             "CAPACITY" => new SubscriptionFee.Capacity(Json.Deserialize<CapacityFee>(root, options)),
             "SLOT" => new SubscriptionFee.Slot(Json.Deserialize<SlotFee>(root, options)),
             "USAGE" => new SubscriptionFee.Usage(Json.Deserialize<UsageFee>(root, options)),
+            "CREDIT" => new SubscriptionFee.Credit(Json.Deserialize<CreditFee>(root, options)),
             var tag => new SubscriptionFee.Unrecognized(tag ?? string.Empty, root.Clone()),
         };
     }
@@ -133,6 +142,9 @@ internal sealed class SubscriptionFeeConverter : JsonConverter<SubscriptionFee>
                 fields.AddRange(Json.ToObject(variant.Value, options));
                 break;
             case SubscriptionFee.Usage variant:
+                fields.AddRange(Json.ToObject(variant.Value, options));
+                break;
+            case SubscriptionFee.Credit variant:
                 fields.AddRange(Json.ToObject(variant.Value, options));
                 break;
         }

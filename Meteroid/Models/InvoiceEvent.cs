@@ -48,6 +48,13 @@ public sealed partial record InvoiceEvent
     [JsonPropertyName("parent_invoice_id")]
     public string? ParentInvoiceId { get; init; }
 
+    /// <summary>
+    /// On <c>invoice.paid</c>: true when finalized credit notes, not a payment, settled the invoice's
+    /// whole total. Nothing was collected, so it books no cash. False on every other event.
+    /// </summary>
+    [JsonPropertyName("settled_by_credit_notes")]
+    public required bool SettledByCreditNotes { get; init; }
+
     /// <summary>The <c>status</c> property.</summary>
     [JsonPropertyName("status")]
     public required InvoiceStatus Status { get; init; }
@@ -89,6 +96,7 @@ public sealed partial record InvoiceEvent
         && global::Meteroid.Equality.Equal(InvoiceId, other.InvoiceId)
         && global::Meteroid.Equality.Equal(InvoiceNumber, other.InvoiceNumber)
         && global::Meteroid.Equality.Equal(ParentInvoiceId, other.ParentInvoiceId)
+        && global::Meteroid.Equality.Equal(SettledByCreditNotes, other.SettledByCreditNotes)
         && global::Meteroid.Equality.Equal(Status, other.Status)
         && global::Meteroid.Equality.Equal(TaxAmount, other.TaxAmount)
         && global::Meteroid.Equality.Equal(Total, other.Total)
@@ -109,6 +117,7 @@ public sealed partial record InvoiceEvent
         hash.Add(global::Meteroid.Equality.Hash(InvoiceId));
         hash.Add(global::Meteroid.Equality.Hash(InvoiceNumber));
         hash.Add(global::Meteroid.Equality.Hash(ParentInvoiceId));
+        hash.Add(global::Meteroid.Equality.Hash(SettledByCreditNotes));
         hash.Add(global::Meteroid.Equality.Hash(Status));
         hash.Add(global::Meteroid.Equality.Hash(TaxAmount));
         hash.Add(global::Meteroid.Equality.Hash(Total));

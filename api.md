@@ -9,7 +9,7 @@ paginated operation). A paginated operation returns an `AsyncPager`: awaited, it
 the properties of the response body; enumerated, every item of every page. Models are in
 [`Meteroid.Models`](Meteroid/Models).
 
-[Add ons](#add-ons) · [Add ons entitlements](#add-ons-entitlements) · [Batch jobs](#batch-jobs) · [Checkout sessions](#checkout-sessions) · [Connect](#connect) · [Coupons](#coupons) · [Credit notes](#credit-notes) · [Custom properties](#custom-properties) · [Customers](#customers) · [Entitlements](#entitlements) · [Events](#events) · [Features](#features) · [Invoices](#invoices) · [Metrics](#metrics) · [Oauth](#oauth) · [Oauth apps](#oauth-apps) · [Plans](#plans) · [Plans versions](#plans-versions) · [Product families](#product-families) · [Products](#products) · [Products entitlements](#products-entitlements) · [Subscriptions](#subscriptions) · [Usage](#usage) · [Webhook endpoints](#webhook-endpoints) · [Webhook endpoints endpoints](#webhook-endpoints-endpoints)
+[Add ons](#add-ons) · [Add ons entitlements](#add-ons-entitlements) · [Batch jobs](#batch-jobs) · [Budgets](#budgets) · [Checkout sessions](#checkout-sessions) · [Checks](#checks) · [Connect](#connect) · [Coupons](#coupons) · [Credit notes](#credit-notes) · [Credit units](#credit-units) · [Credit units prices](#credit-units-prices) · [Credits](#credits) · [Credits grants](#credits-grants) · [Credits wallets](#credits-wallets) · [Custom properties](#custom-properties) · [Customers](#customers) · [Entitlements](#entitlements) · [Events](#events) · [Features](#features) · [Invoices](#invoices) · [Metrics](#metrics) · [Oauth](#oauth) · [Oauth apps](#oauth-apps) · [Plans](#plans) · [Plans versions](#plans-versions) · [Product families](#product-families) · [Products](#products) · [Products entitlements](#products-entitlements) · [Subscriptions](#subscriptions) · [Usage](#usage) · [Usage customer](#usage-customer) · [Usage costs](#usage-costs) · [Usage costs customer](#usage-costs-customer) · [Usage costs subscription](#usage-costs-subscription) · [Webhook endpoints](#webhook-endpoints) · [Webhook endpoints endpoints](#webhook-endpoints-endpoints)
 
 ## Add ons
 
@@ -43,6 +43,17 @@ the properties of the response body; enumerated, every item of every page. Model
 | `Task<BatchJobDetailResponse> client.BatchJobs.RetrieveAsync(string batchJobId)` | `GET /api/v1/batch-jobs/{batch_job_id}` | [`BatchJobDetailResponse`](Meteroid/Models/BatchJobDetailResponse.cs) |
 | `AsyncPager<BatchJobsListFailuresPage, BatchJobItemFailureResponse> client.BatchJobs.ListFailuresAsync(string batchJobId, BatchJobsListFailuresOptions? options)` | `GET /api/v1/batch-jobs/{batch_job_id}/failures` | pages of [`BatchJobFailuresResponse`](Meteroid/Models/BatchJobFailuresResponse.cs), every [`BatchJobItemFailureResponse`](Meteroid/Models/BatchJobItemFailureResponse.cs) |
 
+## Budgets
+
+[`client.Budgets`](Meteroid/Api/BudgetsApi.cs)
+
+| Method | Request | Returns |
+| --- | --- | --- |
+| `AsyncPager<BudgetsListPage, Budget> client.Budgets.ListAsync(string idOrAlias, BudgetsListOptions? options)` | `GET /api/v1/customers/{id_or_alias}/budgets` | pages of [`BudgetListResponse`](Meteroid/Models/BudgetListResponse.cs), every [`Budget`](Meteroid/Models/Budget.cs) |
+| `Task<Budget> client.Budgets.CreateAsync(string idOrAlias, CreateBudgetRequest createBudgetRequest, BudgetsCreateOptions options)` | `POST /api/v1/customers/{id_or_alias}/budgets` | [`Budget`](Meteroid/Models/Budget.cs) |
+| `Task<Budget> client.Budgets.UpdateAsync(string idOrAlias, string budgetId, PatchBudgetRequest patchBudgetRequest, BudgetsUpdateOptions options)` | `PATCH /api/v1/customers/{id_or_alias}/budgets/{budget_id}` | [`Budget`](Meteroid/Models/Budget.cs) |
+| `Task<Budget> client.Budgets.ArchiveAsync(string idOrAlias, string budgetId, BudgetsArchiveOptions options)` | `POST /api/v1/customers/{id_or_alias}/budgets/{budget_id}/archive` | [`Budget`](Meteroid/Models/Budget.cs) |
+
 ## Checkout sessions
 
 [`client.CheckoutSessions`](Meteroid/Api/CheckoutSessionsApi.cs)
@@ -54,6 +65,14 @@ the properties of the response body; enumerated, every item of every page. Model
 | `Task<GetCheckoutSessionResponse> client.CheckoutSessions.RetrieveAsync(string id)` | `GET /api/v1/checkout-sessions/{id}` | [`GetCheckoutSessionResponse`](Meteroid/Models/GetCheckoutSessionResponse.cs) |
 | `Task<CancelCheckoutSessionResponse> client.CheckoutSessions.CancelAsync(string id)` | `POST /api/v1/checkout-sessions/{id}/cancel` | [`CancelCheckoutSessionResponse`](Meteroid/Models/CancelCheckoutSessionResponse.cs) |
 
+## Checks
+
+[`client.Checks`](Meteroid/Api/ChecksApi.cs)
+
+| Method | Request | Returns |
+| --- | --- | --- |
+| `Task<EntitlementCheck> client.Checks.CheckEntitlementAsync(string idOrAlias, string featureIdOrCode, ChecksCheckEntitlementOptions? options)` | `GET /api/v1/customers/{id_or_alias}/entitlements/{feature_id_or_code}/check` | [`EntitlementCheck`](Meteroid/Models/EntitlementCheck.cs) |
+
 ## Connect
 
 [`client.Connect`](Meteroid/Api/ConnectApi.cs)
@@ -61,7 +80,7 @@ the properties of the response body; enumerated, every item of every page. Model
 | Method | Request | Returns |
 | --- | --- | --- |
 | `Task<ConnectedAccountsResponse> client.Connect.ListConnectedAccountsAsync()` | `GET /api/v1/connected-accounts` | [`ConnectedAccountsResponse`](Meteroid/Models/ConnectedAccountsResponse.cs) |
-| `Task<ConnectedAccount> client.Connect.CreateConnectedAccountAsync(CreateConnectedAccountRequest createConnectedAccountRequest)` | `POST /api/v1/connected-accounts` | [`ConnectedAccount`](Meteroid/Models/ConnectedAccount.cs) |
+| `Task<CreateConnectedAccountResponse> client.Connect.CreateConnectedAccountAsync(CreateConnectedAccountRequest createConnectedAccountRequest)` | `POST /api/v1/connected-accounts` | [`CreateConnectedAccountResponse`](Meteroid/Models/CreateConnectedAccountResponse.cs) |
 | `Task<ConnectedAccount> client.Connect.RetrieveConnectedAccountAsync(string id)` | `GET /api/v1/connected-accounts/{id}` | [`ConnectedAccount`](Meteroid/Models/ConnectedAccount.cs) |
 | `Task client.Connect.DisconnectAccountAsync(string id)` | `DELETE /api/v1/connected-accounts/{id}` | nothing |
 | `Task<OnboardingLinkResponse> client.Connect.CreateOnboardingLinkAsync(string id, CreateOnboardingLinkRequest createOnboardingLinkRequest)` | `POST /api/v1/connected-accounts/{id}/onboarding` | [`OnboardingLinkResponse`](Meteroid/Models/OnboardingLinkResponse.cs) |
@@ -92,6 +111,55 @@ the properties of the response body; enumerated, every item of every page. Model
 | `Task<CreditNote> client.CreditNotes.UpdateCustomPropertiesAsync(string creditNoteId, CreditNoteCustomPropertiesRequest creditNoteCustomPropertiesRequest)` | `PATCH /api/v1/credit-notes/{credit_note_id}/custom-properties` | [`CreditNote`](Meteroid/Models/CreditNote.cs) |
 | `Task<byte[]> client.CreditNotes.DownloadAsync(string creditNoteId)` | `GET /api/v1/credit-notes/{credit_note_id}/download` | bytes |
 | `Task<byte[]> client.CreditNotes.DownloadXmlAsync(string creditNoteId)` | `GET /api/v1/credit-notes/{credit_note_id}/xml` | bytes |
+
+## Credit units
+
+[`client.CreditUnits`](Meteroid/Api/CreditUnitsApi.cs)
+
+| Method | Request | Returns |
+| --- | --- | --- |
+| `Task<CreditUnitListResponse> client.CreditUnits.ListAsync(CreditUnitsListOptions? options)` | `GET /api/v1/credit-units` | [`CreditUnitListResponse`](Meteroid/Models/CreditUnitListResponse.cs) |
+| `Task<CreditUnit> client.CreditUnits.CreateAsync(CreditUnitCreateRequest creditUnitCreateRequest)` | `POST /api/v1/credit-units` | [`CreditUnit`](Meteroid/Models/CreditUnit.cs) |
+| `Task<CreditUnit> client.CreditUnits.RetrieveAsync(string id)` | `GET /api/v1/credit-units/{id}` | [`CreditUnit`](Meteroid/Models/CreditUnit.cs) |
+| `Task<CreditUnit> client.CreditUnits.UpdateAsync(string id, CreditUnitUpdateRequest creditUnitUpdateRequest)` | `PATCH /api/v1/credit-units/{id}` | [`CreditUnit`](Meteroid/Models/CreditUnit.cs) |
+
+### Credit units prices
+
+[`client.CreditUnits.Prices`](Meteroid/Api/CreditUnitsPricesApi.cs)
+
+| Method | Request | Returns |
+| --- | --- | --- |
+| `Task<CreditUnitPriceListResponse> client.CreditUnits.Prices.ListAsync(string id, CreditUnitsPricesListOptions? options)` | `GET /api/v1/credit-units/{id}/prices` | [`CreditUnitPriceListResponse`](Meteroid/Models/CreditUnitPriceListResponse.cs) |
+| `Task<CreditUnitPrice> client.CreditUnits.Prices.UpdateAsync(string id, string currency, CreditUnitPriceSetRequest creditUnitPriceSetRequest)` | `PUT /api/v1/credit-units/{id}/prices/{currency}` | [`CreditUnitPrice`](Meteroid/Models/CreditUnitPrice.cs) |
+| `Task<CreditUnitPrice> client.CreditUnits.Prices.ArchiveAsync(string id, string currency)` | `DELETE /api/v1/credit-units/{id}/prices/{currency}` | [`CreditUnitPrice`](Meteroid/Models/CreditUnitPrice.cs) |
+
+## Credits
+
+[`client.Credits`](Meteroid/Api/CreditsApi.cs)
+
+| Method | Request | Returns |
+| --- | --- | --- |
+| `AsyncPager<CreditsListCustomerCreditLedgerPage, LedgerEntry> client.Credits.ListCustomerCreditLedgerAsync(string idOrAlias, CreditsListCustomerCreditLedgerOptions? options)` | `GET /api/v1/customers/{id_or_alias}/credit-ledger` | pages of [`LedgerListResponse`](Meteroid/Models/LedgerListResponse.cs), every [`LedgerEntry`](Meteroid/Models/LedgerEntry.cs) |
+| `Task<TopUpResponse> client.Credits.CreateCustomerTopUpAsync(string idOrAlias, CreateTopUpRequest createTopUpRequest, CreditsCreateCustomerTopUpOptions options)` | `POST /api/v1/customers/{id_or_alias}/top-ups` | [`TopUpResponse`](Meteroid/Models/TopUpResponse.cs) |
+
+### Credits grants
+
+[`client.Credits.Grants`](Meteroid/Api/CreditsGrantsApi.cs)
+
+| Method | Request | Returns |
+| --- | --- | --- |
+| `AsyncPager<CreditsGrantsListPage, CreditGrant> client.Credits.Grants.ListAsync(string idOrAlias, CreditsGrantsListOptions? options)` | `GET /api/v1/customers/{id_or_alias}/credit-grants` | pages of [`CreditGrantListResponse`](Meteroid/Models/CreditGrantListResponse.cs), every [`CreditGrant`](Meteroid/Models/CreditGrant.cs) |
+| `Task<CreditGrant> client.Credits.Grants.CreateAsync(string idOrAlias, CreateCreditGrantRequest createCreditGrantRequest, CreditsGrantsCreateOptions options)` | `POST /api/v1/customers/{id_or_alias}/credit-grants` | [`CreditGrant`](Meteroid/Models/CreditGrant.cs) |
+
+### Credits wallets
+
+[`client.Credits.Wallets`](Meteroid/Api/CreditsWalletsApi.cs)
+
+| Method | Request | Returns |
+| --- | --- | --- |
+| `Task<WalletListResponse> client.Credits.Wallets.ListAsync(string idOrAlias, CreditsWalletsListOptions? options)` | `GET /api/v1/customers/{id_or_alias}/wallets` | [`WalletListResponse`](Meteroid/Models/WalletListResponse.cs) |
+| `Task<WalletCheck> client.Credits.Wallets.CheckAsync(string idOrAlias, CreditsWalletsCheckOptions? options)` | `GET /api/v1/customers/{id_or_alias}/wallets/check` | [`WalletCheck`](Meteroid/Models/WalletCheck.cs) |
+| `Task<Wallet> client.Credits.Wallets.UpdateAsync(string idOrAlias, string currency, PatchWalletRequest patchWalletRequest, CreditsWalletsUpdateOptions options)` | `PATCH /api/v1/customers/{id_or_alias}/wallets/{currency}` | [`Wallet`](Meteroid/Models/Wallet.cs) |
 
 ## Custom properties
 
@@ -279,9 +347,42 @@ the properties of the response body; enumerated, every item of every page. Model
 
 | Method | Request | Returns |
 | --- | --- | --- |
-| `Task<UsageResponse> client.Usage.RetrieveCustomerAsync(string customerId, UsageRetrieveCustomerOptions options)` | `GET /api/v1/usage/customer/{customer_id}` | [`UsageResponse`](Meteroid/Models/UsageResponse.cs) |
 | `Task<UsageResponse> client.Usage.RetrieveSubscriptionAsync(string subscriptionId, UsageRetrieveSubscriptionOptions? options)` | `GET /api/v1/usage/subscription/{subscription_id}` | [`UsageResponse`](Meteroid/Models/UsageResponse.cs) |
 | `Task<UsageResponse> client.Usage.RetrieveSummaryAsync(UsageRetrieveSummaryOptions options)` | `GET /api/v1/usage/summary` | [`UsageResponse`](Meteroid/Models/UsageResponse.cs) |
+
+### Usage customer
+
+[`client.Usage.Customer`](Meteroid/Api/UsageCustomerApi.cs)
+
+| Method | Request | Returns |
+| --- | --- | --- |
+| `Task<UsageResponse> client.Usage.Customer.RetrieveAsync(string customerId, UsageCustomerRetrieveOptions options)` | `GET /api/v1/usage/customer/{customer_id}` | [`UsageResponse`](Meteroid/Models/UsageResponse.cs) |
+| `Task<UnattributedUsageResponse> client.Usage.Customer.RetrieveUnattributedAsync(string customerId, UsageCustomerRetrieveUnattributedOptions? options)` | `GET /api/v1/usage/customer/{customer_id}/unattributed` | [`UnattributedUsageResponse`](Meteroid/Models/UnattributedUsageResponse.cs) |
+
+## Usage costs
+
+[`client.UsageCosts`](Meteroid/Api/UsageCostsApi.cs)
+
+| Method | Request | Returns |
+| --- | --- | --- |
+
+### Usage costs customer
+
+[`client.UsageCosts.Customer`](Meteroid/Api/UsageCostsCustomerApi.cs)
+
+| Method | Request | Returns |
+| --- | --- | --- |
+| `Task<UsageCostListResponse> client.UsageCosts.Customer.ListCostsAsync(string customerId, UsageCostsCustomerListCostsOptions options)` | `GET /api/v1/usage/customer/{customer_id}/costs` | [`UsageCostListResponse`](Meteroid/Models/UsageCostListResponse.cs) |
+| `Task<UsageEventListResponse> client.UsageCosts.Customer.ListEventsAsync(string customerId, UsageCostsCustomerListEventsOptions options)` | `GET /api/v1/usage/customer/{customer_id}/events` | [`UsageEventListResponse`](Meteroid/Models/UsageEventListResponse.cs) |
+
+### Usage costs subscription
+
+[`client.UsageCosts.Subscription`](Meteroid/Api/UsageCostsSubscriptionApi.cs)
+
+| Method | Request | Returns |
+| --- | --- | --- |
+| `Task<UsageCostListResponse> client.UsageCosts.Subscription.ListCostsAsync(string subscriptionId, UsageCostsSubscriptionListCostsOptions options)` | `GET /api/v1/usage/subscription/{subscription_id}/costs` | [`UsageCostListResponse`](Meteroid/Models/UsageCostListResponse.cs) |
+| `Task<UsageEventListResponse> client.UsageCosts.Subscription.ListEventsAsync(string subscriptionId, UsageCostsSubscriptionListEventsOptions options)` | `GET /api/v1/usage/subscription/{subscription_id}/events` | [`UsageEventListResponse`](Meteroid/Models/UsageEventListResponse.cs) |
 
 ## Webhook endpoints
 

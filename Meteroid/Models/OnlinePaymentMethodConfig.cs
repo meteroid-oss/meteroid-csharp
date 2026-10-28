@@ -16,6 +16,10 @@ public sealed partial record OnlinePaymentMethodConfig
     [JsonPropertyName("config")]
     public OnlineMethodsConfig? Config { get; init; }
 
+    /// <summary>The <c>type</c> property.</summary>
+    [JsonPropertyName("type")]
+    public string Type { get; init; } = "online";
+
     /// <summary>The properties of the JSON object this SDK version does not know, sent back as they came.</summary>
     [JsonExtensionData]
     public IDictionary<string, JsonElement>? AdditionalProperties { get; set; }
@@ -26,6 +30,7 @@ public sealed partial record OnlinePaymentMethodConfig
     public bool Equals(OnlinePaymentMethodConfig? other) =>
         other is not null
         && global::Meteroid.Equality.Equal(Config, other.Config)
+        && global::Meteroid.Equality.Equal(Type, other.Type)
         && global::Meteroid.Equality.Equal(AdditionalProperties, other.AdditionalProperties);
 
     /// <inheritdoc/>
@@ -33,6 +38,7 @@ public sealed partial record OnlinePaymentMethodConfig
     {
         var hash = new HashCode();
         hash.Add(global::Meteroid.Equality.Hash(Config));
+        hash.Add(global::Meteroid.Equality.Hash(Type));
         hash.Add(global::Meteroid.Equality.Hash(AdditionalProperties));
         return hash.ToHashCode();
     }

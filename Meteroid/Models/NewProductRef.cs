@@ -24,6 +24,10 @@ public sealed partial record NewProductRef
     [JsonPropertyName("name")]
     public required string Name { get; init; }
 
+    /// <summary>The <c>type</c> property.</summary>
+    [JsonPropertyName("type")]
+    public string Type { get; init; } = "NEW";
+
     /// <summary>The properties of the JSON object this SDK version does not know, sent back as they came.</summary>
     [JsonExtensionData]
     public IDictionary<string, JsonElement>? AdditionalProperties { get; set; }
@@ -36,6 +40,7 @@ public sealed partial record NewProductRef
         && global::Meteroid.Equality.Equal(FeeStructure, other.FeeStructure)
         && global::Meteroid.Equality.Equal(FeeType, other.FeeType)
         && global::Meteroid.Equality.Equal(Name, other.Name)
+        && global::Meteroid.Equality.Equal(Type, other.Type)
         && global::Meteroid.Equality.Equal(AdditionalProperties, other.AdditionalProperties);
 
     /// <inheritdoc/>
@@ -45,6 +50,7 @@ public sealed partial record NewProductRef
         hash.Add(global::Meteroid.Equality.Hash(FeeStructure));
         hash.Add(global::Meteroid.Equality.Hash(FeeType));
         hash.Add(global::Meteroid.Equality.Hash(Name));
+        hash.Add(global::Meteroid.Equality.Hash(Type));
         hash.Add(global::Meteroid.Equality.Hash(AdditionalProperties));
         return hash.ToHashCode();
     }

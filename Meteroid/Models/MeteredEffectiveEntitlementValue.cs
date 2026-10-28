@@ -16,6 +16,10 @@ public sealed partial record MeteredEffectiveEntitlementValue
     [JsonPropertyName("spec")]
     public required MeteredEntitlementSpec Spec { get; init; }
 
+    /// <summary>The <c>type</c> property.</summary>
+    [JsonPropertyName("type")]
+    public string Type { get; init; } = "METERED";
+
     /// <summary>The <c>usage</c> property.</summary>
     [JsonPropertyName("usage")]
     public required MeteredEntitlementUsage Usage { get; init; }
@@ -30,6 +34,7 @@ public sealed partial record MeteredEffectiveEntitlementValue
     public bool Equals(MeteredEffectiveEntitlementValue? other) =>
         other is not null
         && global::Meteroid.Equality.Equal(Spec, other.Spec)
+        && global::Meteroid.Equality.Equal(Type, other.Type)
         && global::Meteroid.Equality.Equal(Usage, other.Usage)
         && global::Meteroid.Equality.Equal(AdditionalProperties, other.AdditionalProperties);
 
@@ -38,6 +43,7 @@ public sealed partial record MeteredEffectiveEntitlementValue
     {
         var hash = new HashCode();
         hash.Add(global::Meteroid.Equality.Hash(Spec));
+        hash.Add(global::Meteroid.Equality.Hash(Type));
         hash.Add(global::Meteroid.Equality.Hash(Usage));
         hash.Add(global::Meteroid.Equality.Hash(AdditionalProperties));
         return hash.ToHashCode();

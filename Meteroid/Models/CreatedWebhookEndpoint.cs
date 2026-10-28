@@ -38,7 +38,8 @@ public sealed partial record CreatedWebhookEndpoint
     public WebhookEndpointDisabledReason? DisabledReason { get; init; }
 
     /// <summary>
-    /// Subscribed event types. Empty means every event type.
+    /// Subscribed event types. Empty means every event type except Beta ones, which are sent
+    /// only to endpoints that list them.
     /// </summary>
     [JsonPropertyName("event_types")]
     public required IReadOnlyList<string> EventTypes { get; init; }

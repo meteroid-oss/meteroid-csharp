@@ -12,6 +12,10 @@ namespace Meteroid.Models;
 /// <summary>The <c>CapacityFee</c> object.</summary>
 public sealed partial record CapacityFee
 {
+    /// <summary>The <c>credit_unit</c> property.</summary>
+    [JsonPropertyName("credit_unit")]
+    public FeeCreditUnit? CreditUnit { get; init; }
+
     /// <summary>The <c>included</c> property.</summary>
     [JsonPropertyName("included")]
     public required long Included { get; init; }
@@ -30,6 +34,10 @@ public sealed partial record CapacityFee
     [JsonNumberHandling(JsonNumberHandling.AllowReadingFromString | JsonNumberHandling.WriteAsString)]
     public required decimal Rate { get; init; }
 
+    /// <summary>The <c>type</c> property.</summary>
+    [JsonPropertyName("type")]
+    public string Type { get; init; } = "CAPACITY";
+
     /// <summary>The properties of the JSON object this SDK version does not know, sent back as they came.</summary>
     [JsonExtensionData]
     public IDictionary<string, JsonElement>? AdditionalProperties { get; set; }
@@ -39,20 +47,24 @@ public sealed partial record CapacityFee
     /// <returns>Whether the records are equal.</returns>
     public bool Equals(CapacityFee? other) =>
         other is not null
+        && global::Meteroid.Equality.Equal(CreditUnit, other.CreditUnit)
         && global::Meteroid.Equality.Equal(Included, other.Included)
         && global::Meteroid.Equality.Equal(MetricId, other.MetricId)
         && global::Meteroid.Equality.Equal(OverageRate, other.OverageRate)
         && global::Meteroid.Equality.Equal(Rate, other.Rate)
+        && global::Meteroid.Equality.Equal(Type, other.Type)
         && global::Meteroid.Equality.Equal(AdditionalProperties, other.AdditionalProperties);
 
     /// <inheritdoc/>
     public override int GetHashCode()
     {
         var hash = new HashCode();
+        hash.Add(global::Meteroid.Equality.Hash(CreditUnit));
         hash.Add(global::Meteroid.Equality.Hash(Included));
         hash.Add(global::Meteroid.Equality.Hash(MetricId));
         hash.Add(global::Meteroid.Equality.Hash(OverageRate));
         hash.Add(global::Meteroid.Equality.Hash(Rate));
+        hash.Add(global::Meteroid.Equality.Hash(Type));
         hash.Add(global::Meteroid.Equality.Hash(AdditionalProperties));
         return hash.ToHashCode();
     }

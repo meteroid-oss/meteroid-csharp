@@ -24,6 +24,10 @@ public sealed partial record Plan
     [JsonPropertyName("created_at")]
     public required DateTimeOffset CreatedAt { get; init; }
 
+    /// <summary>The <c>credit_exhausted_rule</c> property.</summary>
+    [JsonPropertyName("credit_exhausted_rule")]
+    public CreditExhaustedRule? CreditExhaustedRule { get; init; }
+
     /// <summary>The <c>currency</c> property.</summary>
     [JsonPropertyName("currency")]
     public required Currency Currency { get; init; }
@@ -109,6 +113,7 @@ public sealed partial record Plan
         && global::Meteroid.Equality.Equal(AvailableParameters, other.AvailableParameters)
         && global::Meteroid.Equality.Equal(BillingCycles, other.BillingCycles)
         && global::Meteroid.Equality.Equal(CreatedAt, other.CreatedAt)
+        && global::Meteroid.Equality.Equal(CreditExhaustedRule, other.CreditExhaustedRule)
         && global::Meteroid.Equality.Equal(Currency, other.Currency)
         && global::Meteroid.Equality.Equal(Description, other.Description)
         && global::Meteroid.Equality.Equal(Entitlements, other.Entitlements)
@@ -135,6 +140,7 @@ public sealed partial record Plan
         hash.Add(global::Meteroid.Equality.Hash(AvailableParameters));
         hash.Add(global::Meteroid.Equality.Hash(BillingCycles));
         hash.Add(global::Meteroid.Equality.Hash(CreatedAt));
+        hash.Add(global::Meteroid.Equality.Hash(CreditExhaustedRule));
         hash.Add(global::Meteroid.Equality.Hash(Currency));
         hash.Add(global::Meteroid.Equality.Hash(Description));
         hash.Add(global::Meteroid.Equality.Hash(Entitlements));

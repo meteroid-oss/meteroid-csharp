@@ -60,6 +60,18 @@ public sealed partial record MetricEventData
     [JsonPropertyName("unit_conversion_rounding")]
     public UnitConversionRoundingEnum? UnitConversionRounding { get; init; }
 
+    /// <summary>
+    /// What several units of the metric are called, e.g. <c>tokens</c>.
+    /// </summary>
+    [JsonPropertyName("unit_plural")]
+    public string? UnitPlural { get; init; }
+
+    /// <summary>
+    /// What one unit of the metric is called, e.g. <c>token</c>.
+    /// </summary>
+    [JsonPropertyName("unit_singular")]
+    public string? UnitSingular { get; init; }
+
     /// <summary>The <c>usage_group_key</c> property.</summary>
     [JsonPropertyName("usage_group_key")]
     public string? UsageGroupKey { get; init; }
@@ -85,6 +97,8 @@ public sealed partial record MetricEventData
         && global::Meteroid.Equality.Equal(SegmentationMatrix, other.SegmentationMatrix)
         && global::Meteroid.Equality.Equal(UnitConversionFactor, other.UnitConversionFactor)
         && global::Meteroid.Equality.Equal(UnitConversionRounding, other.UnitConversionRounding)
+        && global::Meteroid.Equality.Equal(UnitPlural, other.UnitPlural)
+        && global::Meteroid.Equality.Equal(UnitSingular, other.UnitSingular)
         && global::Meteroid.Equality.Equal(UsageGroupKey, other.UsageGroupKey)
         && global::Meteroid.Equality.Equal(AdditionalProperties, other.AdditionalProperties);
 
@@ -104,6 +118,8 @@ public sealed partial record MetricEventData
         hash.Add(global::Meteroid.Equality.Hash(SegmentationMatrix));
         hash.Add(global::Meteroid.Equality.Hash(UnitConversionFactor));
         hash.Add(global::Meteroid.Equality.Hash(UnitConversionRounding));
+        hash.Add(global::Meteroid.Equality.Hash(UnitPlural));
+        hash.Add(global::Meteroid.Equality.Hash(UnitSingular));
         hash.Add(global::Meteroid.Equality.Hash(UsageGroupKey));
         hash.Add(global::Meteroid.Equality.Hash(AdditionalProperties));
         return hash.ToHashCode();

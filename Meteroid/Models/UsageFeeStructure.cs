@@ -20,6 +20,10 @@ public sealed partial record UsageFeeStructure
     [JsonPropertyName("model")]
     public required UsageModelEnum Model { get; init; }
 
+    /// <summary>The <c>type</c> property.</summary>
+    [JsonPropertyName("type")]
+    public string Type { get; init; } = "USAGE";
+
     /// <summary>The properties of the JSON object this SDK version does not know, sent back as they came.</summary>
     [JsonExtensionData]
     public IDictionary<string, JsonElement>? AdditionalProperties { get; set; }
@@ -31,6 +35,7 @@ public sealed partial record UsageFeeStructure
         other is not null
         && global::Meteroid.Equality.Equal(MetricId, other.MetricId)
         && global::Meteroid.Equality.Equal(Model, other.Model)
+        && global::Meteroid.Equality.Equal(Type, other.Type)
         && global::Meteroid.Equality.Equal(AdditionalProperties, other.AdditionalProperties);
 
     /// <inheritdoc/>
@@ -39,6 +44,7 @@ public sealed partial record UsageFeeStructure
         var hash = new HashCode();
         hash.Add(global::Meteroid.Equality.Hash(MetricId));
         hash.Add(global::Meteroid.Equality.Hash(Model));
+        hash.Add(global::Meteroid.Equality.Hash(Type));
         hash.Add(global::Meteroid.Equality.Hash(AdditionalProperties));
         return hash.ToHashCode();
     }

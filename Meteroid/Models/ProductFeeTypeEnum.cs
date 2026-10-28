@@ -29,8 +29,12 @@ public readonly partial record struct ProductFeeTypeEnum(string Value) : IString
     /// <summary><c>ONE_TIME</c></summary>
     public static ProductFeeTypeEnum OneTime { get; } = new("ONE_TIME");
 
+    /// <summary><c>CREDIT</c></summary>
+    public static ProductFeeTypeEnum Credit { get; } = new("CREDIT");
+
     /// <summary>Whether this SDK version knows the value.</summary>
-    public bool IsKnown => Value is "RATE" or "SLOT" or "CAPACITY" or "USAGE" or "EXTRA_RECURRING" or "ONE_TIME";
+    public bool IsKnown =>
+        Value is "RATE" or "SLOT" or "CAPACITY" or "USAGE" or "EXTRA_RECURRING" or "ONE_TIME" or "CREDIT";
 
     /// <summary>The known values as constants, to <c>switch</c> on <see cref="Value"/>.</summary>
     public static class Values
@@ -52,6 +56,9 @@ public readonly partial record struct ProductFeeTypeEnum(string Value) : IString
 
         /// <summary><c>ONE_TIME</c></summary>
         public const string OneTime = "ONE_TIME";
+
+        /// <summary><c>CREDIT</c></summary>
+        public const string Credit = "CREDIT";
     }
 
     static ProductFeeTypeEnum IStringEnum<ProductFeeTypeEnum>.FromValue(string value) => new(value);

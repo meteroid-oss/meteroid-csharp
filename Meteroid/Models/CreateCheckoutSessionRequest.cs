@@ -46,7 +46,12 @@ public sealed partial record CreateCheckoutSessionRequest
     [JsonPropertyName("components")]
     public CreateSubscriptionComponents? Components { get; init; }
 
-    /// <summary>The <c>coupon_code</c> property.</summary>
+    /// <summary>
+    /// Code of the coupon to apply, used only when <c>coupon_ids</c> is empty. It names the coupon with
+    /// exactly that code, else the only live coupon equal to it ignoring the case of ASCII
+    /// letters. An unknown or ambiguous code is refused with 400. If the code no longer names a
+    /// usable coupon when the customer pays, the payment is refused and nothing is charged.
+    /// </summary>
     [JsonPropertyName("coupon_code")]
     public string? CouponCode { get; init; }
 

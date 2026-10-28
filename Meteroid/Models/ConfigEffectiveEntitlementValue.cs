@@ -12,6 +12,10 @@ namespace Meteroid.Models;
 /// <summary>The <c>ConfigEffectiveEntitlementValue</c> object.</summary>
 public sealed partial record ConfigEffectiveEntitlementValue
 {
+    /// <summary>The <c>type</c> property.</summary>
+    [JsonPropertyName("type")]
+    public string Type { get; init; } = "CONFIG";
+
     /// <summary>The <c>value</c> property.</summary>
     [JsonPropertyName("value")]
     public required ConfigValue Value { get; init; }
@@ -25,6 +29,7 @@ public sealed partial record ConfigEffectiveEntitlementValue
     /// <returns>Whether the records are equal.</returns>
     public bool Equals(ConfigEffectiveEntitlementValue? other) =>
         other is not null
+        && global::Meteroid.Equality.Equal(Type, other.Type)
         && global::Meteroid.Equality.Equal(Value, other.Value)
         && global::Meteroid.Equality.Equal(AdditionalProperties, other.AdditionalProperties);
 
@@ -32,6 +37,7 @@ public sealed partial record ConfigEffectiveEntitlementValue
     public override int GetHashCode()
     {
         var hash = new HashCode();
+        hash.Add(global::Meteroid.Equality.Hash(Type));
         hash.Add(global::Meteroid.Equality.Hash(Value));
         hash.Add(global::Meteroid.Equality.Hash(AdditionalProperties));
         return hash.ToHashCode();

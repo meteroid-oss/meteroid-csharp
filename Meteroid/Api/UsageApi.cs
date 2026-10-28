@@ -18,33 +18,18 @@ public interface IUsageApi
     /// <summary>The same operations, returning the status and headers of the response with its body.</summary>
     IUsageApiWithRawResponse WithRawResponse { get; }
 
-    /// <summary>
-    /// Get customer usage
-    /// </summary>
-    /// <remarks>
-    /// Retrieve aggregated usage data for a customer over a specified period.
-    /// </remarks>
-    /// <param name="customerId">The <c>customer_id</c> path parameter.</param>
-    /// <param name="options">The query and header parameters.</param>
-    /// <param name="requestOptions">Headers, timeout, retries or idempotency key of this call.</param>
-    /// <param name="cancellationToken">Cancels the call.</param>
-    /// <exception cref="UnauthorizedException">401: <c>Error</c> is the <see cref="Models.RestErrorResponse"/> body.</exception>
-    /// <exception cref="NotFoundException">404: <c>Error</c> is the <see cref="Models.RestErrorResponse"/> body.</exception>
-    /// <exception cref="RateLimitException">429: <c>Error</c> is the <see cref="Models.RestErrorResponse"/> body.</exception>
-    /// <exception cref="ServerErrorException">500: <c>Error</c> is the <see cref="Models.RestErrorResponse"/> body.</exception>
-    Task<UsageResponse> RetrieveCustomerAsync(
-        string customerId,
-        UsageRetrieveCustomerOptions options,
-        RequestOptions? requestOptions = null,
-        CancellationToken cancellationToken = default
-    );
+    /// <summary>The <c>customer</c> operations.</summary>
+    IUsageCustomerApi Customer { get; }
 
     /// <summary>
     /// Get subscription usage
     /// </summary>
     /// <remarks>
     /// Retrieve aggregated usage data for a subscription's usage-based components.
-    /// If start_date/end_date are omitted, defaults to the current billing period.
+    /// If start_date/end_date are omitted, defaults to the current billing period, and the response
+    /// then carries the running total (beta): what each metric's usage adds so far to the next invoice,
+    /// and what they add up to, before discounts and credits. That reading is shared for up to 30
+    /// seconds (see <c>computed_at</c>). Counts towards the usage cost reads' rate limit.
     /// </remarks>
     /// <param name="subscriptionId">The <c>subscription_id</c> path parameter.</param>
     /// <param name="options">The query and header parameters.</param>
@@ -83,17 +68,8 @@ public interface IUsageApi
 /// <summary>The <c>usage</c> operations, returning the status and headers of the response with its body.</summary>
 public interface IUsageApiWithRawResponse
 {
-    /// <summary><see cref="IUsageApi.RetrieveCustomerAsync"/>, with the status and headers of the response.</summary>
-    /// <param name="customerId">The <c>customer_id</c> path parameter.</param>
-    /// <param name="options">The query and header parameters.</param>
-    /// <param name="requestOptions">Headers, timeout, retries or idempotency key of this call.</param>
-    /// <param name="cancellationToken">Cancels the call.</param>
-    Task<ApiResponse<UsageResponse>> RetrieveCustomerAsync(
-        string customerId,
-        UsageRetrieveCustomerOptions options,
-        RequestOptions? requestOptions = null,
-        CancellationToken cancellationToken = default
-    );
+    /// <summary>The <c>customer</c> operations, returning the status and headers of the response with its body.</summary>
+    IUsageCustomerApiWithRawResponse Customer { get; }
 
     /// <summary><see cref="IUsageApi.RetrieveSubscriptionAsync"/>, with the status and headers of the response.</summary>
     /// <param name="subscriptionId">The <c>subscription_id</c> path parameter.</param>
@@ -124,6 +100,7 @@ public sealed partial class UsageApi : IUsageApi
     internal UsageApi(ApiTransport transport)
     {
         WithRawResponse = new(transport);
+        Customer = new(transport);
     }
 
     /// <inheritdoc cref="IUsageApi.WithRawResponse"/>
@@ -131,19 +108,10 @@ public sealed partial class UsageApi : IUsageApi
 
     IUsageApiWithRawResponse IUsageApi.WithRawResponse => WithRawResponse;
 
-    /// <inheritdoc/>
-    public async Task<UsageResponse> RetrieveCustomerAsync(
-        string customerId,
-        UsageRetrieveCustomerOptions options,
-        RequestOptions? requestOptions = null,
-        CancellationToken cancellationToken = default
-    )
-    {
-        var response = await WithRawResponse
-            .RetrieveCustomerAsync(customerId, options, requestOptions, cancellationToken)
-            .ConfigureAwait(false);
-        return response.Value;
-    }
+    /// <inheritdoc cref="IUsageApi.Customer"/>
+    public UsageCustomerApi Customer { get; }
+
+    IUsageCustomerApi IUsageApi.Customer => Customer;
 
     /// <inheritdoc/>
     public async Task<UsageResponse> RetrieveSubscriptionAsync(
@@ -181,41 +149,13 @@ public sealed class UsageApiWithRawResponse : IUsageApiWithRawResponse
     internal UsageApiWithRawResponse(ApiTransport transport)
     {
         _transport = transport;
+        Customer = new(transport);
     }
 
-    /// <inheritdoc/>
-    public Task<ApiResponse<UsageResponse>> RetrieveCustomerAsync(
-        string customerId,
-        UsageRetrieveCustomerOptions options,
-        RequestOptions? requestOptions = null,
-        CancellationToken cancellationToken = default
-    )
-    {
-        ArgumentException.ThrowIfNullOrEmpty(customerId);
-        ArgumentNullException.ThrowIfNull(options);
+    /// <inheritdoc cref="IUsageApiWithRawResponse.Customer"/>
+    public UsageCustomerApiWithRawResponse Customer { get; }
 
-        var request = new ApiRequest(
-            HttpMethod.Get,
-            $"/api/v1/usage/customer/{Uri.EscapeDataString(customerId)}",
-            "usage.retrieve_customer"
-        );
-        request.ErrorTypes = new KeyValuePair<string, JsonTypeInfo>[]
-        {
-            new("401", MeteroidJsonContext.Default.RestErrorResponse),
-            new("404", MeteroidJsonContext.Default.RestErrorResponse),
-            new("429", MeteroidJsonContext.Default.RestErrorResponse),
-            new("500", MeteroidJsonContext.Default.RestErrorResponse),
-        };
-        request.AddQuery("start_date", options.StartDate);
-        request.AddQuery("end_date", options.EndDate);
-        request.AddQuery("metric_id", options.MetricId);
-        return _transport.SendJsonAsync(
-            request,
-            MeteroidJsonContext.Default.UsageResponse,
-            requestOptions,
-            cancellationToken
-        );
-    }
+    IUsageCustomerApiWithRawResponse IUsageApiWithRawResponse.Customer => Customer;
 
     /// <inheritdoc/>
     public Task<ApiResponse<UsageResponse>> RetrieveSubscriptionAsync(

@@ -14,6 +14,10 @@ namespace Meteroid.Models;
 /// </summary>
 public sealed partial record NumberConfigValue
 {
+    /// <summary>The <c>kind</c> property.</summary>
+    [JsonPropertyName("kind")]
+    public string Kind { get; init; } = "NUMBER";
+
     /// <summary>The <c>value</c> property.</summary>
     [JsonPropertyName("value")]
     [JsonNumberHandling(JsonNumberHandling.AllowReadingFromString | JsonNumberHandling.WriteAsString)]
@@ -28,6 +32,7 @@ public sealed partial record NumberConfigValue
     /// <returns>Whether the records are equal.</returns>
     public bool Equals(NumberConfigValue? other) =>
         other is not null
+        && global::Meteroid.Equality.Equal(Kind, other.Kind)
         && global::Meteroid.Equality.Equal(Value, other.Value)
         && global::Meteroid.Equality.Equal(AdditionalProperties, other.AdditionalProperties);
 
@@ -35,6 +40,7 @@ public sealed partial record NumberConfigValue
     public override int GetHashCode()
     {
         var hash = new HashCode();
+        hash.Add(global::Meteroid.Equality.Hash(Kind));
         hash.Add(global::Meteroid.Equality.Hash(Value));
         hash.Add(global::Meteroid.Equality.Hash(AdditionalProperties));
         return hash.ToHashCode();

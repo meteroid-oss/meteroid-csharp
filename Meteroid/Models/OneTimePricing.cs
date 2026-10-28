@@ -16,6 +16,10 @@ public sealed partial record OneTimePricing
     [JsonPropertyName("quantity")]
     public required int Quantity { get; init; }
 
+    /// <summary>The <c>type</c> property.</summary>
+    [JsonPropertyName("type")]
+    public string Type { get; init; } = "ONE_TIME";
+
     /// <summary>The <c>unit_price</c> property.</summary>
     [JsonPropertyName("unit_price")]
     [JsonNumberHandling(JsonNumberHandling.AllowReadingFromString | JsonNumberHandling.WriteAsString)]
@@ -31,6 +35,7 @@ public sealed partial record OneTimePricing
     public bool Equals(OneTimePricing? other) =>
         other is not null
         && global::Meteroid.Equality.Equal(Quantity, other.Quantity)
+        && global::Meteroid.Equality.Equal(Type, other.Type)
         && global::Meteroid.Equality.Equal(UnitPrice, other.UnitPrice)
         && global::Meteroid.Equality.Equal(AdditionalProperties, other.AdditionalProperties);
 
@@ -39,6 +44,7 @@ public sealed partial record OneTimePricing
     {
         var hash = new HashCode();
         hash.Add(global::Meteroid.Equality.Hash(Quantity));
+        hash.Add(global::Meteroid.Equality.Hash(Type));
         hash.Add(global::Meteroid.Equality.Hash(UnitPrice));
         hash.Add(global::Meteroid.Equality.Hash(AdditionalProperties));
         return hash.ToHashCode();

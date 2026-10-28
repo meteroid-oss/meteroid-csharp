@@ -26,6 +26,10 @@ public sealed partial record ExtraRecurringPlanFee
     [JsonPropertyName("quantity")]
     public required int Quantity { get; init; }
 
+    /// <summary>The <c>type</c> property.</summary>
+    [JsonPropertyName("type")]
+    public string Type { get; init; } = "EXTRA_RECURRING";
+
     /// <summary>The <c>unit_price</c> property.</summary>
     [JsonPropertyName("unit_price")]
     [JsonNumberHandling(JsonNumberHandling.AllowReadingFromString | JsonNumberHandling.WriteAsString)]
@@ -43,6 +47,7 @@ public sealed partial record ExtraRecurringPlanFee
         && global::Meteroid.Equality.Equal(BillingType, other.BillingType)
         && global::Meteroid.Equality.Equal(Cadence, other.Cadence)
         && global::Meteroid.Equality.Equal(Quantity, other.Quantity)
+        && global::Meteroid.Equality.Equal(Type, other.Type)
         && global::Meteroid.Equality.Equal(UnitPrice, other.UnitPrice)
         && global::Meteroid.Equality.Equal(AdditionalProperties, other.AdditionalProperties);
 
@@ -53,6 +58,7 @@ public sealed partial record ExtraRecurringPlanFee
         hash.Add(global::Meteroid.Equality.Hash(BillingType));
         hash.Add(global::Meteroid.Equality.Hash(Cadence));
         hash.Add(global::Meteroid.Equality.Hash(Quantity));
+        hash.Add(global::Meteroid.Equality.Hash(Type));
         hash.Add(global::Meteroid.Equality.Hash(UnitPrice));
         hash.Add(global::Meteroid.Equality.Hash(AdditionalProperties));
         return hash.ToHashCode();

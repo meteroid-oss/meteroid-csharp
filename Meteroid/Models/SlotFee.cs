@@ -24,6 +24,10 @@ public sealed partial record SlotFee
     [JsonPropertyName("min_slots")]
     public int? MinSlots { get; init; }
 
+    /// <summary>The <c>type</c> property.</summary>
+    [JsonPropertyName("type")]
+    public string Type { get; init; } = "SLOT";
+
     /// <summary>The <c>unit</c> property.</summary>
     [JsonPropertyName("unit")]
     public required string Unit { get; init; }
@@ -45,6 +49,7 @@ public sealed partial record SlotFee
         && global::Meteroid.Equality.Equal(InitialSlots, other.InitialSlots)
         && global::Meteroid.Equality.Equal(MaxSlots, other.MaxSlots)
         && global::Meteroid.Equality.Equal(MinSlots, other.MinSlots)
+        && global::Meteroid.Equality.Equal(Type, other.Type)
         && global::Meteroid.Equality.Equal(Unit, other.Unit)
         && global::Meteroid.Equality.Equal(UnitRate, other.UnitRate)
         && global::Meteroid.Equality.Equal(AdditionalProperties, other.AdditionalProperties);
@@ -56,6 +61,7 @@ public sealed partial record SlotFee
         hash.Add(global::Meteroid.Equality.Hash(InitialSlots));
         hash.Add(global::Meteroid.Equality.Hash(MaxSlots));
         hash.Add(global::Meteroid.Equality.Hash(MinSlots));
+        hash.Add(global::Meteroid.Equality.Hash(Type));
         hash.Add(global::Meteroid.Equality.Hash(Unit));
         hash.Add(global::Meteroid.Equality.Hash(UnitRate));
         hash.Add(global::Meteroid.Equality.Hash(AdditionalProperties));

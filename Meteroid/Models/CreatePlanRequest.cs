@@ -24,6 +24,10 @@ public sealed partial record CreatePlanRequest
     [JsonPropertyName("components")]
     public required IReadOnlyList<PriceComponentInput> Components { get; init; }
 
+    /// <summary>The <c>credit_exhausted_rule</c> property.</summary>
+    [JsonPropertyName("credit_exhausted_rule")]
+    public CreditExhaustedRule? CreditExhaustedRule { get; init; }
+
     /// <summary>The <c>currency</c> property.</summary>
     [JsonPropertyName("currency")]
     public required string Currency { get; init; }
@@ -85,6 +89,7 @@ public sealed partial record CreatePlanRequest
         && global::Meteroid.Equality.Equal(AddOns, other.AddOns)
         && global::Meteroid.Equality.Equal(Billing, other.Billing)
         && global::Meteroid.Equality.Equal(Components, other.Components)
+        && global::Meteroid.Equality.Equal(CreditExhaustedRule, other.CreditExhaustedRule)
         && global::Meteroid.Equality.Equal(Currency, other.Currency)
         && global::Meteroid.Equality.Equal(Description, other.Description)
         && global::Meteroid.Equality.Equal(Entitlements, other.Entitlements)
@@ -104,6 +109,7 @@ public sealed partial record CreatePlanRequest
         hash.Add(global::Meteroid.Equality.Hash(AddOns));
         hash.Add(global::Meteroid.Equality.Hash(Billing));
         hash.Add(global::Meteroid.Equality.Hash(Components));
+        hash.Add(global::Meteroid.Equality.Hash(CreditExhaustedRule));
         hash.Add(global::Meteroid.Equality.Hash(Currency));
         hash.Add(global::Meteroid.Equality.Hash(Description));
         hash.Add(global::Meteroid.Equality.Hash(Entitlements));

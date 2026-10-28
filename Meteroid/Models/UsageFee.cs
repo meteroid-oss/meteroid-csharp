@@ -12,6 +12,10 @@ namespace Meteroid.Models;
 /// <summary>The <c>UsageFee</c> object.</summary>
 public sealed partial record UsageFee
 {
+    /// <summary>The <c>credit_unit</c> property.</summary>
+    [JsonPropertyName("credit_unit")]
+    public FeeCreditUnit? CreditUnit { get; init; }
+
     /// <summary>The <c>metric_id</c> property.</summary>
     [JsonPropertyName("metric_id")]
     public required string MetricId { get; init; }
@@ -19,6 +23,10 @@ public sealed partial record UsageFee
     /// <summary>The <c>model</c> property.</summary>
     [JsonPropertyName("model")]
     public required UsagePricingModel Model { get; init; }
+
+    /// <summary>The <c>type</c> property.</summary>
+    [JsonPropertyName("type")]
+    public string Type { get; init; } = "USAGE";
 
     /// <summary>The properties of the JSON object this SDK version does not know, sent back as they came.</summary>
     [JsonExtensionData]
@@ -29,16 +37,20 @@ public sealed partial record UsageFee
     /// <returns>Whether the records are equal.</returns>
     public bool Equals(UsageFee? other) =>
         other is not null
+        && global::Meteroid.Equality.Equal(CreditUnit, other.CreditUnit)
         && global::Meteroid.Equality.Equal(MetricId, other.MetricId)
         && global::Meteroid.Equality.Equal(Model, other.Model)
+        && global::Meteroid.Equality.Equal(Type, other.Type)
         && global::Meteroid.Equality.Equal(AdditionalProperties, other.AdditionalProperties);
 
     /// <inheritdoc/>
     public override int GetHashCode()
     {
         var hash = new HashCode();
+        hash.Add(global::Meteroid.Equality.Hash(CreditUnit));
         hash.Add(global::Meteroid.Equality.Hash(MetricId));
         hash.Add(global::Meteroid.Equality.Hash(Model));
+        hash.Add(global::Meteroid.Equality.Hash(Type));
         hash.Add(global::Meteroid.Equality.Hash(AdditionalProperties));
         return hash.ToHashCode();
     }

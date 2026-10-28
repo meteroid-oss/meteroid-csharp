@@ -39,7 +39,12 @@ public sealed partial record SubscriptionCreateRequest
     [JsonPropertyName("charge_automatically")]
     public bool? ChargeAutomatically { get; init; }
 
-    /// <summary>The <c>coupon_codes</c> property.</summary>
+    /// <summary>
+    /// Codes of the coupons to apply. A code matches whatever the case of its ASCII letters; when
+    /// several coupons differ from it only in that case, the one with exactly that code applies. A
+    /// code that names no live coupon, or several differing only in case, refuses the request with
+    /// 400 listing the codes (unknown codes used to be ignored silently).
+    /// </summary>
     [JsonPropertyName("coupon_codes")]
     public IReadOnlyList<string>? CouponCodes { get; init; }
 
@@ -99,6 +104,13 @@ public sealed partial record SubscriptionCreateRequest
     [JsonPropertyName("trial_days")]
     public int? TrialDays { get; init; }
 
+    /// <summary>
+    /// Bill only the customer's events whose property has this value. Omit to bill the events
+    /// no usage filter of the customer's other subscriptions matches.
+    /// </summary>
+    [JsonPropertyName("usage_filter")]
+    public UsageFilter? UsageFilter { get; init; }
+
     /// <summary>The <c>version</c> property.</summary>
     [JsonPropertyName("version")]
     public int? Version { get; init; }
@@ -131,6 +143,7 @@ public sealed partial record SubscriptionCreateRequest
         && global::Meteroid.Equality.Equal(SkipPastInvoices, other.SkipPastInvoices)
         && global::Meteroid.Equality.Equal(StartDate, other.StartDate)
         && global::Meteroid.Equality.Equal(TrialDays, other.TrialDays)
+        && global::Meteroid.Equality.Equal(UsageFilter, other.UsageFilter)
         && global::Meteroid.Equality.Equal(Version, other.Version)
         && global::Meteroid.Equality.Equal(AdditionalProperties, other.AdditionalProperties);
 
@@ -157,6 +170,7 @@ public sealed partial record SubscriptionCreateRequest
         hash.Add(global::Meteroid.Equality.Hash(SkipPastInvoices));
         hash.Add(global::Meteroid.Equality.Hash(StartDate));
         hash.Add(global::Meteroid.Equality.Hash(TrialDays));
+        hash.Add(global::Meteroid.Equality.Hash(UsageFilter));
         hash.Add(global::Meteroid.Equality.Hash(Version));
         hash.Add(global::Meteroid.Equality.Hash(AdditionalProperties));
         return hash.ToHashCode();

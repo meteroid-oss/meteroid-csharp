@@ -18,6 +18,10 @@ public sealed partial record RatePlanFee
     [JsonPropertyName("rates")]
     public required IReadOnlyList<TermRate> Rates { get; init; }
 
+    /// <summary>The <c>type</c> property.</summary>
+    [JsonPropertyName("type")]
+    public string Type { get; init; } = "RATE";
+
     /// <summary>The properties of the JSON object this SDK version does not know, sent back as they came.</summary>
     [JsonExtensionData]
     public IDictionary<string, JsonElement>? AdditionalProperties { get; set; }
@@ -28,6 +32,7 @@ public sealed partial record RatePlanFee
     public bool Equals(RatePlanFee? other) =>
         other is not null
         && global::Meteroid.Equality.Equal(Rates, other.Rates)
+        && global::Meteroid.Equality.Equal(Type, other.Type)
         && global::Meteroid.Equality.Equal(AdditionalProperties, other.AdditionalProperties);
 
     /// <inheritdoc/>
@@ -35,6 +40,7 @@ public sealed partial record RatePlanFee
     {
         var hash = new HashCode();
         hash.Add(global::Meteroid.Equality.Hash(Rates));
+        hash.Add(global::Meteroid.Equality.Hash(Type));
         hash.Add(global::Meteroid.Equality.Hash(AdditionalProperties));
         return hash.ToHashCode();
     }

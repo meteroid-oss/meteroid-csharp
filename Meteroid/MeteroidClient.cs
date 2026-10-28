@@ -18,8 +18,14 @@ public interface IMeteroidClient : IDisposable
     /// <summary>The <c>batch_jobs</c> operations.</summary>
     IBatchJobsApi BatchJobs { get; }
 
+    /// <summary>The <c>budgets</c> operations.</summary>
+    IBudgetsApi Budgets { get; }
+
     /// <summary>The <c>checkout_sessions</c> operations.</summary>
     ICheckoutSessionsApi CheckoutSessions { get; }
+
+    /// <summary>The <c>checks</c> operations.</summary>
+    IChecksApi Checks { get; }
 
     /// <summary>The <c>connect</c> operations.</summary>
     IConnectApi Connect { get; }
@@ -29,6 +35,12 @@ public interface IMeteroidClient : IDisposable
 
     /// <summary>The <c>credit_notes</c> operations.</summary>
     ICreditNotesApi CreditNotes { get; }
+
+    /// <summary>The <c>credit_units</c> operations.</summary>
+    ICreditUnitsApi CreditUnits { get; }
+
+    /// <summary>The <c>credits</c> operations.</summary>
+    ICreditsApi Credits { get; }
 
     /// <summary>The <c>custom_properties</c> operations.</summary>
     ICustomPropertiesApi CustomProperties { get; }
@@ -72,6 +84,9 @@ public interface IMeteroidClient : IDisposable
     /// <summary>The <c>usage</c> operations.</summary>
     IUsageApi Usage { get; }
 
+    /// <summary>The <c>usage_costs</c> operations.</summary>
+    IUsageCostsApi UsageCosts { get; }
+
     /// <summary>The <c>webhook_endpoints</c> operations.</summary>
     IWebhookEndpointsApi WebhookEndpoints { get; }
 }
@@ -104,10 +119,14 @@ public sealed partial class MeteroidClient : IMeteroidClient
         _transport = CreateTransport(token, options ?? new(), http: null);
         AddOns = new(_transport);
         BatchJobs = new(_transport);
+        Budgets = new(_transport);
         CheckoutSessions = new(_transport);
+        Checks = new(_transport);
         Connect = new(_transport);
         Coupons = new(_transport);
         CreditNotes = new(_transport);
+        CreditUnits = new(_transport);
+        Credits = new(_transport);
         CustomProperties = new(_transport);
         Customers = new(_transport);
         Entitlements = new(_transport);
@@ -122,6 +141,7 @@ public sealed partial class MeteroidClient : IMeteroidClient
         Products = new(_transport);
         Subscriptions = new(_transport);
         Usage = new(_transport);
+        UsageCosts = new(_transport);
         WebhookEndpoints = new(_transport);
     }
 
@@ -138,10 +158,14 @@ public sealed partial class MeteroidClient : IMeteroidClient
         _transport = CreateTransport(token, options ?? new(), httpClient);
         AddOns = new(_transport);
         BatchJobs = new(_transport);
+        Budgets = new(_transport);
         CheckoutSessions = new(_transport);
+        Checks = new(_transport);
         Connect = new(_transport);
         Coupons = new(_transport);
         CreditNotes = new(_transport);
+        CreditUnits = new(_transport);
+        Credits = new(_transport);
         CustomProperties = new(_transport);
         Customers = new(_transport);
         Entitlements = new(_transport);
@@ -156,6 +180,7 @@ public sealed partial class MeteroidClient : IMeteroidClient
         Products = new(_transport);
         Subscriptions = new(_transport);
         Usage = new(_transport);
+        UsageCosts = new(_transport);
         WebhookEndpoints = new(_transport);
     }
 
@@ -180,10 +205,20 @@ public sealed partial class MeteroidClient : IMeteroidClient
 
     IBatchJobsApi IMeteroidClient.BatchJobs => BatchJobs;
 
+    /// <summary>The <c>budgets</c> operations.</summary>
+    public BudgetsApi Budgets { get; }
+
+    IBudgetsApi IMeteroidClient.Budgets => Budgets;
+
     /// <summary>The <c>checkout_sessions</c> operations.</summary>
     public CheckoutSessionsApi CheckoutSessions { get; }
 
     ICheckoutSessionsApi IMeteroidClient.CheckoutSessions => CheckoutSessions;
+
+    /// <summary>The <c>checks</c> operations.</summary>
+    public ChecksApi Checks { get; }
+
+    IChecksApi IMeteroidClient.Checks => Checks;
 
     /// <summary>The <c>connect</c> operations.</summary>
     public ConnectApi Connect { get; }
@@ -199,6 +234,16 @@ public sealed partial class MeteroidClient : IMeteroidClient
     public CreditNotesApi CreditNotes { get; }
 
     ICreditNotesApi IMeteroidClient.CreditNotes => CreditNotes;
+
+    /// <summary>The <c>credit_units</c> operations.</summary>
+    public CreditUnitsApi CreditUnits { get; }
+
+    ICreditUnitsApi IMeteroidClient.CreditUnits => CreditUnits;
+
+    /// <summary>The <c>credits</c> operations.</summary>
+    public CreditsApi Credits { get; }
+
+    ICreditsApi IMeteroidClient.Credits => Credits;
 
     /// <summary>The <c>custom_properties</c> operations.</summary>
     public CustomPropertiesApi CustomProperties { get; }
@@ -269,6 +314,11 @@ public sealed partial class MeteroidClient : IMeteroidClient
     public UsageApi Usage { get; }
 
     IUsageApi IMeteroidClient.Usage => Usage;
+
+    /// <summary>The <c>usage_costs</c> operations.</summary>
+    public UsageCostsApi UsageCosts { get; }
+
+    IUsageCostsApi IMeteroidClient.UsageCosts => UsageCosts;
 
     /// <summary>The <c>webhook_endpoints</c> operations.</summary>
     public WebhookEndpointsApi WebhookEndpoints { get; }

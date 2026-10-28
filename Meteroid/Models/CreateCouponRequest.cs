@@ -12,7 +12,10 @@ namespace Meteroid.Models;
 /// <summary>The <c>CreateCouponRequest</c> object.</summary>
 public sealed partial record CreateCouponRequest
 {
-    /// <summary>The <c>code</c> property.</summary>
+    /// <summary>
+    /// 1 to 64 ASCII letters, digits, hyphens or underscores. A promotional-credit (<c>CREDIT</c>) code
+    /// is stored upper-case. Codes are matched as described on <c>Coupon.code</c>.
+    /// </summary>
     [JsonPropertyName("code")]
     public required string Code { get; init; }
 
@@ -40,7 +43,10 @@ public sealed partial record CreateCouponRequest
     [JsonPropertyName("redemption_limit")]
     public int? RedemptionLimit { get; init; }
 
-    /// <summary>The <c>reusable</c> property.</summary>
+    /// <summary>
+    /// Whether one customer may redeem the coupon more than once. Must be false for a
+    /// promotional-credit (<c>CREDIT</c>) coupon.
+    /// </summary>
     [JsonPropertyName("reusable")]
     public bool? Reusable { get; init; }
 

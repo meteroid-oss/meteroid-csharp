@@ -16,7 +16,12 @@ public sealed partial record Coupon
     [JsonPropertyName("archived_at")]
     public DateTimeOffset? ArchivedAt { get; init; }
 
-    /// <summary>The <c>code</c> property.</summary>
+    /// <summary>
+    /// A promotional-credit (<c>CREDIT</c>) code is stored upper-case; other codes as written. A code
+    /// is redeemed by the coupon with exactly that code, else by the only live coupon equal to it
+    /// ignoring the case of ASCII letters; several such coupons and no exact match make it
+    /// ambiguous.
+    /// </summary>
     [JsonPropertyName("code")]
     public required string Code { get; init; }
 

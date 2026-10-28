@@ -37,6 +37,14 @@ public abstract partial record CouponDiscount
         public override string Type => "FIXED";
     }
 
+    /// <summary>The <c>CREDIT</c> variant.</summary>
+    /// <param name="Value">The fields of the variant.</param>
+    public sealed record Credit(CreditDiscount Value) : CouponDiscount
+    {
+        /// <inheritdoc/>
+        public override string Type => "CREDIT";
+    }
+
     /// <summary>A variant unknown to this SDK version, kept as the raw JSON object.</summary>
     /// <param name="Tag">The <c>type</c> of the variant.</param>
     /// <param name="Raw">The whole JSON object.</param>
@@ -67,6 +75,7 @@ internal sealed class CouponDiscountConverter : JsonConverter<CouponDiscount>
         {
             "PERCENTAGE" => new CouponDiscount.Percentage(Json.Deserialize<PercentageDiscount>(root, options)),
             "FIXED" => new CouponDiscount.Fixed(Json.Deserialize<FixedDiscount>(root, options)),
+            "CREDIT" => new CouponDiscount.Credit(Json.Deserialize<CreditDiscount>(root, options)),
             var tag => new CouponDiscount.Unrecognized(tag ?? string.Empty, root.Clone()),
         };
     }
@@ -85,6 +94,9 @@ internal sealed class CouponDiscountConverter : JsonConverter<CouponDiscount>
                 fields.AddRange(Json.ToObject(variant.Value, options));
                 break;
             case CouponDiscount.Fixed variant:
+                fields.AddRange(Json.ToObject(variant.Value, options));
+                break;
+            case CouponDiscount.Credit variant:
                 fields.AddRange(Json.ToObject(variant.Value, options));
                 break;
         }

@@ -29,7 +29,8 @@ public sealed partial record UpdateWebhookEndpointRequest
     public MaybeUnset<bool?> Disabled { get; init; }
 
     /// <summary>
-    /// Replaces the subscription list. An empty array subscribes to every event type.
+    /// Replaces the subscription list. An empty array subscribes to every event type except Beta
+    /// ones, which are sent only to endpoints that list them.
     /// </summary>
     [JsonPropertyName("event_types")]
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]

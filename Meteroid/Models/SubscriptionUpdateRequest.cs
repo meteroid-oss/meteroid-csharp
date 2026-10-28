@@ -65,6 +65,12 @@ public sealed partial record SubscriptionUpdateRequest
     [JsonConverter(typeof(MaybeUnsetConverter<string?>))]
     public MaybeUnset<string?> PurchaseOrder { get; init; }
 
+    /// <summary>The <c>usage_filter</c> property.</summary>
+    [JsonPropertyName("usage_filter")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+    [JsonConverter(typeof(MaybeUnsetConverter<UsageFilter?>))]
+    public MaybeUnset<UsageFilter?> UsageFilter { get; init; }
+
     /// <summary>The properties of the JSON object this SDK version does not know, sent back as they came.</summary>
     [JsonExtensionData]
     public IDictionary<string, JsonElement>? AdditionalProperties { get; set; }
@@ -81,6 +87,7 @@ public sealed partial record SubscriptionUpdateRequest
         && global::Meteroid.Equality.Equal(NetTerms, other.NetTerms)
         && global::Meteroid.Equality.Equal(PaymentMethodsConfig, other.PaymentMethodsConfig)
         && global::Meteroid.Equality.Equal(PurchaseOrder, other.PurchaseOrder)
+        && global::Meteroid.Equality.Equal(UsageFilter, other.UsageFilter)
         && global::Meteroid.Equality.Equal(AdditionalProperties, other.AdditionalProperties);
 
     /// <inheritdoc/>
@@ -94,6 +101,7 @@ public sealed partial record SubscriptionUpdateRequest
         hash.Add(global::Meteroid.Equality.Hash(NetTerms));
         hash.Add(global::Meteroid.Equality.Hash(PaymentMethodsConfig));
         hash.Add(global::Meteroid.Equality.Hash(PurchaseOrder));
+        hash.Add(global::Meteroid.Equality.Hash(UsageFilter));
         hash.Add(global::Meteroid.Equality.Hash(AdditionalProperties));
         return hash.ToHashCode();
     }
