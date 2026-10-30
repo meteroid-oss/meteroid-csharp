@@ -1,0 +1,26 @@
+// this file is @generated
+#pragma warning disable CS0612, CS0618 // generated code may use deprecated API
+#pragma warning disable CA1707, CA1711, CA1716, CA1720 // identifiers follow the API's own names
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Nodes;
+using Meteroid.Models;
+
+namespace Meteroid;
+
+/// <summary>Query and header parameters of <see cref="LicensesApi.ListAsync"/>.</summary>
+public sealed record LicensesListOptions
+{
+    /// <summary>
+    /// Filter by customer ID or alias
+    /// </summary>
+    public string? CustomerId { get; init; }
+
+    /// <summary>The <c>subscription_id</c> query parameter.</summary>
+    public string? SubscriptionId { get; init; }
+
+    /// <summary>
+    /// Include revoked licenses. Default: false.
+    /// </summary>
+    public bool? IncludeRevoked { get; init; }
+}
