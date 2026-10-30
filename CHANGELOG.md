@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.31.1](https://github.com/meteroid-oss/meteroid-csharp/compare/v0.31.0...v0.31.1) (2026-10-30)
+
+
+### Features
+
+* **api:** add `GET /api/v1/licenses`, `GET /api/v1/licenses/{license_id}`, `GET /api/v1/licenses/{license_id}/activation-code`, `GET /api/v1/licensing/signing-keys`, `POST /api/v1/licenses` and 2 more ([aefbcbf](https://github.com/meteroid-oss/meteroid-csharp/commit/aefbcbf40867ed35996f80c8817ab4bd3c74f3a4))
+* **api:** update `GET /api/v1/plans`, `GET /api/v1/plans/{plan_id}`, `PATCH /api/v1/plans/{plan_id}`, `POST /api/v1/custom-property-definitions`, `POST /api/v1/plans` and 3 more ([aefbcbf](https://github.com/meteroid-oss/meteroid-csharp/commit/aefbcbf40867ed35996f80c8817ab4bd3c74f3a4))
+* **api:** update SDKs to meteroid 0.1.0 ([#16](https://github.com/meteroid-oss/meteroid-csharp/issues/16)) ([aefbcbf](https://github.com/meteroid-oss/meteroid-csharp/commit/aefbcbf40867ed35996f80c8817ab4bd3c74f3a4))
+
 ## [0.31.0](https://github.com/meteroid-oss/meteroid-csharp/compare/v0.30.0...v0.31.0) (2026-10-28)
 
 
