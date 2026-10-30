@@ -44,6 +44,12 @@ public sealed partial record Plan
     [JsonPropertyName("id")]
     public required string Id { get; init; }
 
+    /// <summary>
+    /// Subscriptions to this plan are issued a software license automatically.
+    /// </summary>
+    [JsonPropertyName("issues_license")]
+    public bool? IssuesLicense { get; init; }
+
     /// <summary>The <c>minimum_commitment</c> property.</summary>
     [JsonPropertyName("minimum_commitment")]
     public MinimumCommitment? MinimumCommitment { get; init; }
@@ -118,6 +124,7 @@ public sealed partial record Plan
         && global::Meteroid.Equality.Equal(Description, other.Description)
         && global::Meteroid.Equality.Equal(Entitlements, other.Entitlements)
         && global::Meteroid.Equality.Equal(Id, other.Id)
+        && global::Meteroid.Equality.Equal(IssuesLicense, other.IssuesLicense)
         && global::Meteroid.Equality.Equal(MinimumCommitment, other.MinimumCommitment)
         && global::Meteroid.Equality.Equal(Name, other.Name)
         && global::Meteroid.Equality.Equal(NetTerms, other.NetTerms)
@@ -145,6 +152,7 @@ public sealed partial record Plan
         hash.Add(global::Meteroid.Equality.Hash(Description));
         hash.Add(global::Meteroid.Equality.Hash(Entitlements));
         hash.Add(global::Meteroid.Equality.Hash(Id));
+        hash.Add(global::Meteroid.Equality.Hash(IssuesLicense));
         hash.Add(global::Meteroid.Equality.Hash(MinimumCommitment));
         hash.Add(global::Meteroid.Equality.Hash(Name));
         hash.Add(global::Meteroid.Equality.Hash(NetTerms));

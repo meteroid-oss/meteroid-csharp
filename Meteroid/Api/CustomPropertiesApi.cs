@@ -45,6 +45,7 @@ public interface ICustomPropertiesApi
     /// <param name="requestOptions">Headers, timeout, retries or idempotency key of this call.</param>
     /// <param name="cancellationToken">Cancels the call.</param>
     /// <exception cref="BadRequestException">400: <c>Error</c> is the <see cref="Models.RestErrorResponse"/> body.</exception>
+    /// <exception cref="ForbiddenException">403: <c>Error</c> is the <see cref="Models.RestErrorResponse"/> body.</exception>
     /// <exception cref="ConflictException">409: <c>Error</c> is the <see cref="Models.RestErrorResponse"/> body.</exception>
     /// <exception cref="RateLimitException">429: <c>Error</c> is the <see cref="Models.RestErrorResponse"/> body.</exception>
     /// <exception cref="ServerErrorException">500: <c>Error</c> is the <see cref="Models.RestErrorResponse"/> body.</exception>
@@ -76,6 +77,7 @@ public interface ICustomPropertiesApi
     /// <param name="customPropertyDefinitionUpdateRequest">The request body.</param>
     /// <param name="requestOptions">Headers, timeout, retries or idempotency key of this call.</param>
     /// <param name="cancellationToken">Cancels the call.</param>
+    /// <exception cref="ForbiddenException">403: <c>Error</c> is the <see cref="Models.RestErrorResponse"/> body.</exception>
     /// <exception cref="NotFoundException">404: <c>Error</c> is the <see cref="Models.RestErrorResponse"/> body.</exception>
     /// <exception cref="RateLimitException">429: <c>Error</c> is the <see cref="Models.RestErrorResponse"/> body.</exception>
     /// <exception cref="ServerErrorException">500: <c>Error</c> is the <see cref="Models.RestErrorResponse"/> body.</exception>
@@ -330,6 +332,7 @@ public sealed class CustomPropertiesApiWithRawResponse : ICustomPropertiesApiWit
         request.ErrorTypes = new KeyValuePair<string, JsonTypeInfo>[]
         {
             new("400", MeteroidJsonContext.Default.RestErrorResponse),
+            new("403", MeteroidJsonContext.Default.RestErrorResponse),
             new("409", MeteroidJsonContext.Default.RestErrorResponse),
             new("429", MeteroidJsonContext.Default.RestErrorResponse),
             new("500", MeteroidJsonContext.Default.RestErrorResponse),
@@ -392,6 +395,7 @@ public sealed class CustomPropertiesApiWithRawResponse : ICustomPropertiesApiWit
         );
         request.ErrorTypes = new KeyValuePair<string, JsonTypeInfo>[]
         {
+            new("403", MeteroidJsonContext.Default.RestErrorResponse),
             new("404", MeteroidJsonContext.Default.RestErrorResponse),
             new("429", MeteroidJsonContext.Default.RestErrorResponse),
             new("500", MeteroidJsonContext.Default.RestErrorResponse),

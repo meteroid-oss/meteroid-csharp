@@ -9,7 +9,7 @@ paginated operation). A paginated operation returns an `AsyncPager`: awaited, it
 the properties of the response body; enumerated, every item of every page. Models are in
 [`Meteroid.Models`](Meteroid/Models).
 
-[Add ons](#add-ons) · [Add ons entitlements](#add-ons-entitlements) · [Batch jobs](#batch-jobs) · [Budgets](#budgets) · [Checkout sessions](#checkout-sessions) · [Checks](#checks) · [Connect](#connect) · [Coupons](#coupons) · [Credit notes](#credit-notes) · [Credit units](#credit-units) · [Credit units prices](#credit-units-prices) · [Credits](#credits) · [Credits grants](#credits-grants) · [Credits wallets](#credits-wallets) · [Custom properties](#custom-properties) · [Customers](#customers) · [Entitlements](#entitlements) · [Events](#events) · [Features](#features) · [Invoices](#invoices) · [Metrics](#metrics) · [Oauth](#oauth) · [Oauth apps](#oauth-apps) · [Plans](#plans) · [Plans versions](#plans-versions) · [Product families](#product-families) · [Products](#products) · [Products entitlements](#products-entitlements) · [Subscriptions](#subscriptions) · [Usage](#usage) · [Usage customer](#usage-customer) · [Usage costs](#usage-costs) · [Usage costs customer](#usage-costs-customer) · [Usage costs subscription](#usage-costs-subscription) · [Webhook endpoints](#webhook-endpoints) · [Webhook endpoints endpoints](#webhook-endpoints-endpoints)
+[Add ons](#add-ons) · [Add ons entitlements](#add-ons-entitlements) · [Batch jobs](#batch-jobs) · [Budgets](#budgets) · [Checkout sessions](#checkout-sessions) · [Checks](#checks) · [Connect](#connect) · [Coupons](#coupons) · [Credit notes](#credit-notes) · [Credit units](#credit-units) · [Credit units prices](#credit-units-prices) · [Credits](#credits) · [Credits grants](#credits-grants) · [Credits wallets](#credits-wallets) · [Custom properties](#custom-properties) · [Customers](#customers) · [Entitlements](#entitlements) · [Events](#events) · [Features](#features) · [Invoices](#invoices) · [Licenses](#licenses) · [Metrics](#metrics) · [Oauth](#oauth) · [Oauth apps](#oauth-apps) · [Plans](#plans) · [Plans versions](#plans-versions) · [Product families](#product-families) · [Products](#products) · [Products entitlements](#products-entitlements) · [Subscriptions](#subscriptions) · [Usage](#usage) · [Usage customer](#usage-customer) · [Usage costs](#usage-costs) · [Usage costs customer](#usage-costs-customer) · [Usage costs subscription](#usage-costs-subscription) · [Webhook endpoints](#webhook-endpoints) · [Webhook endpoints endpoints](#webhook-endpoints-endpoints)
 
 ## Add ons
 
@@ -232,6 +232,20 @@ the properties of the response body; enumerated, every item of every page. Model
 | `Task<byte[]> client.Invoices.DownloadAsync(string invoiceId)` | `GET /api/v1/invoices/{invoice_id}/download` | bytes |
 | `Task<Invoice> client.Invoices.RefreshAsync(string invoiceId)` | `POST /api/v1/invoices/{invoice_id}/refresh` | [`Invoice`](Meteroid/Models/Invoice.cs) |
 | `Task<byte[]> client.Invoices.DownloadXmlAsync(string invoiceId)` | `GET /api/v1/invoices/{invoice_id}/xml` | bytes |
+
+## Licenses
+
+[`client.Licenses`](Meteroid/Api/LicensesApi.cs)
+
+| Method | Request | Returns |
+| --- | --- | --- |
+| `Task<LicenseListResponse> client.Licenses.ListAsync(LicensesListOptions? options)` | `GET /api/v1/licenses` | [`LicenseListResponse`](Meteroid/Models/LicenseListResponse.cs) |
+| `Task<IssueLicenseResponse> client.Licenses.CreateAsync(IssueLicenseRequest issueLicenseRequest)` | `POST /api/v1/licenses` | [`IssueLicenseResponse`](Meteroid/Models/IssueLicenseResponse.cs) |
+| `Task<License> client.Licenses.RetrieveAsync(string licenseId)` | `GET /api/v1/licenses/{license_id}` | [`License`](Meteroid/Models/License.cs) |
+| `Task<LicenseActivationCode> client.Licenses.RetrieveActivationCodeAsync(string licenseId)` | `GET /api/v1/licenses/{license_id}/activation-code` | [`LicenseActivationCode`](Meteroid/Models/LicenseActivationCode.cs) |
+| `Task<OfflineLicense> client.Licenses.OfflineAsync(string licenseId, IssueOfflineLicenseRequest issueOfflineLicenseRequest)` | `POST /api/v1/licenses/{license_id}/offline` | [`OfflineLicense`](Meteroid/Models/OfflineLicense.cs) |
+| `Task<License> client.Licenses.RevokeAsync(string licenseId, RevokeLicenseRequest revokeLicenseRequest)` | `POST /api/v1/licenses/{license_id}/revoke` | [`License`](Meteroid/Models/License.cs) |
+| `Task<LicenseSigningKeysResponse> client.Licenses.ListLicensingSigningKeysAsync()` | `GET /api/v1/licensing/signing-keys` | [`LicenseSigningKeysResponse`](Meteroid/Models/LicenseSigningKeysResponse.cs) |
 
 ## Metrics
 

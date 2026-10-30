@@ -60,6 +60,9 @@ public interface IMeteroidClient : IDisposable
     /// <summary>The <c>invoices</c> operations.</summary>
     IInvoicesApi Invoices { get; }
 
+    /// <summary>The <c>licenses</c> operations.</summary>
+    ILicensesApi Licenses { get; }
+
     /// <summary>The <c>metrics</c> operations.</summary>
     IMetricsApi Metrics { get; }
 
@@ -133,6 +136,7 @@ public sealed partial class MeteroidClient : IMeteroidClient
         Events = new(_transport);
         Features = new(_transport);
         Invoices = new(_transport);
+        Licenses = new(_transport);
         Metrics = new(_transport);
         Oauth = new(_transport);
         OauthApps = new(_transport);
@@ -172,6 +176,7 @@ public sealed partial class MeteroidClient : IMeteroidClient
         Events = new(_transport);
         Features = new(_transport);
         Invoices = new(_transport);
+        Licenses = new(_transport);
         Metrics = new(_transport);
         Oauth = new(_transport);
         OauthApps = new(_transport);
@@ -274,6 +279,11 @@ public sealed partial class MeteroidClient : IMeteroidClient
     public InvoicesApi Invoices { get; }
 
     IInvoicesApi IMeteroidClient.Invoices => Invoices;
+
+    /// <summary>The <c>licenses</c> operations.</summary>
+    public LicensesApi Licenses { get; }
+
+    ILicensesApi IMeteroidClient.Licenses => Licenses;
 
     /// <summary>The <c>metrics</c> operations.</summary>
     public MetricsApi Metrics { get; }
