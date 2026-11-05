@@ -68,6 +68,7 @@ public interface IBudgetsApi
     /// <param name="cancellationToken">Cancels the call.</param>
     /// <exception cref="BadRequestException">400: <c>Error</c> is the <see cref="Models.RestErrorResponse"/> body.</exception>
     /// <exception cref="UnauthorizedException">401: <c>Error</c> is the <see cref="Models.RestErrorResponse"/> body.</exception>
+    /// <exception cref="ForbiddenException">403: <c>Error</c> is the <see cref="Models.RestErrorResponse"/> body.</exception>
     /// <exception cref="NotFoundException">404: <c>Error</c> is the <see cref="Models.RestErrorResponse"/> body.</exception>
     /// <exception cref="ConflictException">409: <c>Error</c> is the <see cref="Models.RestErrorResponse"/> body.</exception>
     /// <exception cref="RateLimitException">429: <c>Error</c> is the <see cref="Models.RestErrorResponse"/> body.</exception>
@@ -100,6 +101,7 @@ public interface IBudgetsApi
     /// <param name="cancellationToken">Cancels the call.</param>
     /// <exception cref="BadRequestException">400: <c>Error</c> is the <see cref="Models.RestErrorResponse"/> body.</exception>
     /// <exception cref="UnauthorizedException">401: <c>Error</c> is the <see cref="Models.RestErrorResponse"/> body.</exception>
+    /// <exception cref="ForbiddenException">403: <c>Error</c> is the <see cref="Models.RestErrorResponse"/> body.</exception>
     /// <exception cref="NotFoundException">404: <c>Error</c> is the <see cref="Models.RestErrorResponse"/> body.</exception>
     /// <exception cref="ConflictException">409: <c>Error</c> is the <see cref="Models.RestErrorResponse"/> body.</exception>
     /// <exception cref="RateLimitException">429: <c>Error</c> is the <see cref="Models.RestErrorResponse"/> body.</exception>
@@ -354,6 +356,7 @@ public sealed class BudgetsApiWithRawResponse : IBudgetsApiWithRawResponse
         {
             new("400", MeteroidJsonContext.Default.RestErrorResponse),
             new("401", MeteroidJsonContext.Default.RestErrorResponse),
+            new("403", MeteroidJsonContext.Default.RestErrorResponse),
             new("404", MeteroidJsonContext.Default.RestErrorResponse),
             new("409", MeteroidJsonContext.Default.RestErrorResponse),
             new("429", MeteroidJsonContext.Default.RestErrorResponse),
@@ -388,6 +391,7 @@ public sealed class BudgetsApiWithRawResponse : IBudgetsApiWithRawResponse
         {
             new("400", MeteroidJsonContext.Default.RestErrorResponse),
             new("401", MeteroidJsonContext.Default.RestErrorResponse),
+            new("403", MeteroidJsonContext.Default.RestErrorResponse),
             new("404", MeteroidJsonContext.Default.RestErrorResponse),
             new("409", MeteroidJsonContext.Default.RestErrorResponse),
             new("429", MeteroidJsonContext.Default.RestErrorResponse),
