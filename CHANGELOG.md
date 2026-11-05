@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.31.2](https://github.com/meteroid-oss/meteroid-csharp/compare/v0.31.1...v0.31.2) (2026-11-05)
+
+
+### Features
+
+* **api:** update `PATCH /api/v1/customers/{id_or_alias}/budgets/{budget_id}`, `PATCH /api/v1/customers/{id_or_alias}/wallets/{currency}`, `POST /api/v1/customers/{id_or_alias}/budgets`, `PUT /api/v1/plans/versions/{plan_version_id}/minimum`, `PUT /api/v1/plans/{plan_id}` ([80deb87](https://github.com/meteroid-oss/meteroid-csharp/commit/80deb872cde788b80fbd921bb8385a9b6dd00786))
+* **api:** update SDKs to meteroid 0.1.0 ([#18](https://github.com/meteroid-oss/meteroid-csharp/issues/18)) ([80deb87](https://github.com/meteroid-oss/meteroid-csharp/commit/80deb872cde788b80fbd921bb8385a9b6dd00786))
+
 ## [0.31.1](https://github.com/meteroid-oss/meteroid-csharp/compare/v0.31.0...v0.31.1) (2026-10-30)
 
 
