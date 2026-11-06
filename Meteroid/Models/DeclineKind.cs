@@ -38,6 +38,9 @@ public readonly partial record struct DeclineKind(string Value) : IStringEnum<De
     /// <summary><c>DO_NOT_RETRY</c></summary>
     public static DeclineKind DoNotRetry { get; } = new("DO_NOT_RETRY");
 
+    /// <summary><c>UNCONFIRMED</c></summary>
+    public static DeclineKind Unconfirmed { get; } = new("UNCONFIRMED");
+
     /// <summary>Whether this SDK version knows the value.</summary>
     public bool IsKnown =>
         Value
@@ -49,7 +52,8 @@ public readonly partial record struct DeclineKind(string Value) : IStringEnum<De
                 or "FRAUD"
                 or "PROCESSING_ERROR"
                 or "OTHER"
-                or "DO_NOT_RETRY";
+                or "DO_NOT_RETRY"
+                or "UNCONFIRMED";
 
     /// <summary>The known values as constants, to <c>switch</c> on <see cref="Value"/>.</summary>
     public static class Values
@@ -80,6 +84,9 @@ public readonly partial record struct DeclineKind(string Value) : IStringEnum<De
 
         /// <summary><c>DO_NOT_RETRY</c></summary>
         public const string DoNotRetry = "DO_NOT_RETRY";
+
+        /// <summary><c>UNCONFIRMED</c></summary>
+        public const string Unconfirmed = "UNCONFIRMED";
     }
 
     static DeclineKind IStringEnum<DeclineKind>.FromValue(string value) => new(value);

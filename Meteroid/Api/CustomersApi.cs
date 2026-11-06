@@ -150,7 +150,8 @@ public interface ICustomersApi
     /// Generate a portal token for a customer
     /// </summary>
     /// <remarks>
-    /// Generates a JWT token that grants access to the customer portal.
+    /// Generates an opaque token that grants access to the customer portal. A call may return the
+    /// token of an earlier call with the same scopes, with up to 10% less lifetime: rely on <c>expires_at</c>.
     /// The token can be used to access invoices, payment methods, and other portal features.
     /// </remarks>
     /// <param name="idOrAlias">The <c>id_or_alias</c> path parameter.</param>
