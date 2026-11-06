@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.31.3](https://github.com/meteroid-oss/meteroid-csharp/compare/v0.31.2...v0.31.3) (2026-11-06)
+
+
+### Features
+
+* **api:** update `GET /api/v1/usage/customer/{customer_id}/costs`, `GET /api/v1/usage/customer/{customer_id}/events`, `GET /api/v1/usage/subscription/{subscription_id}/costs`, `GET /api/v1/usage/subscription/{subscription_id}/events`, `POST webhook:payment.failed` and 5 more ([86f87ab](https://github.com/meteroid-oss/meteroid-csharp/commit/86f87abb77297b2a96e0cff6999495f65bb86821))
+* **api:** update SDKs to meteroid 0.1.0 ([#20](https://github.com/meteroid-oss/meteroid-csharp/issues/20)) ([86f87ab](https://github.com/meteroid-oss/meteroid-csharp/commit/86f87abb77297b2a96e0cff6999495f65bb86821))
+
 ## [0.31.2](https://github.com/meteroid-oss/meteroid-csharp/compare/v0.31.1...v0.31.2) (2026-11-05)
 
 
