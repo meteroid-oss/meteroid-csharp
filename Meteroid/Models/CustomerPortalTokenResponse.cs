@@ -37,7 +37,7 @@ public sealed partial record CustomerPortalTokenResponse
     public required string PortalUrl { get; init; }
 
     /// <summary>
-    /// JWT token for portal access
+    /// Opaque token for portal access
     /// </summary>
     [JsonPropertyName("token")]
     public required string Token { get; init; }
