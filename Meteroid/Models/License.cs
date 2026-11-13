@@ -31,6 +31,12 @@ public sealed partial record License
     public required string CustomerName { get; init; }
 
     /// <summary>
+    /// Ephemeral: each activation of the reusable code gets a license of this many hours.
+    /// </summary>
+    [JsonPropertyName("ephemeral_hours")]
+    public int? EphemeralHours { get; init; }
+
+    /// <summary>
     /// Whether the activation code can still be retrieved: only until activation or revocation.
     /// </summary>
     [JsonPropertyName("has_activation_code")]
@@ -99,6 +105,7 @@ public sealed partial record License
         && global::Meteroid.Equality.Equal(CreatedAt, other.CreatedAt)
         && global::Meteroid.Equality.Equal(CustomerId, other.CustomerId)
         && global::Meteroid.Equality.Equal(CustomerName, other.CustomerName)
+        && global::Meteroid.Equality.Equal(EphemeralHours, other.EphemeralHours)
         && global::Meteroid.Equality.Equal(HasActivationCode, other.HasActivationCode)
         && global::Meteroid.Equality.Equal(Id, other.Id)
         && global::Meteroid.Equality.Equal(InstanceId, other.InstanceId)
@@ -120,6 +127,7 @@ public sealed partial record License
         hash.Add(global::Meteroid.Equality.Hash(CreatedAt));
         hash.Add(global::Meteroid.Equality.Hash(CustomerId));
         hash.Add(global::Meteroid.Equality.Hash(CustomerName));
+        hash.Add(global::Meteroid.Equality.Hash(EphemeralHours));
         hash.Add(global::Meteroid.Equality.Hash(HasActivationCode));
         hash.Add(global::Meteroid.Equality.Hash(Id));
         hash.Add(global::Meteroid.Equality.Hash(InstanceId));

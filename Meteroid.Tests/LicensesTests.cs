@@ -13,7 +13,7 @@ public class LicensesTests
         using var mock = new PerseidMock(
             200,
             "application/json",
-            "{\"data\":[{\"auto_issued\":false,\"created_at\":\"2023-12-31T23:59:59.999-05:30\",\"customer_id\":\"customer_id_2\",\"customer_name\":\"sample\",\"has_activation_code\":false,\"id\":\"license_id_0\",\"offline\":false,\"revoked_immediately\":false,\"status\":\"REVOKED\",\"validity_days\":-123456789}]}"
+            "{\"data\":[{\"auto_issued\":false,\"created_at\":\"2023-12-31T23:59:59.999-05:30\",\"customer_id\":\"customer_id_2\",\"customer_name\":\"sample\",\"has_activation_code\":true,\"id\":\"license_id_78\",\"offline\":false,\"revoked_immediately\":false,\"status\":\"PENDING\",\"validity_days\":2147483647}]}"
         );
         await mock.Client.Licenses.ListAsync();
         Assert.Equal(new[] { "GET /api/v1/licenses" }, mock.Requests);
@@ -25,7 +25,7 @@ public class LicensesTests
         using var mock = new PerseidMock(
             200,
             "application/json",
-            "{\"license\":{\"auto_issued\":false,\"created_at\":\"2023-12-31T23:59:59.999-05:30\",\"customer_id\":\"customer_id_37\",\"customer_name\":\"sample\",\"has_activation_code\":true,\"id\":\"license_id_40\",\"offline\":true,\"revoked_immediately\":true,\"status\":\"PENDING\",\"validity_days\":123456789}}"
+            "{\"license\":{\"auto_issued\":false,\"created_at\":\"2023-12-31T23:59:59.999-05:30\",\"customer_id\":\"customer_id_37\",\"customer_name\":\"sample\",\"has_activation_code\":true,\"id\":\"license_id_32\",\"offline\":true,\"revoked_immediately\":false,\"status\":\"REVOKED\",\"validity_days\":2147483647}}"
         );
         await mock.Client.Licenses.CreateAsync(
             PerseidMock.Decode<global::Meteroid.Models.IssueLicenseRequest>("{\"customer_id\":\"sample\"}")
@@ -39,7 +39,7 @@ public class LicensesTests
         using var mock = new PerseidMock(
             200,
             "application/json",
-            "{\"auto_issued\":false,\"created_at\":\"2024-03-15T10:30:45.123+02:00\",\"customer_id\":\"customer_id_79\",\"customer_name\":\"sample\",\"has_activation_code\":false,\"id\":\"license_id_90\",\"offline\":false,\"revoked_immediately\":true,\"status\":\"PENDING\",\"validity_days\":-123456789}"
+            "{\"auto_issued\":false,\"created_at\":\"2024-03-15T10:30:45.123+02:00\",\"customer_id\":\"customer_id_79\",\"customer_name\":\"sample\",\"has_activation_code\":true,\"id\":\"license_id_13\",\"offline\":true,\"revoked_immediately\":false,\"status\":\"PENDING\",\"validity_days\":-2147483648}"
         );
         await mock.Client.Licenses.RetrieveAsync("license_id");
         Assert.Equal(new[] { "GET /api/v1/licenses/license_id" }, mock.Requests);
@@ -70,7 +70,7 @@ public class LicensesTests
         using var mock = new PerseidMock(
             200,
             "application/json",
-            "{\"auto_issued\":false,\"created_at\":\"2024-03-15T10:30:45.123+02:00\",\"customer_id\":\"customer_id_79\",\"customer_name\":\"sample\",\"has_activation_code\":false,\"id\":\"license_id_90\",\"offline\":false,\"revoked_immediately\":true,\"status\":\"PENDING\",\"validity_days\":-123456789}"
+            "{\"auto_issued\":false,\"created_at\":\"2024-03-15T10:30:45.123+02:00\",\"customer_id\":\"customer_id_79\",\"customer_name\":\"sample\",\"has_activation_code\":true,\"id\":\"license_id_13\",\"offline\":true,\"revoked_immediately\":false,\"status\":\"PENDING\",\"validity_days\":-2147483648}"
         );
         await mock.Client.Licenses.RevokeAsync(
             "license_id",
