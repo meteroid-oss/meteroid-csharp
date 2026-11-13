@@ -19,6 +19,14 @@ public sealed partial record IssueLicenseRequest
     public required string CustomerId { get; init; }
 
     /// <summary>
+    /// Ephemeral, for CI and other short-lived installations: the activation code can be used
+    /// any number of times, each activation gets a license of this many hours (1 to 24) for the
+    /// installation activating, and nothing is refreshed. Not with <c>offline</c> or <c>validity_days</c>.
+    /// </summary>
+    [JsonPropertyName("ephemeral_hours")]
+    public int? EphemeralHours { get; init; }
+
+    /// <summary>
     /// Offline only. The installation's id as it reports it, up to 255 characters without
     /// spaces: the license names it (<c>aud</c>) and stays bound to it. Without one, the license is
     /// not tied to an installation.
@@ -57,6 +65,7 @@ public sealed partial record IssueLicenseRequest
     public bool Equals(IssueLicenseRequest? other) =>
         other is not null
         && global::Meteroid.Equality.Equal(CustomerId, other.CustomerId)
+        && global::Meteroid.Equality.Equal(EphemeralHours, other.EphemeralHours)
         && global::Meteroid.Equality.Equal(InstanceId, other.InstanceId)
         && global::Meteroid.Equality.Equal(Offline, other.Offline)
         && global::Meteroid.Equality.Equal(SubscriptionId, other.SubscriptionId)
@@ -68,6 +77,7 @@ public sealed partial record IssueLicenseRequest
     {
         var hash = new HashCode();
         hash.Add(global::Meteroid.Equality.Hash(CustomerId));
+        hash.Add(global::Meteroid.Equality.Hash(EphemeralHours));
         hash.Add(global::Meteroid.Equality.Hash(InstanceId));
         hash.Add(global::Meteroid.Equality.Hash(Offline));
         hash.Add(global::Meteroid.Equality.Hash(SubscriptionId));

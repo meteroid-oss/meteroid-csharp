@@ -75,7 +75,7 @@ public interface ILicensesApi
     /// Get a license's activation code
     /// </summary>
     /// <remarks>
-    /// Available until the license is activated or revoked.
+    /// Available until the license is activated or revoked; for an ephemeral license, until revoked.
     /// </remarks>
     /// <param name="licenseId">The <c>license_id</c> path parameter.</param>
     /// <param name="requestOptions">Headers, timeout, retries or idempotency key of this call.</param>

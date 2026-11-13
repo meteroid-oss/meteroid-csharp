@@ -14,6 +14,7 @@ public sealed partial record IssueLicenseResponse
 {
     /// <summary>
     /// Online: one-time code the customer enters in their installation to activate the license.
+    /// Ephemeral: the reusable code, e.g. a CI secret.
     /// </summary>
     [JsonPropertyName("activation_code")]
     public string? ActivationCode { get; init; }
