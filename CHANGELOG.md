@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.31.6](https://github.com/meteroid-oss/meteroid-csharp/compare/v0.31.5...v0.31.6) (2026-11-22)
+
+
+### Features
+
+* **api:** update `GET /api/v1/subscriptions/{subscription_id}`, `PATCH /api/v1/subscriptions/{subscription_id}`, `POST /api/v1/subscriptions`, `POST /api/v1/subscriptions/{subscription_id}/cancel` ([3ab2f76](https://github.com/meteroid-oss/meteroid-csharp/commit/3ab2f76b7aa6a8c101d2990ae8aadb4590c2e839))
+* **api:** update SDKs to meteroid 0.1.0 ([#26](https://github.com/meteroid-oss/meteroid-csharp/issues/26)) ([3ab2f76](https://github.com/meteroid-oss/meteroid-csharp/commit/3ab2f76b7aa6a8c101d2990ae8aadb4590c2e839))
+
 ## [0.31.5](https://github.com/meteroid-oss/meteroid-csharp/compare/v0.31.4...v0.31.5) (2026-11-22)
 
 
