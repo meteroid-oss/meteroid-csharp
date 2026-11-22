@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.31.5](https://github.com/meteroid-oss/meteroid-csharp/compare/v0.31.4...v0.31.5) (2026-11-22)
+
+
+### Features
+
+* **api:** add `POST /api/v1/invoices/{invoice_id}/mark-paid`, `POST /api/v1/invoices/{invoice_id}/mark-uncollectible`, `POST /api/v1/invoices/{invoice_id}/payments`, `POST /api/v1/invoices/{invoice_id}/payments/{transaction_id}/reverse` ([9a836f5](https://github.com/meteroid-oss/meteroid-csharp/commit/9a836f5cf470f2ab0017a992700ab166dd3f3d2e))
+* **api:** update `GET /api/v1/credit-notes`, `GET /api/v1/credit-notes/{credit_note_id}`, `GET /api/v1/invoices`, `GET /api/v1/invoices/{invoice_id}`, `GET /api/v1/metrics/{metric_id}` and 11 more ([9a836f5](https://github.com/meteroid-oss/meteroid-csharp/commit/9a836f5cf470f2ab0017a992700ab166dd3f3d2e))
+* **api:** update SDKs to meteroid 0.1.0 ([#24](https://github.com/meteroid-oss/meteroid-csharp/issues/24)) ([9a836f5](https://github.com/meteroid-oss/meteroid-csharp/commit/9a836f5cf470f2ab0017a992700ab166dd3f3d2e))
+
 ## [0.31.4](https://github.com/meteroid-oss/meteroid-csharp/compare/v0.31.3...v0.31.4) (2026-11-13)
 
 
