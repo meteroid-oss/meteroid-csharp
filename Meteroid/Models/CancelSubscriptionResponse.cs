@@ -12,6 +12,19 @@ namespace Meteroid.Models;
 /// <summary>The <c>CancelSubscriptionResponse</c> object.</summary>
 public sealed partial record CancelSubscriptionResponse
 {
+    /// <summary>
+    /// Changes still scheduled after this request, including the cancellation.
+    /// </summary>
+    [JsonPropertyName("pending_events")]
+    public required IReadOnlyList<PendingScheduledEvent> PendingEvents { get; init; }
+
+    /// <summary>
+    /// Date the subscription ends at the start of: its first day without service. Empty when the
+    /// cancellation applied immediately.
+    /// </summary>
+    [JsonPropertyName("scheduled_cancellation_date")]
+    public DateOnly? ScheduledCancellationDate { get; init; }
+
     /// <summary>The <c>subscription</c> property.</summary>
     [JsonPropertyName("subscription")]
     public required Subscription Subscription { get; init; }
@@ -25,6 +38,8 @@ public sealed partial record CancelSubscriptionResponse
     /// <returns>Whether the records are equal.</returns>
     public bool Equals(CancelSubscriptionResponse? other) =>
         other is not null
+        && global::Meteroid.Equality.Equal(PendingEvents, other.PendingEvents)
+        && global::Meteroid.Equality.Equal(ScheduledCancellationDate, other.ScheduledCancellationDate)
         && global::Meteroid.Equality.Equal(Subscription, other.Subscription)
         && global::Meteroid.Equality.Equal(AdditionalProperties, other.AdditionalProperties);
 
@@ -32,6 +47,8 @@ public sealed partial record CancelSubscriptionResponse
     public override int GetHashCode()
     {
         var hash = new HashCode();
+        hash.Add(global::Meteroid.Equality.Hash(PendingEvents));
+        hash.Add(global::Meteroid.Equality.Hash(ScheduledCancellationDate));
         hash.Add(global::Meteroid.Equality.Hash(Subscription));
         hash.Add(global::Meteroid.Equality.Hash(AdditionalProperties));
         return hash.ToHashCode();
