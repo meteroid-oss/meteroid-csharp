@@ -133,6 +133,12 @@ public sealed partial record SubscriptionDetails
     public PaymentMethodsConfig? PaymentMethodsConfig { get; init; }
 
     /// <summary>
+    /// Changes scheduled to apply later: cancellation, plan change or amendment.
+    /// </summary>
+    [JsonPropertyName("pending_events")]
+    public IReadOnlyList<PendingScheduledEvent>? PendingEvents { get; init; }
+
+    /// <summary>
     /// Billing period (monthly, annual, etc.)
     /// </summary>
     [JsonPropertyName("period")]
@@ -157,6 +163,13 @@ public sealed partial record SubscriptionDetails
     /// <summary>The <c>purchase_order</c> property.</summary>
     [JsonPropertyName("purchase_order")]
     public string? PurchaseOrder { get; init; }
+
+    /// <summary>
+    /// Date the subscription ends at the start of, when a cancellation is scheduled: its first
+    /// day without service. <c>end_date</c> is not affected by a scheduled cancellation.
+    /// </summary>
+    [JsonPropertyName("scheduled_cancellation_date")]
+    public DateOnly? ScheduledCancellationDate { get; init; }
 
     /// <summary>
     /// When the subscription contract starts (benefits apply from this date)
@@ -225,12 +238,14 @@ public sealed partial record SubscriptionDetails
         && global::Meteroid.Equality.Equal(MrrCents, other.MrrCents)
         && global::Meteroid.Equality.Equal(NetTerms, other.NetTerms)
         && global::Meteroid.Equality.Equal(PaymentMethodsConfig, other.PaymentMethodsConfig)
+        && global::Meteroid.Equality.Equal(PendingEvents, other.PendingEvents)
         && global::Meteroid.Equality.Equal(Period, other.Period)
         && global::Meteroid.Equality.Equal(PlanId, other.PlanId)
         && global::Meteroid.Equality.Equal(PlanName, other.PlanName)
         && global::Meteroid.Equality.Equal(PlanVersion, other.PlanVersion)
         && global::Meteroid.Equality.Equal(PlanVersionId, other.PlanVersionId)
         && global::Meteroid.Equality.Equal(PurchaseOrder, other.PurchaseOrder)
+        && global::Meteroid.Equality.Equal(ScheduledCancellationDate, other.ScheduledCancellationDate)
         && global::Meteroid.Equality.Equal(StartDate, other.StartDate)
         && global::Meteroid.Equality.Equal(Status, other.Status)
         && global::Meteroid.Equality.Equal(TaxInclusive, other.TaxInclusive)
@@ -268,12 +283,14 @@ public sealed partial record SubscriptionDetails
         hash.Add(global::Meteroid.Equality.Hash(MrrCents));
         hash.Add(global::Meteroid.Equality.Hash(NetTerms));
         hash.Add(global::Meteroid.Equality.Hash(PaymentMethodsConfig));
+        hash.Add(global::Meteroid.Equality.Hash(PendingEvents));
         hash.Add(global::Meteroid.Equality.Hash(Period));
         hash.Add(global::Meteroid.Equality.Hash(PlanId));
         hash.Add(global::Meteroid.Equality.Hash(PlanName));
         hash.Add(global::Meteroid.Equality.Hash(PlanVersion));
         hash.Add(global::Meteroid.Equality.Hash(PlanVersionId));
         hash.Add(global::Meteroid.Equality.Hash(PurchaseOrder));
+        hash.Add(global::Meteroid.Equality.Hash(ScheduledCancellationDate));
         hash.Add(global::Meteroid.Equality.Hash(StartDate));
         hash.Add(global::Meteroid.Equality.Hash(Status));
         hash.Add(global::Meteroid.Equality.Hash(TaxInclusive));
