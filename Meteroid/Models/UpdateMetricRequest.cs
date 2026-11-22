@@ -62,6 +62,14 @@ public sealed partial record UpdateMetricRequest
     [JsonConverter(typeof(MaybeUnsetConverter<string?>))]
     public MaybeUnset<string?> UnitSingular { get; init; }
 
+    /// <summary>
+    /// Omit to leave the breakdown key unchanged; send <c>null</c> to remove it.
+    /// </summary>
+    [JsonPropertyName("usage_breakdown_key")]
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+    [JsonConverter(typeof(MaybeUnsetConverter<string?>))]
+    public MaybeUnset<string?> UsageBreakdownKey { get; init; }
+
     /// <summary>The properties of the JSON object this SDK version does not know, sent back as they came.</summary>
     [JsonExtensionData]
     public IDictionary<string, JsonElement>? AdditionalProperties { get; set; }
@@ -78,6 +86,7 @@ public sealed partial record UpdateMetricRequest
         && global::Meteroid.Equality.Equal(UnitConversion, other.UnitConversion)
         && global::Meteroid.Equality.Equal(UnitPlural, other.UnitPlural)
         && global::Meteroid.Equality.Equal(UnitSingular, other.UnitSingular)
+        && global::Meteroid.Equality.Equal(UsageBreakdownKey, other.UsageBreakdownKey)
         && global::Meteroid.Equality.Equal(AdditionalProperties, other.AdditionalProperties);
 
     /// <inheritdoc/>
@@ -91,6 +100,7 @@ public sealed partial record UpdateMetricRequest
         hash.Add(global::Meteroid.Equality.Hash(UnitConversion));
         hash.Add(global::Meteroid.Equality.Hash(UnitPlural));
         hash.Add(global::Meteroid.Equality.Hash(UnitSingular));
+        hash.Add(global::Meteroid.Equality.Hash(UsageBreakdownKey));
         hash.Add(global::Meteroid.Equality.Hash(AdditionalProperties));
         return hash.ToHashCode();
     }

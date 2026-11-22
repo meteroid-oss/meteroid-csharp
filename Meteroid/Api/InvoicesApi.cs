@@ -18,6 +18,9 @@ public interface IInvoicesApi
     /// <summary>The same operations, returning the status and headers of the response with its body.</summary>
     IInvoicesApiWithRawResponse WithRawResponse { get; }
 
+    /// <summary>The <c>payments</c> operations.</summary>
+    IInvoicesPaymentsApi Payments { get; }
+
     /// <summary>
     /// List invoices with optional filtering by customer, subscription, or status.
     /// </summary>
@@ -99,6 +102,57 @@ public interface IInvoicesApi
     );
 
     /// <summary>
+    /// Mark an invoice as paid
+    /// </summary>
+    /// <remarks>
+    /// Record an external payment for the entire remaining balance of a finalized invoice. The amount
+    /// must match the remaining balance.
+    /// </remarks>
+    /// <param name="invoiceId">The <c>invoice_id</c> path parameter.</param>
+    /// <param name="recordInvoicePaymentRequest">The request body.</param>
+    /// <param name="options">The query and header parameters.</param>
+    /// <param name="requestOptions">Headers, timeout, retries or idempotency key of this call.</param>
+    /// <param name="cancellationToken">Cancels the call.</param>
+    /// <exception cref="BadRequestException">400: <c>Error</c> is the <see cref="Models.RestErrorResponse"/> body.</exception>
+    /// <exception cref="UnauthorizedException">401: <c>Error</c> is the <see cref="Models.RestErrorResponse"/> body.</exception>
+    /// <exception cref="ForbiddenException">403: <c>Error</c> is the <see cref="Models.RestErrorResponse"/> body.</exception>
+    /// <exception cref="NotFoundException">404: <c>Error</c> is the <see cref="Models.RestErrorResponse"/> body.</exception>
+    /// <exception cref="ConflictException">409: <c>Error</c> is the <see cref="Models.RestErrorResponse"/> body.</exception>
+    /// <exception cref="RateLimitException">429: <c>Error</c> is the <see cref="Models.RestErrorResponse"/> body.</exception>
+    /// <exception cref="ServerErrorException">500: <c>Error</c> is the <see cref="Models.RestErrorResponse"/> body.</exception>
+    Task<Transaction> MarkPaidAsync(
+        string invoiceId,
+        RecordInvoicePaymentRequest recordInvoicePaymentRequest,
+        InvoicesMarkPaidOptions options,
+        RequestOptions? requestOptions = null,
+        CancellationToken cancellationToken = default
+    );
+
+    /// <summary>
+    /// Mark an invoice as uncollectible
+    /// </summary>
+    /// <remarks>
+    /// Transition a finalized invoice to uncollectible and stop its payment reminders.
+    /// </remarks>
+    /// <param name="invoiceId">The <c>invoice_id</c> path parameter.</param>
+    /// <param name="options">The query and header parameters.</param>
+    /// <param name="requestOptions">Headers, timeout, retries or idempotency key of this call.</param>
+    /// <param name="cancellationToken">Cancels the call.</param>
+    /// <exception cref="BadRequestException">400: <c>Error</c> is the <see cref="Models.RestErrorResponse"/> body.</exception>
+    /// <exception cref="UnauthorizedException">401: <c>Error</c> is the <see cref="Models.RestErrorResponse"/> body.</exception>
+    /// <exception cref="ForbiddenException">403: <c>Error</c> is the <see cref="Models.RestErrorResponse"/> body.</exception>
+    /// <exception cref="NotFoundException">404: <c>Error</c> is the <see cref="Models.RestErrorResponse"/> body.</exception>
+    /// <exception cref="ConflictException">409: <c>Error</c> is the <see cref="Models.RestErrorResponse"/> body.</exception>
+    /// <exception cref="RateLimitException">429: <c>Error</c> is the <see cref="Models.RestErrorResponse"/> body.</exception>
+    /// <exception cref="ServerErrorException">500: <c>Error</c> is the <see cref="Models.RestErrorResponse"/> body.</exception>
+    Task MarkUncollectibleAsync(
+        string invoiceId,
+        InvoicesMarkUncollectibleOptions options,
+        RequestOptions? requestOptions = null,
+        CancellationToken cancellationToken = default
+    );
+
+    /// <summary>
     /// Refresh invoice
     /// </summary>
     /// <remarks>
@@ -145,6 +199,9 @@ public interface IInvoicesApi
 /// <summary>The <c>invoices</c> operations, returning the status and headers of the response with its body.</summary>
 public interface IInvoicesApiWithRawResponse
 {
+    /// <summary>The <c>payments</c> operations, returning the status and headers of the response with its body.</summary>
+    IInvoicesPaymentsApiWithRawResponse Payments { get; }
+
     /// <summary>The single request of a page of <see cref="IInvoicesApi.ListAsync"/>, with the status and headers of the response.</summary>
     /// <param name="options">The query and header parameters.</param>
     /// <param name="requestOptions">Headers, timeout, retries or idempotency key of this call.</param>
@@ -187,6 +244,32 @@ public interface IInvoicesApiWithRawResponse
         CancellationToken cancellationToken = default
     );
 
+    /// <summary><see cref="IInvoicesApi.MarkPaidAsync"/>, with the status and headers of the response.</summary>
+    /// <param name="invoiceId">The <c>invoice_id</c> path parameter.</param>
+    /// <param name="recordInvoicePaymentRequest">The request body.</param>
+    /// <param name="options">The query and header parameters.</param>
+    /// <param name="requestOptions">Headers, timeout, retries or idempotency key of this call.</param>
+    /// <param name="cancellationToken">Cancels the call.</param>
+    Task<ApiResponse<Transaction>> MarkPaidAsync(
+        string invoiceId,
+        RecordInvoicePaymentRequest recordInvoicePaymentRequest,
+        InvoicesMarkPaidOptions options,
+        RequestOptions? requestOptions = null,
+        CancellationToken cancellationToken = default
+    );
+
+    /// <summary><see cref="IInvoicesApi.MarkUncollectibleAsync"/>, with the status and headers of the response.</summary>
+    /// <param name="invoiceId">The <c>invoice_id</c> path parameter.</param>
+    /// <param name="options">The query and header parameters.</param>
+    /// <param name="requestOptions">Headers, timeout, retries or idempotency key of this call.</param>
+    /// <param name="cancellationToken">Cancels the call.</param>
+    Task<ApiResponse> MarkUncollectibleAsync(
+        string invoiceId,
+        InvoicesMarkUncollectibleOptions options,
+        RequestOptions? requestOptions = null,
+        CancellationToken cancellationToken = default
+    );
+
     /// <summary><see cref="IInvoicesApi.RefreshAsync"/>, with the status and headers of the response.</summary>
     /// <param name="invoiceId">The <c>invoice_id</c> path parameter.</param>
     /// <param name="requestOptions">Headers, timeout, retries or idempotency key of this call.</param>
@@ -214,12 +297,18 @@ public sealed partial class InvoicesApi : IInvoicesApi
     internal InvoicesApi(ApiTransport transport)
     {
         WithRawResponse = new(transport);
+        Payments = new(transport);
     }
 
     /// <inheritdoc cref="IInvoicesApi.WithRawResponse"/>
     public InvoicesApiWithRawResponse WithRawResponse { get; }
 
     IInvoicesApiWithRawResponse IInvoicesApi.WithRawResponse => WithRawResponse;
+
+    /// <inheritdoc cref="IInvoicesApi.Payments"/>
+    public InvoicesPaymentsApi Payments { get; }
+
+    IInvoicesPaymentsApi IInvoicesApi.Payments => Payments;
 
     /// <inheritdoc/>
     public AsyncPager<InvoicesListPage, Invoice> ListAsync(
@@ -282,6 +371,29 @@ public sealed partial class InvoicesApi : IInvoicesApi
     }
 
     /// <inheritdoc/>
+    public async Task<Transaction> MarkPaidAsync(
+        string invoiceId,
+        RecordInvoicePaymentRequest recordInvoicePaymentRequest,
+        InvoicesMarkPaidOptions options,
+        RequestOptions? requestOptions = null,
+        CancellationToken cancellationToken = default
+    )
+    {
+        var response = await WithRawResponse
+            .MarkPaidAsync(invoiceId, recordInvoicePaymentRequest, options, requestOptions, cancellationToken)
+            .ConfigureAwait(false);
+        return response.Value;
+    }
+
+    /// <inheritdoc/>
+    public Task MarkUncollectibleAsync(
+        string invoiceId,
+        InvoicesMarkUncollectibleOptions options,
+        RequestOptions? requestOptions = null,
+        CancellationToken cancellationToken = default
+    ) => WithRawResponse.MarkUncollectibleAsync(invoiceId, options, requestOptions, cancellationToken);
+
+    /// <inheritdoc/>
     public async Task<Invoice> RefreshAsync(
         string invoiceId,
         RequestOptions? requestOptions = null,
@@ -316,7 +428,13 @@ public sealed class InvoicesApiWithRawResponse : IInvoicesApiWithRawResponse
     internal InvoicesApiWithRawResponse(ApiTransport transport)
     {
         _transport = transport;
+        Payments = new(transport);
     }
+
+    /// <inheritdoc cref="IInvoicesApiWithRawResponse.Payments"/>
+    public InvoicesPaymentsApiWithRawResponse Payments { get; }
+
+    IInvoicesPaymentsApiWithRawResponse IInvoicesApiWithRawResponse.Payments => Payments;
 
     /// <inheritdoc/>
     public Task<ApiResponse<InvoiceListResponse>> ListAsync(
@@ -431,6 +549,74 @@ public sealed class InvoicesApiWithRawResponse : IInvoicesApiWithRawResponse
             new("500", MeteroidJsonContext.Default.RestErrorResponse),
         };
         return _transport.SendBytesAsync(request, requestOptions, cancellationToken);
+    }
+
+    /// <inheritdoc/>
+    public Task<ApiResponse<Transaction>> MarkPaidAsync(
+        string invoiceId,
+        RecordInvoicePaymentRequest recordInvoicePaymentRequest,
+        InvoicesMarkPaidOptions options,
+        RequestOptions? requestOptions = null,
+        CancellationToken cancellationToken = default
+    )
+    {
+        ArgumentException.ThrowIfNullOrEmpty(invoiceId);
+        ArgumentNullException.ThrowIfNull(recordInvoicePaymentRequest);
+        ArgumentNullException.ThrowIfNull(options);
+
+        var request = new ApiRequest(
+            HttpMethod.Post,
+            $"/api/v1/invoices/{Uri.EscapeDataString(invoiceId)}/mark-paid",
+            "invoices.mark_paid"
+        );
+        request.ErrorTypes = new KeyValuePair<string, JsonTypeInfo>[]
+        {
+            new("400", MeteroidJsonContext.Default.RestErrorResponse),
+            new("401", MeteroidJsonContext.Default.RestErrorResponse),
+            new("403", MeteroidJsonContext.Default.RestErrorResponse),
+            new("404", MeteroidJsonContext.Default.RestErrorResponse),
+            new("409", MeteroidJsonContext.Default.RestErrorResponse),
+            new("429", MeteroidJsonContext.Default.RestErrorResponse),
+            new("500", MeteroidJsonContext.Default.RestErrorResponse),
+        };
+        request.SetHeader("Idempotency-Key", options.IdempotencyKey);
+        request.SetJsonBody(recordInvoicePaymentRequest, MeteroidJsonContext.Default.RecordInvoicePaymentRequest);
+        return _transport.SendJsonAsync(
+            request,
+            MeteroidJsonContext.Default.Transaction,
+            requestOptions,
+            cancellationToken
+        );
+    }
+
+    /// <inheritdoc/>
+    public Task<ApiResponse> MarkUncollectibleAsync(
+        string invoiceId,
+        InvoicesMarkUncollectibleOptions options,
+        RequestOptions? requestOptions = null,
+        CancellationToken cancellationToken = default
+    )
+    {
+        ArgumentException.ThrowIfNullOrEmpty(invoiceId);
+        ArgumentNullException.ThrowIfNull(options);
+
+        var request = new ApiRequest(
+            HttpMethod.Post,
+            $"/api/v1/invoices/{Uri.EscapeDataString(invoiceId)}/mark-uncollectible",
+            "invoices.mark_uncollectible"
+        );
+        request.ErrorTypes = new KeyValuePair<string, JsonTypeInfo>[]
+        {
+            new("400", MeteroidJsonContext.Default.RestErrorResponse),
+            new("401", MeteroidJsonContext.Default.RestErrorResponse),
+            new("403", MeteroidJsonContext.Default.RestErrorResponse),
+            new("404", MeteroidJsonContext.Default.RestErrorResponse),
+            new("409", MeteroidJsonContext.Default.RestErrorResponse),
+            new("429", MeteroidJsonContext.Default.RestErrorResponse),
+            new("500", MeteroidJsonContext.Default.RestErrorResponse),
+        };
+        request.SetHeader("Idempotency-Key", options.IdempotencyKey);
+        return _transport.SendAsync(request, requestOptions, cancellationToken);
     }
 
     /// <inheritdoc/>

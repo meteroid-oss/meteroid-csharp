@@ -63,6 +63,10 @@ public sealed partial record InvoiceLineItem
     [JsonNumberHandling(JsonNumberHandling.AllowReadingFromString | JsonNumberHandling.WriteAsString)]
     public decimal? UnitPrice { get; init; }
 
+    /// <summary>The <c>usage_breakdown</c> property.</summary>
+    [JsonPropertyName("usage_breakdown")]
+    public InvoiceLineUsageBreakdown? UsageBreakdown { get; init; }
+
     /// <summary>The properties of the JSON object this SDK version does not know, sent back as they came.</summary>
     [JsonExtensionData]
     public IDictionary<string, JsonElement>? AdditionalProperties { get; set; }
@@ -83,6 +87,7 @@ public sealed partial record InvoiceLineItem
         && global::Meteroid.Equality.Equal(SubLineItems, other.SubLineItems)
         && global::Meteroid.Equality.Equal(TaxRate, other.TaxRate)
         && global::Meteroid.Equality.Equal(UnitPrice, other.UnitPrice)
+        && global::Meteroid.Equality.Equal(UsageBreakdown, other.UsageBreakdown)
         && global::Meteroid.Equality.Equal(AdditionalProperties, other.AdditionalProperties);
 
     /// <inheritdoc/>
@@ -100,6 +105,7 @@ public sealed partial record InvoiceLineItem
         hash.Add(global::Meteroid.Equality.Hash(SubLineItems));
         hash.Add(global::Meteroid.Equality.Hash(TaxRate));
         hash.Add(global::Meteroid.Equality.Hash(UnitPrice));
+        hash.Add(global::Meteroid.Equality.Hash(UsageBreakdown));
         hash.Add(global::Meteroid.Equality.Hash(AdditionalProperties));
         return hash.ToHashCode();
     }
