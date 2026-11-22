@@ -42,6 +42,7 @@ public interface IMetricsApi
     /// <param name="cancellationToken">Cancels the call.</param>
     /// <exception cref="BadRequestException">400: <c>Error</c> is the <see cref="Models.RestErrorResponse"/> body.</exception>
     /// <exception cref="UnauthorizedException">401: <c>Error</c> is the <see cref="Models.RestErrorResponse"/> body.</exception>
+    /// <exception cref="ForbiddenException">403: <c>Error</c> is the <see cref="Models.RestErrorResponse"/> body.</exception>
     /// <exception cref="RateLimitException">429: <c>Error</c> is the <see cref="Models.RestErrorResponse"/> body.</exception>
     Task<Metric> CreateAsync(
         CreateMetricRequest createMetricRequest,
@@ -76,6 +77,7 @@ public interface IMetricsApi
     /// <param name="cancellationToken">Cancels the call.</param>
     /// <exception cref="BadRequestException">400: <c>Error</c> is the <see cref="Models.RestErrorResponse"/> body.</exception>
     /// <exception cref="UnauthorizedException">401: <c>Error</c> is the <see cref="Models.RestErrorResponse"/> body.</exception>
+    /// <exception cref="ForbiddenException">403: <c>Error</c> is the <see cref="Models.RestErrorResponse"/> body.</exception>
     /// <exception cref="NotFoundException">404: <c>Error</c> is the <see cref="Models.RestErrorResponse"/> body.</exception>
     /// <exception cref="RateLimitException">429: <c>Error</c> is the <see cref="Models.RestErrorResponse"/> body.</exception>
     Task<Metric> UpdateAsync(
@@ -320,6 +322,7 @@ public sealed class MetricsApiWithRawResponse : IMetricsApiWithRawResponse
         {
             new("400", MeteroidJsonContext.Default.RestErrorResponse),
             new("401", MeteroidJsonContext.Default.RestErrorResponse),
+            new("403", MeteroidJsonContext.Default.RestErrorResponse),
             new("429", MeteroidJsonContext.Default.RestErrorResponse),
         };
         request.SetJsonBody(createMetricRequest, MeteroidJsonContext.Default.CreateMetricRequest);
@@ -369,6 +372,7 @@ public sealed class MetricsApiWithRawResponse : IMetricsApiWithRawResponse
         {
             new("400", MeteroidJsonContext.Default.RestErrorResponse),
             new("401", MeteroidJsonContext.Default.RestErrorResponse),
+            new("403", MeteroidJsonContext.Default.RestErrorResponse),
             new("404", MeteroidJsonContext.Default.RestErrorResponse),
             new("429", MeteroidJsonContext.Default.RestErrorResponse),
         };

@@ -9,7 +9,7 @@ paginated operation). A paginated operation returns an `AsyncPager`: awaited, it
 the properties of the response body; enumerated, every item of every page. Models are in
 [`Meteroid.Models`](Meteroid/Models).
 
-[Add ons](#add-ons) · [Add ons entitlements](#add-ons-entitlements) · [Batch jobs](#batch-jobs) · [Budgets](#budgets) · [Checkout sessions](#checkout-sessions) · [Checks](#checks) · [Connect](#connect) · [Coupons](#coupons) · [Credit notes](#credit-notes) · [Credit units](#credit-units) · [Credit units prices](#credit-units-prices) · [Credits](#credits) · [Credits grants](#credits-grants) · [Credits wallets](#credits-wallets) · [Custom properties](#custom-properties) · [Customers](#customers) · [Entitlements](#entitlements) · [Events](#events) · [Features](#features) · [Invoices](#invoices) · [Licenses](#licenses) · [Metrics](#metrics) · [Oauth](#oauth) · [Oauth apps](#oauth-apps) · [Plans](#plans) · [Plans versions](#plans-versions) · [Product families](#product-families) · [Products](#products) · [Products entitlements](#products-entitlements) · [Subscriptions](#subscriptions) · [Usage](#usage) · [Usage customer](#usage-customer) · [Usage costs](#usage-costs) · [Usage costs customer](#usage-costs-customer) · [Usage costs subscription](#usage-costs-subscription) · [Webhook endpoints](#webhook-endpoints) · [Webhook endpoints endpoints](#webhook-endpoints-endpoints)
+[Add ons](#add-ons) · [Add ons entitlements](#add-ons-entitlements) · [Batch jobs](#batch-jobs) · [Budgets](#budgets) · [Checkout sessions](#checkout-sessions) · [Checks](#checks) · [Connect](#connect) · [Coupons](#coupons) · [Credit notes](#credit-notes) · [Credit units](#credit-units) · [Credit units prices](#credit-units-prices) · [Credits](#credits) · [Credits grants](#credits-grants) · [Credits wallets](#credits-wallets) · [Custom properties](#custom-properties) · [Customers](#customers) · [Entitlements](#entitlements) · [Events](#events) · [Features](#features) · [Invoices](#invoices) · [Invoices payments](#invoices-payments) · [Licenses](#licenses) · [Metrics](#metrics) · [Oauth](#oauth) · [Oauth apps](#oauth-apps) · [Plans](#plans) · [Plans versions](#plans-versions) · [Product families](#product-families) · [Products](#products) · [Products entitlements](#products-entitlements) · [Subscriptions](#subscriptions) · [Usage](#usage) · [Usage customer](#usage-customer) · [Usage costs](#usage-costs) · [Usage costs customer](#usage-costs-customer) · [Usage costs subscription](#usage-costs-subscription) · [Webhook endpoints](#webhook-endpoints) · [Webhook endpoints endpoints](#webhook-endpoints-endpoints)
 
 ## Add ons
 
@@ -230,8 +230,19 @@ the properties of the response body; enumerated, every item of every page. Model
 | `Task<Invoice> client.Invoices.RetrieveAsync(string invoiceId)` | `GET /api/v1/invoices/{invoice_id}` | [`Invoice`](Meteroid/Models/Invoice.cs) |
 | `Task<Invoice> client.Invoices.UpdateCustomPropertiesAsync(string invoiceId, InvoiceCustomPropertiesRequest invoiceCustomPropertiesRequest)` | `PATCH /api/v1/invoices/{invoice_id}/custom-properties` | [`Invoice`](Meteroid/Models/Invoice.cs) |
 | `Task<byte[]> client.Invoices.DownloadAsync(string invoiceId)` | `GET /api/v1/invoices/{invoice_id}/download` | bytes |
+| `Task<Transaction> client.Invoices.MarkPaidAsync(string invoiceId, RecordInvoicePaymentRequest recordInvoicePaymentRequest, InvoicesMarkPaidOptions options)` | `POST /api/v1/invoices/{invoice_id}/mark-paid` | [`Transaction`](Meteroid/Models/Transaction.cs) |
+| `Task client.Invoices.MarkUncollectibleAsync(string invoiceId, InvoicesMarkUncollectibleOptions options)` | `POST /api/v1/invoices/{invoice_id}/mark-uncollectible` | nothing |
 | `Task<Invoice> client.Invoices.RefreshAsync(string invoiceId)` | `POST /api/v1/invoices/{invoice_id}/refresh` | [`Invoice`](Meteroid/Models/Invoice.cs) |
 | `Task<byte[]> client.Invoices.DownloadXmlAsync(string invoiceId)` | `GET /api/v1/invoices/{invoice_id}/xml` | bytes |
+
+### Invoices payments
+
+[`client.Invoices.Payments`](Meteroid/Api/InvoicesPaymentsApi.cs)
+
+| Method | Request | Returns |
+| --- | --- | --- |
+| `Task<Transaction> client.Invoices.Payments.CreateAsync(string invoiceId, RecordInvoicePaymentRequest recordInvoicePaymentRequest, InvoicesPaymentsCreateOptions options)` | `POST /api/v1/invoices/{invoice_id}/payments` | [`Transaction`](Meteroid/Models/Transaction.cs) |
+| `Task<Transaction> client.Invoices.Payments.ReverseAsync(string invoiceId, string transactionId, ReverseInvoicePaymentRequest reverseInvoicePaymentRequest, InvoicesPaymentsReverseOptions options)` | `POST /api/v1/invoices/{invoice_id}/payments/{transaction_id}/reverse` | [`Transaction`](Meteroid/Models/Transaction.cs) |
 
 ## Licenses
 

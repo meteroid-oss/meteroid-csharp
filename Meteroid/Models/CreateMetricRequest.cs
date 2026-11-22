@@ -69,7 +69,17 @@ public sealed partial record CreateMetricRequest
     [JsonPropertyName("unit_singular")]
     public string? UnitSingular { get; init; }
 
-    /// <summary>The <c>usage_group_key</c> property.</summary>
+    /// <summary>
+    /// Event property, e.g. <c>project_id</c>, that breaks each invoice line down by value. The line is
+    /// still priced on its total usage, and each value shows its quantity and share of the amount.
+    /// </summary>
+    [JsonPropertyName("usage_breakdown_key")]
+    public string? UsageBreakdownKey { get; init; }
+
+    /// <summary>
+    /// Event property, e.g. <c>cluster_id</c>, whose values are billed as separate invoice lines, each
+    /// priced on its own usage.
+    /// </summary>
     [JsonPropertyName("usage_group_key")]
     public string? UsageGroupKey { get; init; }
 
@@ -94,6 +104,7 @@ public sealed partial record CreateMetricRequest
         && global::Meteroid.Equality.Equal(UnitConversion, other.UnitConversion)
         && global::Meteroid.Equality.Equal(UnitPlural, other.UnitPlural)
         && global::Meteroid.Equality.Equal(UnitSingular, other.UnitSingular)
+        && global::Meteroid.Equality.Equal(UsageBreakdownKey, other.UsageBreakdownKey)
         && global::Meteroid.Equality.Equal(UsageGroupKey, other.UsageGroupKey)
         && global::Meteroid.Equality.Equal(AdditionalProperties, other.AdditionalProperties);
 
@@ -113,6 +124,7 @@ public sealed partial record CreateMetricRequest
         hash.Add(global::Meteroid.Equality.Hash(UnitConversion));
         hash.Add(global::Meteroid.Equality.Hash(UnitPlural));
         hash.Add(global::Meteroid.Equality.Hash(UnitSingular));
+        hash.Add(global::Meteroid.Equality.Hash(UsageBreakdownKey));
         hash.Add(global::Meteroid.Equality.Hash(UsageGroupKey));
         hash.Add(global::Meteroid.Equality.Hash(AdditionalProperties));
         return hash.ToHashCode();

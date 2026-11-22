@@ -72,6 +72,10 @@ public sealed partial record MetricEvent
     [JsonPropertyName("unit_singular")]
     public string? UnitSingular { get; init; }
 
+    /// <summary>The <c>usage_breakdown_key</c> property.</summary>
+    [JsonPropertyName("usage_breakdown_key")]
+    public string? UsageBreakdownKey { get; init; }
+
     /// <summary>The <c>usage_group_key</c> property.</summary>
     [JsonPropertyName("usage_group_key")]
     public string? UsageGroupKey { get; init; }
@@ -111,6 +115,7 @@ public sealed partial record MetricEvent
         && global::Meteroid.Equality.Equal(UnitConversionRounding, other.UnitConversionRounding)
         && global::Meteroid.Equality.Equal(UnitPlural, other.UnitPlural)
         && global::Meteroid.Equality.Equal(UnitSingular, other.UnitSingular)
+        && global::Meteroid.Equality.Equal(UsageBreakdownKey, other.UsageBreakdownKey)
         && global::Meteroid.Equality.Equal(UsageGroupKey, other.UsageGroupKey)
         && global::Meteroid.Equality.Equal(Id, other.Id)
         && global::Meteroid.Equality.Equal(Timestamp, other.Timestamp)
@@ -135,6 +140,7 @@ public sealed partial record MetricEvent
         hash.Add(global::Meteroid.Equality.Hash(UnitConversionRounding));
         hash.Add(global::Meteroid.Equality.Hash(UnitPlural));
         hash.Add(global::Meteroid.Equality.Hash(UnitSingular));
+        hash.Add(global::Meteroid.Equality.Hash(UsageBreakdownKey));
         hash.Add(global::Meteroid.Equality.Hash(UsageGroupKey));
         hash.Add(global::Meteroid.Equality.Hash(Id));
         hash.Add(global::Meteroid.Equality.Hash(Timestamp));

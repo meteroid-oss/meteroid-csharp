@@ -38,7 +38,7 @@ public sealed partial record Event
 
     /// <summary>
     /// RFC 3339 timestamp. Defaults to ingestion time if omitted.
-    /// Must be between 24 hours ago and 1 hour from now. Set <c>allow_backfilling</c> to remove the past limit.
+    /// Must be between 24 hours ago and 1 hour from now. Set <c>allow_backfilling</c> to accept timestamps up to 13 months in the past.
     /// </summary>
     [JsonPropertyName("timestamp")]
     public DateTimeOffset? Timestamp { get; init; }

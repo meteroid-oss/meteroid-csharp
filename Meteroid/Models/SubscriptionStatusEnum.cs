@@ -5,7 +5,8 @@ using System.Text.Json.Serialization;
 namespace Meteroid.Models;
 
 /// <summary>
-/// One of the known values below, or any other string a newer API version sends.
+/// <c>PendingCharge</c>, <c>Paused</c>, <c>Suspended</c>, <c>Superseded</c> and <c>Errored</c> stay in the published
+/// schema; no subscription holds them any more, and a filter on them lists none.
 /// </summary>
 /// <param name="Value">The JSON value.</param>
 [JsonConverter(typeof(StringEnumConverter<SubscriptionStatusEnum>))]

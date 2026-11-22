@@ -13,7 +13,7 @@ namespace Meteroid.Models;
 public sealed partial record IngestEventsRequest
 {
     /// <summary>
-    /// Allow events with timestamps more than 1 day in the past. Defaults to <c>false</c>.
+    /// Allow events with timestamps more than 1 day in the past, up to 13 months. Defaults to <c>false</c>.
     /// </summary>
     [JsonPropertyName("allow_backfilling")]
     public bool? AllowBackfilling { get; init; }
