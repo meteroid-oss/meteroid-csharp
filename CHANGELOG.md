@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.31.7](https://github.com/meteroid-oss/meteroid-csharp/compare/v0.31.6...v0.31.7) (2026-11-23)
+
+
+### Features
+
+* **api:** add `POST /api/v1/events/{event_id}/amend`, `POST /api/v1/events/{event_id}/void` ([a409c90](https://github.com/meteroid-oss/meteroid-csharp/commit/a409c90052c40be09683ddceb413329281dc43be))
+* **api:** update `GET /api/v1/invoices`, `GET /api/v1/invoices/{invoice_id}`, `PATCH /api/v1/invoices/{invoice_id}/custom-properties`, `POST /api/v1/invoices/{invoice_id}/refresh` ([a409c90](https://github.com/meteroid-oss/meteroid-csharp/commit/a409c90052c40be09683ddceb413329281dc43be))
+* **api:** update SDKs to meteroid 0.1.0 ([#28](https://github.com/meteroid-oss/meteroid-csharp/issues/28)) ([a409c90](https://github.com/meteroid-oss/meteroid-csharp/commit/a409c90052c40be09683ddceb413329281dc43be))
+
 ## [0.31.6](https://github.com/meteroid-oss/meteroid-csharp/compare/v0.31.5...v0.31.6) (2026-11-22)
 
 
