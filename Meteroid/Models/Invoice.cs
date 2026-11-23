@@ -31,6 +31,15 @@ public sealed partial record Invoice
     [JsonPropertyName("billing_period_start")]
     public DateOnly? BillingPeriodStart { get; init; }
 
+    /// <summary>
+    /// Debts carried in from earlier invoices (amounts due below the payment providers' minimum
+    /// charge, never collected on their own) less the one this invoice carried to a later
+    /// invoice, in minor units. Included in <c>amount_due</c>:
+    /// <c>amount_due = total + carried_balance - applied_credits - paid</c>.
+    /// </summary>
+    [JsonPropertyName("carried_balance")]
+    public long? CarriedBalance { get; init; }
+
     /// <summary>The <c>child_invoice_id</c> property.</summary>
     [JsonPropertyName("child_invoice_id")]
     public string? ChildInvoiceId { get; init; }
@@ -207,6 +216,7 @@ public sealed partial record Invoice
         && global::Meteroid.Equality.Equal(AmountDue, other.AmountDue)
         && global::Meteroid.Equality.Equal(AppliedCredits, other.AppliedCredits)
         && global::Meteroid.Equality.Equal(BillingPeriodStart, other.BillingPeriodStart)
+        && global::Meteroid.Equality.Equal(CarriedBalance, other.CarriedBalance)
         && global::Meteroid.Equality.Equal(ChildInvoiceId, other.ChildInvoiceId)
         && global::Meteroid.Equality.Equal(Coupons, other.Coupons)
         && global::Meteroid.Equality.Equal(CreatedAt, other.CreatedAt)
@@ -253,6 +263,7 @@ public sealed partial record Invoice
         hash.Add(global::Meteroid.Equality.Hash(AmountDue));
         hash.Add(global::Meteroid.Equality.Hash(AppliedCredits));
         hash.Add(global::Meteroid.Equality.Hash(BillingPeriodStart));
+        hash.Add(global::Meteroid.Equality.Hash(CarriedBalance));
         hash.Add(global::Meteroid.Equality.Hash(ChildInvoiceId));
         hash.Add(global::Meteroid.Equality.Hash(Coupons));
         hash.Add(global::Meteroid.Equality.Hash(CreatedAt));

@@ -44,6 +44,82 @@ public interface IEventsApi
         RequestOptions? requestOptions = null,
         CancellationToken cancellationToken = default
     );
+
+    /// <summary>
+    /// Amend an event
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// Replaces the timestamp and the properties of an ingested event. The code and the customer
+    /// cannot change: void the event and send a new one instead. The change is applied asynchronously,
+    /// in order with the event's other copies.
+    /// </para>
+    /// <para>
+    /// Only events ingested in the last 35 days can be amended, and neither their current nor their
+    /// new timestamp can be in an invoiced period. Tenants that keep the last copy of an event correct
+    /// it by sending it again instead.
+    /// </para>
+    /// <para>
+    /// An event is found once metering has stored it: a just-ingested event can still return <c>404</c>.
+    /// Wait until an amend is visible before sending the next change to the same event; concurrent
+    /// changes resolve by <c>ingested_at</c>, the latest wins.
+    /// </para>
+    /// </remarks>
+    /// <param name="eventId">The <c>event_id</c> path parameter.</param>
+    /// <param name="amendEventRequest">The request body.</param>
+    /// <param name="requestOptions">Headers, timeout, retries or idempotency key of this call.</param>
+    /// <param name="cancellationToken">Cancels the call.</param>
+    /// <exception cref="BadRequestException">400: <c>Error</c> is the <see cref="Models.RestErrorResponse"/> body.</exception>
+    /// <exception cref="UnauthorizedException">401: <c>Error</c> is the <see cref="Models.RestErrorResponse"/> body.</exception>
+    /// <exception cref="ForbiddenException">403: <c>Error</c> is the <see cref="Models.RestErrorResponse"/> body.</exception>
+    /// <exception cref="NotFoundException">404: <c>Error</c> is the <see cref="Models.RestErrorResponse"/> body.</exception>
+    /// <exception cref="ConflictException">409: <c>Error</c> is the <see cref="Models.RestErrorResponse"/> body.</exception>
+    /// <exception cref="RateLimitException">429: <c>Error</c> is the <see cref="Models.RestErrorResponse"/> body.</exception>
+    /// <exception cref="ServerErrorException">500, 503: <c>Error</c> is the <see cref="Models.RestErrorResponse"/> body.</exception>
+    /// <exception cref="ServerErrorException">500, 503: <c>Error</c> is the <see cref="Models.RestErrorResponse"/> body.</exception>
+    Task<EventChangeResponse> AmendAsync(
+        string eventId,
+        AmendEventRequest amendEventRequest,
+        RequestOptions? requestOptions = null,
+        CancellationToken cancellationToken = default
+    );
+
+    /// <summary>
+    /// Void an event
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// Cancels an ingested event: it no longer counts in usage. The change is applied asynchronously,
+    /// in order with the event's other copies.
+    /// </para>
+    /// <para>
+    /// Only events ingested in the last 35 days, outside an invoiced period, can be voided. Tenants
+    /// that keep the last copy of an event correct it by sending it again instead.
+    /// </para>
+    /// <para>
+    /// An event is found once metering has stored it: a just-ingested event can still return <c>404</c>,
+    /// and so does a retried void once the first one is applied. Wait until a change is visible
+    /// before sending the next one to the same event; concurrent changes resolve by <c>ingested_at</c>.
+    /// </para>
+    /// </remarks>
+    /// <param name="eventId">The <c>event_id</c> path parameter.</param>
+    /// <param name="voidEventRequest">The request body.</param>
+    /// <param name="requestOptions">Headers, timeout, retries or idempotency key of this call.</param>
+    /// <param name="cancellationToken">Cancels the call.</param>
+    /// <exception cref="BadRequestException">400: <c>Error</c> is the <see cref="Models.RestErrorResponse"/> body.</exception>
+    /// <exception cref="UnauthorizedException">401: <c>Error</c> is the <see cref="Models.RestErrorResponse"/> body.</exception>
+    /// <exception cref="ForbiddenException">403: <c>Error</c> is the <see cref="Models.RestErrorResponse"/> body.</exception>
+    /// <exception cref="NotFoundException">404: <c>Error</c> is the <see cref="Models.RestErrorResponse"/> body.</exception>
+    /// <exception cref="ConflictException">409: <c>Error</c> is the <see cref="Models.RestErrorResponse"/> body.</exception>
+    /// <exception cref="RateLimitException">429: <c>Error</c> is the <see cref="Models.RestErrorResponse"/> body.</exception>
+    /// <exception cref="ServerErrorException">500, 503: <c>Error</c> is the <see cref="Models.RestErrorResponse"/> body.</exception>
+    /// <exception cref="ServerErrorException">500, 503: <c>Error</c> is the <see cref="Models.RestErrorResponse"/> body.</exception>
+    Task<EventChangeResponse> VoidAsync(
+        string eventId,
+        VoidEventRequest voidEventRequest,
+        RequestOptions? requestOptions = null,
+        CancellationToken cancellationToken = default
+    );
 }
 
 /// <summary>The <c>events</c> operations, returning the status and headers of the response with its body.</summary>
@@ -55,6 +131,30 @@ public interface IEventsApiWithRawResponse
     /// <param name="cancellationToken">Cancels the call.</param>
     Task<ApiResponse<IngestEventsResponse>> IngestAsync(
         IngestEventsRequest ingestEventsRequest,
+        RequestOptions? requestOptions = null,
+        CancellationToken cancellationToken = default
+    );
+
+    /// <summary><see cref="IEventsApi.AmendAsync"/>, with the status and headers of the response.</summary>
+    /// <param name="eventId">The <c>event_id</c> path parameter.</param>
+    /// <param name="amendEventRequest">The request body.</param>
+    /// <param name="requestOptions">Headers, timeout, retries or idempotency key of this call.</param>
+    /// <param name="cancellationToken">Cancels the call.</param>
+    Task<ApiResponse<EventChangeResponse>> AmendAsync(
+        string eventId,
+        AmendEventRequest amendEventRequest,
+        RequestOptions? requestOptions = null,
+        CancellationToken cancellationToken = default
+    );
+
+    /// <summary><see cref="IEventsApi.VoidAsync"/>, with the status and headers of the response.</summary>
+    /// <param name="eventId">The <c>event_id</c> path parameter.</param>
+    /// <param name="voidEventRequest">The request body.</param>
+    /// <param name="requestOptions">Headers, timeout, retries or idempotency key of this call.</param>
+    /// <param name="cancellationToken">Cancels the call.</param>
+    Task<ApiResponse<EventChangeResponse>> VoidAsync(
+        string eventId,
+        VoidEventRequest voidEventRequest,
         RequestOptions? requestOptions = null,
         CancellationToken cancellationToken = default
     );
@@ -82,6 +182,34 @@ public sealed partial class EventsApi : IEventsApi
     {
         var response = await WithRawResponse
             .IngestAsync(ingestEventsRequest, requestOptions, cancellationToken)
+            .ConfigureAwait(false);
+        return response.Value;
+    }
+
+    /// <inheritdoc/>
+    public async Task<EventChangeResponse> AmendAsync(
+        string eventId,
+        AmendEventRequest amendEventRequest,
+        RequestOptions? requestOptions = null,
+        CancellationToken cancellationToken = default
+    )
+    {
+        var response = await WithRawResponse
+            .AmendAsync(eventId, amendEventRequest, requestOptions, cancellationToken)
+            .ConfigureAwait(false);
+        return response.Value;
+    }
+
+    /// <inheritdoc/>
+    public async Task<EventChangeResponse> VoidAsync(
+        string eventId,
+        VoidEventRequest voidEventRequest,
+        RequestOptions? requestOptions = null,
+        CancellationToken cancellationToken = default
+    )
+    {
+        var response = await WithRawResponse
+            .VoidAsync(eventId, voidEventRequest, requestOptions, cancellationToken)
             .ConfigureAwait(false);
         return response.Value;
     }
@@ -117,6 +245,78 @@ public sealed class EventsApiWithRawResponse : IEventsApiWithRawResponse
         return _transport.SendJsonAsync(
             request,
             MeteroidJsonContext.Default.IngestEventsResponse,
+            requestOptions,
+            cancellationToken
+        );
+    }
+
+    /// <inheritdoc/>
+    public Task<ApiResponse<EventChangeResponse>> AmendAsync(
+        string eventId,
+        AmendEventRequest amendEventRequest,
+        RequestOptions? requestOptions = null,
+        CancellationToken cancellationToken = default
+    )
+    {
+        ArgumentException.ThrowIfNullOrEmpty(eventId);
+        ArgumentNullException.ThrowIfNull(amendEventRequest);
+
+        var request = new ApiRequest(
+            HttpMethod.Post,
+            $"/api/v1/events/{Uri.EscapeDataString(eventId)}/amend",
+            "events.amend"
+        );
+        request.ErrorTypes = new KeyValuePair<string, JsonTypeInfo>[]
+        {
+            new("400", MeteroidJsonContext.Default.RestErrorResponse),
+            new("401", MeteroidJsonContext.Default.RestErrorResponse),
+            new("403", MeteroidJsonContext.Default.RestErrorResponse),
+            new("404", MeteroidJsonContext.Default.RestErrorResponse),
+            new("409", MeteroidJsonContext.Default.RestErrorResponse),
+            new("429", MeteroidJsonContext.Default.RestErrorResponse),
+            new("500", MeteroidJsonContext.Default.RestErrorResponse),
+            new("503", MeteroidJsonContext.Default.RestErrorResponse),
+        };
+        request.SetJsonBody(amendEventRequest, MeteroidJsonContext.Default.AmendEventRequest);
+        return _transport.SendJsonAsync(
+            request,
+            MeteroidJsonContext.Default.EventChangeResponse,
+            requestOptions,
+            cancellationToken
+        );
+    }
+
+    /// <inheritdoc/>
+    public Task<ApiResponse<EventChangeResponse>> VoidAsync(
+        string eventId,
+        VoidEventRequest voidEventRequest,
+        RequestOptions? requestOptions = null,
+        CancellationToken cancellationToken = default
+    )
+    {
+        ArgumentException.ThrowIfNullOrEmpty(eventId);
+        ArgumentNullException.ThrowIfNull(voidEventRequest);
+
+        var request = new ApiRequest(
+            HttpMethod.Post,
+            $"/api/v1/events/{Uri.EscapeDataString(eventId)}/void",
+            "events.void"
+        );
+        request.ErrorTypes = new KeyValuePair<string, JsonTypeInfo>[]
+        {
+            new("400", MeteroidJsonContext.Default.RestErrorResponse),
+            new("401", MeteroidJsonContext.Default.RestErrorResponse),
+            new("403", MeteroidJsonContext.Default.RestErrorResponse),
+            new("404", MeteroidJsonContext.Default.RestErrorResponse),
+            new("409", MeteroidJsonContext.Default.RestErrorResponse),
+            new("429", MeteroidJsonContext.Default.RestErrorResponse),
+            new("500", MeteroidJsonContext.Default.RestErrorResponse),
+            new("503", MeteroidJsonContext.Default.RestErrorResponse),
+        };
+        request.SetJsonBody(voidEventRequest, MeteroidJsonContext.Default.VoidEventRequest);
+        return _transport.SendJsonAsync(
+            request,
+            MeteroidJsonContext.Default.EventChangeResponse,
             requestOptions,
             cancellationToken
         );

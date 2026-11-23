@@ -206,6 +206,8 @@ the properties of the response body; enumerated, every item of every page. Model
 | Method | Request | Returns |
 | --- | --- | --- |
 | `Task<IngestEventsResponse> client.Events.IngestAsync(IngestEventsRequest ingestEventsRequest)` | `POST /api/v1/events/ingest` | [`IngestEventsResponse`](Meteroid/Models/IngestEventsResponse.cs) |
+| `Task<EventChangeResponse> client.Events.AmendAsync(string eventId, AmendEventRequest amendEventRequest)` | `POST /api/v1/events/{event_id}/amend` | [`EventChangeResponse`](Meteroid/Models/EventChangeResponse.cs) |
+| `Task<EventChangeResponse> client.Events.VoidAsync(string eventId, VoidEventRequest voidEventRequest)` | `POST /api/v1/events/{event_id}/void` | [`EventChangeResponse`](Meteroid/Models/EventChangeResponse.cs) |
 
 ## Features
 
