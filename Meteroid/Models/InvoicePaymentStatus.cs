@@ -26,8 +26,11 @@ public readonly partial record struct InvoicePaymentStatus(string Value) : IStri
     /// <summary><c>PROCESSING</c></summary>
     public static InvoicePaymentStatus Processing { get; } = new("PROCESSING");
 
+    /// <summary><c>CARRIED</c></summary>
+    public static InvoicePaymentStatus Carried { get; } = new("CARRIED");
+
     /// <summary>Whether this SDK version knows the value.</summary>
-    public bool IsKnown => Value is "UNPAID" or "PARTIALLY_PAID" or "PAID" or "ERRORED" or "PROCESSING";
+    public bool IsKnown => Value is "UNPAID" or "PARTIALLY_PAID" or "PAID" or "ERRORED" or "PROCESSING" or "CARRIED";
 
     /// <summary>The known values as constants, to <c>switch</c> on <see cref="Value"/>.</summary>
     public static class Values
@@ -46,6 +49,9 @@ public readonly partial record struct InvoicePaymentStatus(string Value) : IStri
 
         /// <summary><c>PROCESSING</c></summary>
         public const string Processing = "PROCESSING";
+
+        /// <summary><c>CARRIED</c></summary>
+        public const string Carried = "CARRIED";
     }
 
     static InvoicePaymentStatus IStringEnum<InvoicePaymentStatus>.FromValue(string value) => new(value);
