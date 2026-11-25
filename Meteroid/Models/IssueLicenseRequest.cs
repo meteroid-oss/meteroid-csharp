@@ -20,8 +20,8 @@ public sealed partial record IssueLicenseRequest
 
     /// <summary>
     /// Ephemeral, for CI and other short-lived installations: the activation code can be used
-    /// any number of times, each activation gets a license of this many hours (1 to 24) for the
-    /// installation activating, and nothing is refreshed. Not with <c>offline</c> or <c>validity_days</c>.
+    /// by any number of installations, each gets one license of this many hours (1 to 24), never
+    /// renewed. Not with <c>offline</c> or <c>validity_days</c>.
     /// </summary>
     [JsonPropertyName("ephemeral_hours")]
     public int? EphemeralHours { get; init; }
@@ -33,6 +33,14 @@ public sealed partial record IssueLicenseRequest
     /// </summary>
     [JsonPropertyName("instance_id")]
     public string? InstanceId { get; init; }
+
+    /// <summary>
+    /// Signed into the license as is, for the licensed software to read: at most 20 entries,
+    /// keys of 1 to 64 characters among <c>a-z</c>, <c>0-9</c>, <c>_</c>, <c>.</c> and <c>-</c>, values up to 256
+    /// characters. Reserved: <c>environment</c> only takes <c>non_production</c>.
+    /// </summary>
+    [JsonPropertyName("metadata")]
+    public IReadOnlyDictionary<string, string>? Metadata { get; init; }
 
     /// <summary>
     /// Delivers the license at once as a signed offline license, for an installation that
@@ -67,6 +75,7 @@ public sealed partial record IssueLicenseRequest
         && global::Meteroid.Equality.Equal(CustomerId, other.CustomerId)
         && global::Meteroid.Equality.Equal(EphemeralHours, other.EphemeralHours)
         && global::Meteroid.Equality.Equal(InstanceId, other.InstanceId)
+        && global::Meteroid.Equality.Equal(Metadata, other.Metadata)
         && global::Meteroid.Equality.Equal(Offline, other.Offline)
         && global::Meteroid.Equality.Equal(SubscriptionId, other.SubscriptionId)
         && global::Meteroid.Equality.Equal(ValidityDays, other.ValidityDays)
@@ -79,6 +88,7 @@ public sealed partial record IssueLicenseRequest
         hash.Add(global::Meteroid.Equality.Hash(CustomerId));
         hash.Add(global::Meteroid.Equality.Hash(EphemeralHours));
         hash.Add(global::Meteroid.Equality.Hash(InstanceId));
+        hash.Add(global::Meteroid.Equality.Hash(Metadata));
         hash.Add(global::Meteroid.Equality.Hash(Offline));
         hash.Add(global::Meteroid.Equality.Hash(SubscriptionId));
         hash.Add(global::Meteroid.Equality.Hash(ValidityDays));
