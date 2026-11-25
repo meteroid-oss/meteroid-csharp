@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.31.8](https://github.com/meteroid-oss/meteroid-csharp/compare/v0.31.7...v0.31.8) (2026-11-25)
+
+
+### Features
+
+* **api:** update `GET /api/v1/licenses`, `GET /api/v1/licenses/{license_id}`, `POST /api/v1/licenses`, `POST /api/v1/licenses/{license_id}/revoke` ([09c12e9](https://github.com/meteroid-oss/meteroid-csharp/commit/09c12e9b1197da962692575faea14afdd3626885))
+* **api:** update SDKs to meteroid 0.1.0 ([#30](https://github.com/meteroid-oss/meteroid-csharp/issues/30)) ([09c12e9](https://github.com/meteroid-oss/meteroid-csharp/commit/09c12e9b1197da962692575faea14afdd3626885))
+
 ## [0.31.7](https://github.com/meteroid-oss/meteroid-csharp/compare/v0.31.6...v0.31.7) (2026-11-23)
 
 
