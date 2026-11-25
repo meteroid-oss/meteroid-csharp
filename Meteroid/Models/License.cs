@@ -57,6 +57,12 @@ public sealed partial record License
     public DateTimeOffset? LastRefreshedAt { get; init; }
 
     /// <summary>
+    /// Signed into the license as is.
+    /// </summary>
+    [JsonPropertyName("metadata")]
+    public required IReadOnlyDictionary<string, string> Metadata { get; init; }
+
+    /// <summary>
     /// Issued as a signed offline license: never activated nor refreshed.
     /// </summary>
     [JsonPropertyName("offline")]
@@ -110,6 +116,7 @@ public sealed partial record License
         && global::Meteroid.Equality.Equal(Id, other.Id)
         && global::Meteroid.Equality.Equal(InstanceId, other.InstanceId)
         && global::Meteroid.Equality.Equal(LastRefreshedAt, other.LastRefreshedAt)
+        && global::Meteroid.Equality.Equal(Metadata, other.Metadata)
         && global::Meteroid.Equality.Equal(Offline, other.Offline)
         && global::Meteroid.Equality.Equal(PlanName, other.PlanName)
         && global::Meteroid.Equality.Equal(RevokedAt, other.RevokedAt)
@@ -132,6 +139,7 @@ public sealed partial record License
         hash.Add(global::Meteroid.Equality.Hash(Id));
         hash.Add(global::Meteroid.Equality.Hash(InstanceId));
         hash.Add(global::Meteroid.Equality.Hash(LastRefreshedAt));
+        hash.Add(global::Meteroid.Equality.Hash(Metadata));
         hash.Add(global::Meteroid.Equality.Hash(Offline));
         hash.Add(global::Meteroid.Equality.Hash(PlanName));
         hash.Add(global::Meteroid.Equality.Hash(RevokedAt));
